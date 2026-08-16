@@ -1,3 +1,12 @@
+---
+interface Props {
+	title: string;
+};
+
+const { title } = Astro.props;
+
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
@@ -6,10 +15,10 @@
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<!-- TODO: Add the finalized motto to the tab title -->
-		<title>ApotheonAI | MOTTO</title>
+		<title>{ title }</title>
 	</head>
 	<body>
+		<h1>This is ApotheonAI.</h1>
 		<slot />
 	</body>
 </html>
