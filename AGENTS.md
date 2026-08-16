@@ -1,3 +1,11 @@
+## Git
+
+Never write "by Cursor AI", "Made-with: Cursor", or any similar AI attribution in commit messages or git trailers.
+
+## Design
+
+Dark, classical, gold: black background, Playfair Display headlines, Inter UI, muted gold/bronze CTAs. Tokens and component classes live in `src/styles/global.css`. Logo is `/Logo.svg` (black SVG — tint gold). Hero art is `/helmet1-transparent.png`.
+
 ## Development
 
 When starting the dev server, use background mode:

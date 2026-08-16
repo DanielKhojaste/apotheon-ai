@@ -1,0 +1,16 @@
+---
+description: ApotheonAI visual language — dark, classical, gold
+alwaysApply: true
+---
+
+# Design system
+
+Premium dark landing aesthetic: black void background, cream type, muted gold/bronze accents, Spartan/classical-meets-AI.
+
+- **Background:** `#000000` (`bg-void`) with a faint grain overlay.
+- **Display type:** Playfair Display (`font-serif`) for headlines and the wordmark.
+- **UI type:** Inter (`font-sans`) for buttons, labels, and body.
+- **Accents:** gold/bronze gradients (`btn-gold`), not bright yellow.
+- **Logo:** `/Logo.svg` is black; tint it gold with `.logo-gold` (mask), never leave it black on the dark background.
+- **Hero art:** `/helmet1-transparent.png` on the right, with a warm gold glow.
+- Use Tailwind utilities plus the tokens in `src/styles/global.css`. Use Preline for interactive pieces (navbar collapse, later overlays/dropdowns).
