@@ -174,6 +174,39 @@ function makeTrailGradient(
 	return grad;
 }
 
+function strokeShimmer(
+	ctx: CanvasRenderingContext2D,
+	points: Pt[],
+	samples: number,
+	headU: number,
+	length: number,
+	width: number,
+	alpha: number,
+) {
+	const uStart = Math.max(0.1, headU - length);
+	const uEnd = Math.min(0.76, headU);
+	const span = uEnd - uStart;
+	if (span < 0.03) return;
+
+	const chunks = 8;
+	for (let c = 0; c < chunks; c += 1) {
+		const t0 = c / chunks;
+		const t1 = (c + 1) / chunks;
+		const envelope = Math.sin(Math.PI * ((t0 + t1) * 0.5));
+		const a = alpha * envelope * envelope;
+		if (a < 0.02) continue;
+		strokeRange(
+			ctx,
+			points,
+			samples,
+			uStart + span * t0,
+			uStart + span * t1,
+			width,
+			`rgba(255, 214, 148, ${a})`,
+		);
+	}
+}
+
 function makePointBuffer() {
 	return Array.from({ length: MAX_SAMPLES + 1 }, () => ({ x: 0, y: 0 }));
 }
@@ -245,7 +278,7 @@ export default function DivineFlow({
 					alpha: hero ? 0.55 + random() * 0.4 : 0.18 + random() * 0.38,
 					pulsePhase: random(),
 					pulseSpeed: 0.03 + random() * 0.05,
-					pulseLength: 0.06 + random() * 0.08,
+					pulseLength: 0.16 + random() * 0.1,
 					shimmerSpeed: 0.2 + random() * 0.32,
 					hasPulse: hero,
 				});
@@ -494,15 +527,15 @@ export default function DivineFlow({
 				strokeRange(ctx, points, samples, 0, 1, thread.coreWidth, core);
 
 				if (thread.hasPulse && !reducedMotion && motion > 0) {
-					const pulseU = ((thread.pulsePhase + time * thread.pulseSpeed * motion) % 0.58) + 0.1;
-					strokeRange(
+					const pulseU = ((thread.pulsePhase + time * thread.pulseSpeed * motion) % 0.58) + 0.12;
+					strokeShimmer(
 						ctx,
 						points,
 						samples,
-						Math.max(0.08, pulseU - thread.pulseLength),
-						Math.max(pulseU, 0.1),
-						thread.coreWidth * 1.15,
-						`rgba(255, 244, 214, ${a * 0.45})`,
+						pulseU,
+						thread.pulseLength,
+						thread.coreWidth,
+						a * 0.38,
 					);
 				}
 			}
