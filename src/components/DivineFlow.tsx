@@ -185,6 +185,7 @@ export default function DivineFlow({
 		let samples = 56;
 		let raf = 0;
 		let running = true;
+		let onScreen = true;
 
 		const threads: Thread[] = [];
 		const sparkles: Sparkle[] = [];
@@ -475,9 +476,15 @@ export default function DivineFlow({
 
 			ctx.globalCompositeOperation = "source-over";
 
-			if (!reducedMotion && motion > 0 && !document.hidden) {
+			if (!reducedMotion && motion > 0 && !document.hidden && onScreen) {
 				raf = requestAnimationFrame(render);
 			}
+		}
+
+		function resume() {
+			if (!running || reducedMotion || motion <= 0 || document.hidden || !onScreen) return;
+			cancelAnimationFrame(raf);
+			raf = requestAnimationFrame(render);
 		}
 
 		const observer = new ResizeObserver(() => {
@@ -485,15 +492,21 @@ export default function DivineFlow({
 			if (reducedMotion || motion <= 0) render(performance.now());
 		});
 
+		const intersection = new IntersectionObserver(
+			([entry]) => {
+				onScreen = Boolean(entry?.isIntersecting);
+				if (onScreen) resume();
+			},
+			{ threshold: 0.05 },
+		);
+
 		const onVisibility = () => {
-			if (!document.hidden && running && !reducedMotion && motion > 0) {
-				cancelAnimationFrame(raf);
-				raf = requestAnimationFrame(render);
-			}
+			if (!document.hidden) resume();
 		};
 
 		resize();
 		observer.observe(frame);
+		intersection.observe(frame);
 		window.addEventListener("resize", resize);
 		document.addEventListener("visibilitychange", onVisibility);
 		raf = requestAnimationFrame(render);
@@ -502,6 +515,7 @@ export default function DivineFlow({
 			running = false;
 			cancelAnimationFrame(raf);
 			observer.disconnect();
+			intersection.disconnect();
 			window.removeEventListener("resize", resize);
 			document.removeEventListener("visibilitychange", onVisibility);
 		};
