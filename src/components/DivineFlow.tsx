@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 type DivineFlowProps = {
 	className?: string;
-	/** Bundles per side. Each bundle is several overlapping filaments. */
+	/** Independent filaments per side. */
 	lineCount?: number;
 	/** How far from center filaments emerge (CSS px, capped by viewport). */
 	innerGap?: number;
@@ -17,12 +17,11 @@ type Thread = {
 	startY: number;
 	endY: number;
 	startInset: number;
-	endOvershoot: number;
+	reach: number;
 	c1t: number;
 	c2t: number;
 	bow1: number;
 	bow2: number;
-	offset: number;
 	amp1: number;
 	amp2: number;
 	speed: number;
@@ -35,6 +34,7 @@ type Thread = {
 	pulseSpeed: number;
 	pulseLength: number;
 	shimmerSpeed: number;
+	hasPulse: boolean;
 };
 
 type Sparkle = {
@@ -57,16 +57,10 @@ type Speck = {
 	drift: number;
 };
 
-type Ember = {
-	thread: number;
-	phase: number;
-	speed: number;
-	size: number;
-};
-
 type Pt = { x: number; y: number };
 
 const TAU = Math.PI * 2;
+const MAX_SAMPLES = 72;
 
 function mulberry32(seed: number) {
 	return function random() {
@@ -119,14 +113,14 @@ function measureBox(el: HTMLElement) {
 function strokeRange(
 	ctx: CanvasRenderingContext2D,
 	points: Pt[],
+	samples: number,
 	u0: number,
 	u1: number,
 	width: number,
-	color: string | CanvasGradient,
+	color: string,
 ) {
-	const last = points.length - 1;
-	const i0 = Math.max(0, Math.floor(u0 * last));
-	const i1 = Math.min(last, Math.ceil(u1 * last));
+	const i0 = Math.max(0, Math.floor(u0 * samples));
+	const i1 = Math.min(samples, Math.ceil(u1 * samples));
 	if (i1 <= i0) return;
 
 	ctx.beginPath();
@@ -139,10 +133,9 @@ function strokeRange(
 	ctx.stroke();
 }
 
-function pointAt(points: Pt[], u: number): Pt {
-	const last = points.length - 1;
-	const f = Math.max(0, Math.min(1, u)) * last;
-	const i = Math.min(last - 1, Math.floor(f));
+function pointAt(points: Pt[], samples: number, u: number): Pt {
+	const f = Math.max(0, Math.min(1, u)) * samples;
+	const i = Math.min(samples - 1, Math.floor(f));
 	const t = f - i;
 	return {
 		x: points[i].x + (points[i + 1].x - points[i].x) * t,
@@ -150,18 +143,21 @@ function pointAt(points: Pt[], u: number): Pt {
 	};
 }
 
-function normalAt(points: Pt[], u: number): Pt {
-	const last = points.length - 1;
-	const i = Math.max(1, Math.min(last - 1, Math.round(u * last)));
+function normalAt(points: Pt[], samples: number, u: number): Pt {
+	const i = Math.max(1, Math.min(samples - 1, Math.round(u * samples)));
 	const dx = points[i + 1].x - points[i - 1].x;
 	const dy = points[i + 1].y - points[i - 1].y;
 	const len = Math.hypot(dx, dy) || 1;
 	return { x: -dy / len, y: dx / len };
 }
 
+function makePointBuffer() {
+	return Array.from({ length: MAX_SAMPLES + 1 }, () => ({ x: 0, y: 0 }));
+}
+
 export default function DivineFlow({
 	className,
-	lineCount = 8,
+	lineCount = 7,
 	innerGap = 108,
 	originY = 0.5,
 	motion = 1,
@@ -174,7 +170,7 @@ export default function DivineFlow({
 		const frame = frameRef.current;
 		if (!canvas || !frame) return;
 
-		const ctx = canvas.getContext("2d", { alpha: true });
+		const ctx = canvas.getContext("2d", { alpha: true, desynchronized: true });
 		if (!ctx) return;
 
 		const bloomCanvas = document.createElement("canvas");
@@ -186,122 +182,78 @@ export default function DivineFlow({
 		let width = 1;
 		let height = 1;
 		let dpr = 1;
+		let samples = 56;
 		let raf = 0;
 		let running = true;
 
 		const threads: Thread[] = [];
 		const sparkles: Sparkle[] = [];
 		const specks: Speck[] = [];
-		const embers: Ember[] = [];
 
 		for (const side of [-1, 1] as const) {
 			const random = mulberry32(8400 + side * 173);
 
-			for (let b = 0; b < lineCount; b += 1) {
-				const t = lineCount === 1 ? 0.5 : b / (lineCount - 1);
-				const centered = t * 2 - 1;
-				const startY = centered * 0.078 + (random() - 0.5) * 0.016;
-				const endY = centered * 0.43 + (random() - 0.5) * 0.045;
-				const importance = 1 - Math.abs(centered) * 0.42;
-				const bundleAlpha = (0.38 + random() * 0.5) * (0.72 + importance * 0.28);
-				const bundlePhase = random() * TAU;
-				const threadCount =
-					Math.abs(centered) < 0.34 ? 3 + Math.floor(random() * 3) : 2 + Math.floor(random() * 2);
-				const mid = (threadCount - 1) / 2;
+			for (let i = 0; i < lineCount; i += 1) {
+				const slot = (i + random() * 0.82) / lineCount;
+				const centered = slot * 2 - 1;
+				const startY = centered * 0.055 + (random() - 0.5) * 0.05;
+				const endY = centered * 0.33 + (random() - 0.5) * 0.26;
+				const hero = random() > 0.62;
 
-				for (let k = 0; k < threadCount; k += 1) {
-					const spread = k - mid;
-					threads.push({
-						side,
-						startY: startY + spread * 0.0035,
-						endY: endY + spread * 0.01,
-						startInset: random(),
-						endOvershoot: 0.03 + random() * 0.05,
-						c1t: 0.24 + random() * 0.12,
-						c2t: 0.58 + random() * 0.16,
-						bow1: centered * 0.085 + (random() - 0.5) * 0.04,
-						bow2: -centered * 0.02 + (random() - 0.5) * 0.028,
-						offset: spread * (0.0022 + random() * 0.0014),
-						amp1: 0.003 + random() * 0.0045,
-						amp2: 0.0012 + random() * 0.0024,
-						speed: 0.16 + random() * 0.2,
-						phase: bundlePhase + spread * 0.35 + random() * 0.5,
-						seed: 20 + random() * 200,
-						coreWidth: 0.32 + random() * 0.7 + importance * 0.2,
-						glowWidth: 5 + random() * 8 + importance * 3.5,
-						alpha: bundleAlpha * (0.55 + random() * 0.45),
-						pulsePhase: random(),
-						pulseSpeed: 0.035 + random() * 0.05,
-						pulseLength: 0.07 + random() * 0.09,
-						shimmerSpeed: 0.22 + random() * 0.35,
-					});
-				}
-			}
-
-			for (let w = 0; w < 4; w += 1) {
-				const centered = (random() * 2 - 1) * 0.92;
 				threads.push({
 					side,
-					startY: centered * 0.07,
-					endY: centered * 0.46 + (random() - 0.5) * 0.08,
+					startY,
+					endY,
 					startInset: random(),
-					endOvershoot: 0.02 + random() * 0.06,
-					c1t: 0.2 + random() * 0.18,
-					c2t: 0.55 + random() * 0.22,
-					bow1: centered * 0.09 + (random() - 0.5) * 0.06,
-					bow2: (random() - 0.5) * 0.05,
-					offset: (random() - 0.5) * 0.008,
-					amp1: 0.008 + random() * 0.01,
-					amp2: 0.004 + random() * 0.006,
-					speed: 0.16 + random() * 0.28,
+					reach: 0.68 + random() * 0.4,
+					c1t: 0.18 + random() * 0.2,
+					c2t: 0.5 + random() * 0.28,
+					bow1: centered * 0.05 + (random() - 0.5) * 0.1,
+					bow2: (random() - 0.5) * 0.09,
+					amp1: 0.004 + random() * 0.009,
+					amp2: 0.002 + random() * 0.005,
+					speed: 0.14 + random() * 0.24,
 					phase: random() * TAU,
-					seed: 40 + random() * 180,
-					coreWidth: 0.3 + random() * 0.4,
-					glowWidth: 2.8 + random() * 3.4,
-					alpha: 0.07 + random() * 0.11,
+					seed: 12 + random() * 220,
+					coreWidth: hero ? 0.55 + random() * 0.35 : 0.28 + random() * 0.32,
+					glowWidth: hero ? 3.2 + random() * 2.4 : 1.8 + random() * 2.2,
+					alpha: hero ? 0.55 + random() * 0.4 : 0.18 + random() * 0.38,
 					pulsePhase: random(),
-					pulseSpeed: 0.03 + random() * 0.04,
-					pulseLength: 0.05 + random() * 0.07,
-					shimmerSpeed: 0.18 + random() * 0.3,
+					pulseSpeed: 0.03 + random() * 0.05,
+					pulseLength: 0.06 + random() * 0.08,
+					shimmerSpeed: 0.2 + random() * 0.32,
+					hasPulse: hero,
 				});
 			}
 		}
 
+		const sampled = threads.map(makePointBuffer);
+
 		const sparkleRandom = mulberry32(22101);
-		const sparkleCount = 20;
+		const sparkleCount = Math.min(10, 4 + threads.length);
 		for (let i = 0; i < sparkleCount; i += 1) {
 			sparkles.push({
 				thread: Math.floor(sparkleRandom() * threads.length),
-				phase: 0.18 + sparkleRandom() * 0.7,
-				speed: sparkleRandom() < 0.45 ? 0.012 + sparkleRandom() * 0.02 : 0.003 + sparkleRandom() * 0.008,
-				size: sparkleRandom() < 0.28 ? 1.8 + sparkleRandom() * 1.6 : 0.85 + sparkleRandom() * 0.9,
-				flare: sparkleRandom() < 0.32,
-				tilt: (sparkleRandom() - 0.5) * 0.5,
+				phase: 0.16 + sparkleRandom() * 0.7,
+				speed: sparkleRandom() < 0.4 ? 0.01 + sparkleRandom() * 0.018 : 0.003 + sparkleRandom() * 0.007,
+				size: sparkleRandom() < 0.3 ? 1.5 + sparkleRandom() * 1.2 : 0.7 + sparkleRandom() * 0.7,
+				flare: sparkleRandom() < 0.28,
+				tilt: (sparkleRandom() - 0.5) * 0.55,
 				twinklePhase: sparkleRandom() * TAU,
-				twinkleSpeed: 1.1 + sparkleRandom() * 1.8,
+				twinkleSpeed: 1.05 + sparkleRandom() * 1.7,
 			});
 		}
 
 		const speckRandom = mulberry32(77411);
-		const speckCount = Math.min(96, 48 + lineCount * 4);
+		const speckCount = 28;
 		for (let i = 0; i < speckCount; i += 1) {
 			specks.push({
 				thread: Math.floor(speckRandom() * threads.length),
-				u: 0.12 + speckRandom() * 0.8,
-				nOff: (speckRandom() - 0.5) * 18,
-				size: 0.35 + speckRandom() * 0.9,
+				u: 0.14 + speckRandom() * 0.74,
+				nOff: (speckRandom() - 0.5) * 22,
+				size: 0.3 + speckRandom() * 0.75,
 				phase: speckRandom() * TAU,
-				drift: 0.12 + speckRandom() * 0.22,
-			});
-		}
-
-		const emberRandom = mulberry32(4099);
-		for (let i = 0; i < 14; i += 1) {
-			embers.push({
-				thread: Math.floor(emberRandom() * threads.length),
-				phase: emberRandom(),
-				speed: 0.045 + emberRandom() * 0.07,
-				size: 0.55 + emberRandom() * 0.7,
+				drift: 0.1 + speckRandom() * 0.2,
 			});
 		}
 
@@ -310,6 +262,7 @@ export default function DivineFlow({
 			width = Math.max(1, Math.round(rect.width));
 			height = Math.max(1, Math.round(rect.height));
 			dpr = Math.min(window.devicePixelRatio || 1, 2);
+			samples = Math.max(44, Math.min(MAX_SAMPLES, Math.round(width / 28)));
 
 			canvas.width = Math.round(width * dpr);
 			canvas.height = Math.round(height * dpr);
@@ -319,7 +272,7 @@ export default function DivineFlow({
 			ctx.lineCap = "round";
 			ctx.lineJoin = "round";
 
-			const bloomScale = 0.38;
+			const bloomScale = 0.28;
 			bloomCanvas.width = Math.max(1, Math.round(width * bloomScale));
 			bloomCanvas.height = Math.max(1, Math.round(height * bloomScale));
 			bloomCtx.setTransform(bloomCanvas.width / width, 0, 0, bloomCanvas.height / height, 0, 0);
@@ -327,14 +280,14 @@ export default function DivineFlow({
 			bloomCtx.lineJoin = "round";
 		}
 
-		function pointOnThread(thread: Thread, u: number, time: number): Pt {
+		function writePoint(thread: Thread, u: number, time: number, out: Pt) {
 			const cx = width * 0.5;
 			const cy = height * originY;
 			const originR = Math.min(innerGap, Math.max(64, width * 0.072));
-			const startX = cx + thread.side * originR * (0.42 + thread.startInset * 0.28);
+			const startX = cx + thread.side * originR * (0.4 + thread.startInset * 0.34);
 			const startY = cy + thread.startY * height;
-			const endX =
-				thread.side === 1 ? width + thread.endOvershoot * width : -thread.endOvershoot * width;
+			const edgeX = thread.side === 1 ? width + 48 : -48;
+			const endX = startX + (edgeX - startX) * thread.reach;
 			const endY = cy + thread.endY * height;
 			const span = Math.abs(endX - startX);
 			const c1x = startX + thread.side * span * thread.c1t;
@@ -352,38 +305,33 @@ export default function DivineFlow({
 
 			const tMotion = reducedMotion ? 0 : time;
 			const envelope = Math.sin(Math.PI * u);
-			const n1 = smoothNoise(u * 2.3 + tMotion * thread.speed + thread.phase, thread.seed);
-			const n2 = smoothNoise(u * 5.6 - tMotion * thread.speed * 0.38 + thread.phase * 1.35, thread.seed + 9);
+			const n1 = smoothNoise(u * 2.1 + tMotion * thread.speed + thread.phase, thread.seed);
+			const n2 = smoothNoise(u * 5.4 - tMotion * thread.speed * 0.4 + thread.phase * 1.4, thread.seed + 11);
 			const wave =
 				((n1 - 0.5) * thread.amp1 + (n2 - 0.5) * thread.amp2) * envelope * motion * height;
-			const rest = thread.offset * height * (0.4 + 0.6 * envelope);
 
-			return {
-				x: x0 + nx * (wave + rest),
-				y: y0 + ny * (wave + rest),
-			};
+			out.x = x0 + nx * wave;
+			out.y = y0 + ny * wave;
 		}
 
-		function sampleThread(thread: Thread, time: number, samples: number) {
-			const points = new Array<Pt>(samples + 1);
+		function sampleThread(thread: Thread, time: number, out: Pt[]) {
 			for (let i = 0; i <= samples; i += 1) {
-				points[i] = pointOnThread(thread, i / samples, time);
+				writePoint(thread, i / samples, time, out[i]);
 			}
-			return points;
 		}
 
 		function drawOriginBloom(target: CanvasRenderingContext2D) {
 			const cx = width * 0.5;
 			const cy = height * originY;
-			const rx = Math.min(width, height) * 0.22;
-			const ry = Math.min(width, height) * 0.3;
+			const rx = Math.min(width, height) * 0.2;
+			const ry = Math.min(width, height) * 0.28;
 
 			target.save();
 			target.translate(cx, cy);
 			target.scale(1, ry / rx);
 			const glow = target.createRadialGradient(0, 0, rx * 0.12, 0, 0, rx);
-			glow.addColorStop(0, "rgba(255, 196, 110, 0.14)");
-			glow.addColorStop(0.32, "rgba(196, 132, 48, 0.06)");
+			glow.addColorStop(0, "rgba(255, 196, 110, 0.12)");
+			glow.addColorStop(0.34, "rgba(196, 132, 48, 0.05)");
 			glow.addColorStop(1, "rgba(0, 0, 0, 0)");
 			target.fillStyle = glow;
 			target.beginPath();
@@ -402,52 +350,43 @@ export default function DivineFlow({
 		) {
 			ctx.save();
 			ctx.translate(x, y);
-			ctx.rotate(flare ? 0 : tilt);
+			if (!flare) ctx.rotate(tilt);
 
-			const radius = size * (flare ? 7.2 : 4.4);
+			const radius = size * (flare ? 6.2 : 3.1);
 			const disc = ctx.createRadialGradient(0, 0, 0, 0, 0, radius);
-			disc.addColorStop(0, `rgba(255, 250, 236, ${0.92 * intensity})`);
-			disc.addColorStop(0.1, `rgba(255, 220, 150, ${0.5 * intensity})`);
-			disc.addColorStop(0.28, `rgba(210, 148, 62, ${0.16 * intensity})`);
+			disc.addColorStop(0, `rgba(255, 250, 236, ${0.9 * intensity})`);
+			disc.addColorStop(0.22, `rgba(255, 214, 140, ${0.28 * intensity})`);
 			disc.addColorStop(1, "rgba(0, 0, 0, 0)");
 			ctx.fillStyle = disc;
 			ctx.beginPath();
 			ctx.arc(0, 0, radius, 0, TAU);
 			ctx.fill();
 
-			const hx = flare ? size * 15 : size * 3.2;
-			const hy = flare ? size * 0.16 : size * 0.2;
-			const hg = ctx.createLinearGradient(-hx, 0, hx, 0);
-			hg.addColorStop(0, "rgba(255, 230, 180, 0)");
-			hg.addColorStop(0.5, `rgba(255, 248, 230, ${0.88 * intensity})`);
-			hg.addColorStop(1, "rgba(255, 230, 180, 0)");
-			ctx.fillStyle = hg;
-			ctx.beginPath();
-			ctx.moveTo(-hx, 0);
-			ctx.lineTo(0, -hy);
-			ctx.lineTo(hx, 0);
-			ctx.lineTo(0, hy);
-			ctx.closePath();
-			ctx.fill();
-
-			const vx = flare ? size * 0.15 : size * 0.18;
-			const vy = flare ? size * 5.6 : size * 2.4;
-			const vg = ctx.createLinearGradient(0, -vy, 0, vy);
-			vg.addColorStop(0, "rgba(255, 230, 180, 0)");
-			vg.addColorStop(0.5, `rgba(255, 248, 230, ${0.72 * intensity})`);
-			vg.addColorStop(1, "rgba(255, 230, 180, 0)");
-			ctx.fillStyle = vg;
-			ctx.beginPath();
-			ctx.moveTo(0, -vy);
-			ctx.lineTo(vx, 0);
-			ctx.lineTo(0, vy);
-			ctx.lineTo(-vx, 0);
-			ctx.closePath();
-			ctx.fill();
+			if (flare) {
+				const hx = size * 13;
+				const hy = size * 0.14;
+				const hg = ctx.createLinearGradient(-hx, 0, hx, 0);
+				hg.addColorStop(0, "rgba(255, 230, 180, 0)");
+				hg.addColorStop(0.5, `rgba(255, 248, 230, ${0.82 * intensity})`);
+				hg.addColorStop(1, "rgba(255, 230, 180, 0)");
+				ctx.fillStyle = hg;
+				ctx.beginPath();
+				ctx.moveTo(-hx, 0);
+				ctx.lineTo(0, -hy);
+				ctx.lineTo(hx, 0);
+				ctx.lineTo(0, hy);
+				ctx.closePath();
+				ctx.fill();
+			} else {
+				ctx.fillStyle = `rgba(255, 248, 230, ${0.65 * intensity})`;
+				const arm = size * 2.1;
+				ctx.fillRect(-arm, -0.3, arm * 2, 0.6);
+				ctx.fillRect(-0.3, -arm * 0.65, 0.6, arm * 1.3);
+			}
 
 			ctx.fillStyle = `rgba(255, 252, 245, ${intensity})`;
 			ctx.beginPath();
-			ctx.arc(0, 0, Math.max(0.5, size * 0.28), 0, TAU);
+			ctx.arc(0, 0, Math.max(0.4, size * 0.24), 0, TAU);
 			ctx.fill();
 			ctx.restore();
 		}
@@ -455,16 +394,12 @@ export default function DivineFlow({
 		function render(now: number) {
 			if (!running) return;
 
-			const rect = measureBox(frame);
-			if (Math.round(rect.width) !== width || Math.round(rect.height) !== height) {
-				resize();
+			const time = now * 0.001;
+
+			for (let i = 0; i < threads.length; i += 1) {
+				sampleThread(threads[i], time, sampled[i]);
 			}
 
-			const time = now * 0.001;
-			const samples = Math.max(64, Math.min(120, Math.round(width / 16)));
-			const sampled = threads.map((thread) => sampleThread(thread, time, samples));
-
-			bloomCtx.setTransform(bloomCanvas.width / width, 0, 0, bloomCanvas.height / height, 0, 0);
 			bloomCtx.globalCompositeOperation = "source-over";
 			bloomCtx.clearRect(0, 0, width, height);
 			bloomCtx.globalCompositeOperation = "lighter";
@@ -472,112 +407,70 @@ export default function DivineFlow({
 
 			for (let i = 0; i < threads.length; i += 1) {
 				const thread = threads[i];
-				const shimmer = 0.78 + 0.22 * Math.sin(time * thread.shimmerSpeed + thread.phase);
-				const a = thread.alpha * shimmer;
-				strokeRange(bloomCtx, sampled[i], 0, 1, thread.glowWidth * 1.55, `rgba(214, 154, 64, ${a * 0.55})`);
-				strokeRange(bloomCtx, sampled[i], 0.04, 1, thread.glowWidth * 0.7, `rgba(240, 196, 118, ${a * 0.32})`);
+				const shimmer = 0.8 + 0.2 * Math.sin(time * thread.shimmerSpeed + thread.phase);
+				strokeRange(
+					bloomCtx,
+					sampled[i],
+					samples,
+					0,
+					1,
+					thread.glowWidth * 1.7,
+					`rgba(214, 154, 64, ${thread.alpha * shimmer * 0.5})`,
+				);
 			}
 
-			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 			ctx.globalCompositeOperation = "source-over";
 			ctx.clearRect(0, 0, width, height);
 			ctx.imageSmoothingEnabled = true;
 			ctx.imageSmoothingQuality = "high";
 			ctx.globalCompositeOperation = "lighter";
-			ctx.globalAlpha = 0.9;
 			ctx.drawImage(bloomCanvas, 0, 0, width, height);
-			ctx.globalAlpha = 0.35;
-			ctx.drawImage(bloomCanvas, 0, 0, width, height);
-			ctx.globalAlpha = 1;
 
 			for (let i = 0; i < threads.length; i += 1) {
 				const thread = threads[i];
 				const points = sampled[i];
-				const shimmer = 0.8 + 0.2 * Math.sin(time * thread.shimmerSpeed + thread.phase);
+				const shimmer = 0.82 + 0.18 * Math.sin(time * thread.shimmerSpeed + thread.phase);
 				const a = Math.min(1, thread.alpha * shimmer);
-				const origin = points[0];
-				const tip = points[points.length - 1];
-				const fade = ctx.createLinearGradient(origin.x, origin.y, tip.x, tip.y);
-				fade.addColorStop(0, `rgba(255, 232, 186, 0)`);
-				fade.addColorStop(0.12, `rgba(255, 228, 176, ${a * 0.9})`);
-				fade.addColorStop(0.55, `rgba(255, 236, 196, ${a})`);
-				fade.addColorStop(1, `rgba(220, 164, 78, ${a * 0.12})`);
 
-				const glow = ctx.createLinearGradient(origin.x, origin.y, tip.x, tip.y);
-				glow.addColorStop(0, `rgba(224, 170, 82, 0)`);
-				glow.addColorStop(0.1, `rgba(224, 170, 82, ${a * 0.28})`);
-				glow.addColorStop(0.6, `rgba(224, 170, 82, ${a * 0.16})`);
-				glow.addColorStop(1, `rgba(224, 170, 82, 0)`);
+				strokeRange(ctx, points, samples, 0.05, 0.98, thread.glowWidth * 0.32, `rgba(224, 170, 82, ${a * 0.22})`);
+				strokeRange(ctx, points, samples, 0.08, 0.96, thread.coreWidth, `rgba(255, 232, 186, ${a * 0.78})`);
 
-				strokeRange(ctx, points, 0.02, 1, thread.glowWidth * 0.4, glow);
-				strokeRange(ctx, points, 0.06, 0.46, thread.coreWidth * 1.25, fade);
-				strokeRange(ctx, points, 0.4, 0.98, thread.coreWidth * 0.72, fade);
-
-				if (thread.alpha > 0.28) {
-					strokeRange(
-						ctx,
-						points,
-						0.1,
-						0.9,
-						Math.max(0.28, thread.coreWidth * 0.32),
-						`rgba(255, 248, 228, ${a * 0.28})`,
-					);
-				}
-
-				if (!reducedMotion && motion > 0) {
+				if (thread.hasPulse && !reducedMotion && motion > 0) {
 					const pulseU = (thread.pulsePhase + time * thread.pulseSpeed * motion) % 1;
 					strokeRange(
 						ctx,
 						points,
-						Math.max(0.06, pulseU - thread.pulseLength),
-						Math.max(pulseU, 0.08),
-						thread.coreWidth * 1.2,
-						`rgba(255, 244, 214, ${a * 0.5})`,
+						samples,
+						Math.max(0.08, pulseU - thread.pulseLength),
+						Math.max(pulseU, 0.1),
+						thread.coreWidth * 1.15,
+						`rgba(255, 244, 214, ${a * 0.45})`,
 					);
 				}
 			}
 
 			for (const speck of specks) {
 				const points = sampled[speck.thread];
-				const p = pointAt(points, speck.u);
-				const n = normalAt(points, speck.u);
-				const wander = reducedMotion ? 0 : Math.sin(time * speck.drift + speck.phase) * 2.2 * motion;
-				const pulse = 0.07 + (Math.sin(time * 0.7 + speck.phase) + 1) * 0.06;
+				const p = pointAt(points, samples, speck.u);
+				const n = normalAt(points, samples, speck.u);
+				const wander = reducedMotion ? 0 : Math.sin(time * speck.drift + speck.phase) * 2 * motion;
+				const pulse = 0.06 + (Math.sin(time * 0.7 + speck.phase) + 1) * 0.05;
 				ctx.fillStyle = `rgba(228, 178, 92, ${pulse})`;
 				ctx.beginPath();
 				ctx.arc(p.x + n.x * speck.nOff, p.y + n.y * speck.nOff + wander, speck.size, 0, TAU);
 				ctx.fill();
 			}
 
-			for (const ember of embers) {
-				const u = reducedMotion ? ember.phase : (ember.phase + time * ember.speed * motion) % 1;
-				if (u < 0.08 || u > 0.96) continue;
-				const p = pointAt(sampled[ember.thread], u);
-				const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, ember.size * 4.5);
-				g.addColorStop(0, "rgba(255, 246, 220, 0.85)");
-				g.addColorStop(0.35, "rgba(255, 206, 120, 0.28)");
-				g.addColorStop(1, "rgba(0, 0, 0, 0)");
-				ctx.fillStyle = g;
-				ctx.beginPath();
-				ctx.arc(p.x, p.y, ember.size * 4.5, 0, TAU);
-				ctx.fill();
-				ctx.fillStyle = "rgba(255, 250, 236, 0.9)";
-				ctx.beginPath();
-				ctx.arc(p.x, p.y, ember.size * 0.45, 0, TAU);
-				ctx.fill();
-			}
-
 			for (const sparkle of sparkles) {
 				const u = reducedMotion
 					? sparkle.phase
-					: ((sparkle.phase + time * sparkle.speed * motion) % 0.82) + 0.12;
-				const p = pointAt(sampled[sparkle.thread], u);
+					: ((sparkle.phase + time * sparkle.speed * motion) % 0.8) + 0.12;
+				const p = pointAt(sampled[sparkle.thread], samples, u);
 				const twinkle = Math.pow(
 					0.5 + 0.5 * Math.sin(time * sparkle.twinkleSpeed + sparkle.twinklePhase),
 					2.2,
 				);
-				const intensity = 0.28 + twinkle * 0.72;
-				drawSparkle(p.x, p.y, sparkle.size, intensity, sparkle.flare, sparkle.tilt);
+				drawSparkle(p.x, p.y, sparkle.size, 0.3 + twinkle * 0.7, sparkle.flare, sparkle.tilt);
 			}
 
 			ctx.globalCompositeOperation = "source-over";
