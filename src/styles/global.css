@@ -11,7 +11,7 @@
   ApotheonAI tokens — reuse these utilities as you build pages.
 
   Color:   bg-void  text-cream  text-mist  text-gold  bg-ink
-  Type:    font-serif (Playfair Display)  font-empiric (Empiric Roman)  font-sans (Inter)
+  Type:    font-serif (Playfair Display)  font-empiric (Empiric Roman)  font-cane (CaneNero)  font-sans (Inter)
   Buttons: .btn-gold  .btn-gold-sm  .btn-gold-lg
   Logo:    .logo-gold  (tints the black /Logo.svg)
            .logo-mark  (tints the black /ApotheonAI.svg)
@@ -20,7 +20,17 @@
 
 @font-face {
 	font-family: "Empiric Roman";
-	src: url("/fonts/Empiric%20Roman.TTF") format("truetype");
+	src: url("/fonts/Empiric-Roman.TTF") format("truetype");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "CaneNero";
+	src:
+		url("/fonts/CaneNero.woff2") format("woff2"),
+		url("/fonts/CaneNero.ttf") format("truetype");
 	font-weight: 400;
 	font-style: normal;
 	font-display: swap;
@@ -29,6 +39,7 @@
 @theme {
 	--font-serif: "Playfair Display", ui-serif, Georgia, "Times New Roman", serif;
 	--font-empiric: "Empiric Roman", "Playfair Display", ui-serif, Georgia, serif;
+	--font-cane: "CaneNero", "Playfair Display", ui-serif, Georgia, serif;
 	--font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 
 	--color-void: #000000;
@@ -238,24 +249,38 @@
 		mix-blend-mode: screen;
 	}
 
-	.hero-constellation-line-glow {
-		stroke: #d8bc82;
+	.hero-constellation-line-glow,
+	.hero-constellation-lines {
+		fill: none;
 		stroke-linecap: round;
+	}
+
+	.hero-constellation-line-glow,
+	.hero-constellation-line-glow path {
+		stroke: #d8bc82;
+	}
+
+	.hero-constellation-line-glow {
 		opacity: 0.7;
 	}
 
-	.hero-constellation-line-glow line {
+	.hero-constellation-line-glow path {
 		stroke-width: 3px;
+		vector-effect: non-scaling-stroke;
+	}
+
+	.hero-constellation-lines,
+	.hero-constellation-lines path {
+		stroke: #ead7a4;
 	}
 
 	.hero-constellation-lines {
-		stroke: #ead7a4;
-		stroke-linecap: round;
 		stroke-opacity: 0.78;
 	}
 
-	.hero-constellation-lines line {
+	.hero-constellation-lines path {
 		stroke-width: 1px;
+		vector-effect: non-scaling-stroke;
 	}
 
 	.hero-constellation-stars {
@@ -275,10 +300,7 @@
 
 	.hero-word-ascend,
 	.hero-word-divine {
-		display: flex;
-		align-items: baseline;
-		justify-content: center;
-		font-family: var(--font-empiric);
+		font-family: var(--font-cane) !important;
 		font-weight: 400;
 		letter-spacing: 0.04em;
 		line-height: 0.86;
@@ -297,21 +319,13 @@
 	.hero-word-mid {
 		margin: 0.22em 0 0.18em;
 		padding-left: 0.45em;
-		font-family: var(--font-empiric);
+		font-family: var(--font-cane) !important;
 		font-size: min(6.2svh, 8.4vw);
 		font-weight: 400;
 		letter-spacing: 0.45em;
 		line-height: 1;
 		white-space: nowrap;
 		font-synthesis: none;
-	}
-
-	.hero-lambda {
-		display: inline-block;
-		width: auto;
-		height: 0.88em;
-		margin-right: 0.02em;
-		transform: translateY(0.04em);
 	}
 
 	.spark {
