@@ -7,12 +7,10 @@ import DivineFlow from "../components/DivineFlow";
   <div class="hero-flow">
     <DivineFlow
       client:load
-      lineCount={7}
-      innerGap={275}
+      lineCount={8}
+      innerGap={108}
       originY={0.48}
       motion={1}
-      pointerRadius={200}
-      pointerStrength={26}
     />
   </div>
 
@@ -46,7 +44,7 @@ import DivineFlow from "../components/DivineFlow";
   .hero-flow {
     position: absolute;
     inset: 0;
-    z-index: 0;
+    z-index: 1;
     width: 100%;
     height: 100%;
     pointer-events: none;
@@ -54,7 +52,7 @@ import DivineFlow from "../components/DivineFlow";
 
   .center-vignette {
     position: absolute;
-    z-index: 1;
+    z-index: 0;
     left: 50%;
     top: 48%;
     width: min(38vw, 640px);
