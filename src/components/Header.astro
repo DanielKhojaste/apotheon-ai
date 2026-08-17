@@ -8,48 +8,64 @@ const links = [
 ---
 
 <header class="relative z-30 shrink-0">
-  <nav
-    class="container-page flex flex-wrap items-center justify-between py-5 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:py-7"
-    aria-label="Primary"
-  >
-    <a href="/" class="flex items-center gap-2.5 lg:justify-self-start" aria-label="ApotheonAI home">
-      <span class="logo-gold h-8 w-5 sm:h-9 sm:w-[1.35rem]" aria-hidden="true"></span>
-      <span class="font-serif text-lg tracking-tight text-gold sm:text-xl">ApotheonAI</span>
+  <nav class="container-page relative z-50 flex items-center justify-between py-5 lg:py-7" aria-label="Primary">
+    <a href="/" class="group flex items-center" aria-label="ApotheonAI home">
+      <span
+        class="logo-mark h-9 w-5 bg-cream transition-colors duration-200 sm:h-10 sm:w-[1.4rem] group-hover:bg-gold"
+        aria-hidden="true"
+      ></span>
     </a>
 
     <button
       type="button"
-      class="hs-collapse-toggle relative flex size-9 items-center justify-center rounded-md text-cream lg:hidden hover:text-gold"
+      class="hs-collapse-toggle flex size-10 items-center justify-center text-cream hover:text-gold"
       id="hs-header-collapse"
       aria-expanded="false"
       aria-controls="hs-header-collapse-nav"
       aria-label="Toggle navigation"
       data-hs-collapse="#hs-header-collapse-nav"
     >
-      <svg class="hs-collapse-open:hidden size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <line x1="3" x2="21" y1="6" y2="6"></line>
-        <line x1="3" x2="21" y1="12" y2="12"></line>
-        <line x1="3" x2="21" y1="18" y2="18"></line>
+      <svg
+        class="hs-collapse-open:hidden size-6"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <line x1="3.5" x2="20.5" y1="7" y2="7"></line>
+        <line x1="3.5" x2="20.5" y1="12" y2="12"></line>
+        <line x1="3.5" x2="20.5" y1="17" y2="17"></line>
       </svg>
-      <svg class="hs-collapse-open:block hidden size-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <svg
+        class="hs-collapse-open:block hidden size-6"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
         <path d="M18 6 6 18"></path>
         <path d="m6 6 12 12"></path>
       </svg>
     </button>
-
-    <div
-      id="hs-header-collapse-nav"
-      class="hs-collapse hidden w-full basis-full overflow-hidden transition-[height] duration-300 lg:block lg:w-auto lg:basis-auto lg:justify-self-center"
-      aria-labelledby="hs-header-collapse"
-    >
-      <div class="flex flex-col gap-4 py-6 lg:flex-row lg:items-center lg:gap-10 lg:py-0">
-        {links.map((link) => (
-          <a class="nav-link" href={link.href}>{link.label}</a>
-        ))}
-        <a class="btn-gold btn-gold-sm mt-2 w-fit lg:hidden" href="#platform">Explore Platform</a>
-      </div>
-    </div>
-
-    <a class="btn-gold btn-gold-sm hidden lg:inline-flex lg:justify-self-end" href="#platform">Explore Platform</a>
   </nav>
+
+  <div
+    id="hs-header-collapse-nav"
+    class="hs-collapse hidden absolute inset-x-0 top-0 z-40 min-h-svh bg-void/94"
+    aria-labelledby="hs-header-collapse"
+  >
+    <div class="flex min-h-svh flex-col items-center justify-center gap-8 px-6 pb-16 pt-24">
+      {links.map((link) => (
+        <a class="font-serif text-2xl tracking-wide text-cream/90 transition-colors duration-200 hover:text-gold sm:text-3xl" href={link.href}>
+          {link.label}
+        </a>
+      ))}
+    </div>
+  </div>
 </header>

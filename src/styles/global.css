@@ -14,6 +14,7 @@
   Type:    font-serif (Playfair Display)  font-sans (Inter)
   Buttons: .btn-gold  .btn-gold-sm  .btn-gold-lg
   Logo:    .logo-gold  (tints the black /Logo.svg)
+           .logo-mark  (tints the black /ApotheonAI.svg)
   Layout:  .container-page  .section-kicker  .nav-link
 */
 
@@ -86,6 +87,13 @@
 		-webkit-mask: url("/Logo.svg") center / contain no-repeat;
 	}
 
+	.logo-mark {
+		display: inline-block;
+		flex-shrink: 0;
+		mask: url("/ApotheonAI.svg") center / contain no-repeat;
+		-webkit-mask: url("/ApotheonAI.svg") center / contain no-repeat;
+	}
+
 	.nav-link {
 		@apply font-serif text-[0.95rem] tracking-wide text-cream/90 transition-colors duration-200 hover:text-gold;
 	}
@@ -124,11 +132,19 @@
 		@apply font-sans text-[0.65rem] font-medium tracking-[0.32em] text-gold uppercase;
 	}
 
+	.hero-figure {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
 	.hero-glow {
 		position: absolute;
-		inset: 8% 6% 12% 10%;
+		inset: 6% 4% 10% 4%;
+		z-index: 0;
 		background: radial-gradient(
-			circle at 48% 42%,
+			circle at 50% 42%,
 			rgb(201 165 106 / 0.28) 0%,
 			rgb(143 106 59 / 0.1) 38%,
 			transparent 70%
@@ -137,12 +153,68 @@
 		pointer-events: none;
 	}
 
+	.hero-constellation {
+		position: absolute;
+		left: 50%;
+		top: 48%;
+		z-index: 1;
+		width: 198%;
+		height: 172%;
+		transform: translate(-50%, -50%);
+		pointer-events: none;
+		opacity: 0.72;
+		mix-blend-mode: screen;
+	}
+
+	.hero-metal {
+		color: #f2ece1;
+		text-shadow:
+			0 1px 0 rgb(255 255 255 / 0.22),
+			0 12px 32px rgb(0 0 0 / 0.55);
+	}
+
+	.hero-word-lg {
+		display: flex;
+		align-items: baseline;
+		justify-content: center;
+		font-family: var(--font-serif);
+		font-size: clamp(2.85rem, 8.6vw, 7.4rem);
+		font-weight: 500;
+		letter-spacing: -0.03em;
+		line-height: 0.86;
+		white-space: nowrap;
+	}
+
+	.hero-word-sm {
+		margin: 0.32em 0 0.2em;
+		padding-left: 0.48em;
+		font-family: var(--font-serif);
+		font-size: clamp(0.7rem, 1.5vw, 1.15rem);
+		font-weight: 500;
+		letter-spacing: 0.48em;
+		line-height: 1;
+	}
+
+	.hero-lambda {
+		display: inline-block;
+		width: auto;
+		height: 0.9em;
+		margin-right: 0.015em;
+		transform: translateY(0.02em);
+	}
+
 	.spark {
 		position: absolute;
 		border-radius: 9999px;
 		background: #e8d09a;
 		box-shadow: 0 0 10px 2px rgb(201 165 106 / 0.55);
 		pointer-events: none;
+		animation: sparkle 4.8s ease-in-out infinite;
+	}
+
+	.spark-node {
+		transform-box: fill-box;
+		transform-origin: center;
 		animation: sparkle 4.8s ease-in-out infinite;
 	}
 }

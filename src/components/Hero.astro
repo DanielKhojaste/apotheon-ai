@@ -1,95 +1,210 @@
 ---
-const sparks = [
-  { class: "left-[12%] top-[22%] size-1", delay: "0s" },
-  { class: "left-[28%] top-[14%] size-[3px]", delay: "0.8s" },
-  { class: "right-[18%] top-[18%] size-1.5", delay: "1.4s" },
-  { class: "right-[8%] top-[42%] size-[3px]", delay: "2.1s" },
-  { class: "right-[22%] bottom-[28%] size-1", delay: "0.4s" },
-  { class: "left-[8%] bottom-[36%] size-[3px]", delay: "1.8s" },
-  { class: "left-[42%] top-[10%] size-1", delay: "2.6s" },
+const CX = 500;
+const CY = 512;
+const HELMET_RX = 256;
+const HELMET_RY = 330;
+const VIEW_W = 1000;
+const VIEW_H = 1120;
+
+type Node = {
+  x: number;
+  y: number;
+  r: number;
+  ring: number;
+  spark: boolean;
+  delay: string;
+};
+
+function seeded(i: number, k: number) {
+  const s = Math.sin(i * 12.9898 + k * 78.233) * 43758.5453;
+  return s - Math.floor(s);
+}
+
+function fmt(n: number) {
+  return Math.round(n * 10) / 10;
+}
+
+function inTitleGap(x: number, y: number) {
+  return y > CY + HELMET_RY * 0.28 && Math.abs(x - CX) < 168 && y < CY + HELMET_RY * 1.42;
+}
+
+function insidePaddedHelmet(x: number, y: number, pad = 1.12) {
+  const nx = (x - CX) / (HELMET_RX * pad);
+  const ny = (y - CY) / (HELMET_RY * pad);
+  return nx * nx + ny * ny < 1;
+}
+
+const rings = [
+  { rx: HELMET_RX * 1.18, ry: HELMET_RY * 1.16, count: 18, size: 2.7, phase: 0.04, jitter: 0.055 },
+  { rx: HELMET_RX * 1.44, ry: HELMET_RY * 1.4, count: 22, size: 2.3, phase: 0.17, jitter: 0.07 },
+  { rx: HELMET_RX * 1.74, ry: HELMET_RY * 1.68, count: 26, size: 2.0, phase: 0.07, jitter: 0.075 },
+  { rx: HELMET_RX * 2.08, ry: HELMET_RY * 1.98, count: 20, size: 1.7, phase: 0.23, jitter: 0.06 },
+  { rx: HELMET_RX * 2.46, ry: HELMET_RY * 2.28, count: 14, size: 1.45, phase: 0.11, jitter: 0.05 },
 ];
+
+const nodes: Node[] = [];
+
+for (const [ri, ring] of rings.entries()) {
+  const half = ring.count / 2;
+  for (let i = 0; i <= half; i++) {
+    const t = -Math.PI / 2 + (i / half) * Math.PI + ring.phase;
+    const jr = 1 + (seeded(i, ri + 1) - 0.5) * ring.jitter;
+    const jt = (seeded(i, ri + 7) - 0.5) * 0.065;
+    const x = CX + ring.rx * Math.cos(t + jt) * jr;
+    const y = CY + ring.ry * Math.sin(t + jt) * jr;
+
+    if (x < CX - 0.6) continue;
+    if (insidePaddedHelmet(x, y, 1.14)) continue;
+    if (inTitleGap(x, y)) continue;
+    if (x < 18 || x > VIEW_W - 18 || y < 18 || y > VIEW_H - 18) continue;
+
+    const node: Node = {
+      x,
+      y,
+      r: ring.size * (0.84 + seeded(i, ri + 3) * 0.36),
+      ring: ri,
+      spark: seeded(i, ri + 11) > 0.7,
+      delay: `${(seeded(i, ri + 15) * 3.6).toFixed(2)}s`,
+    };
+    nodes.push(node);
+    if (x > CX + 2.5) {
+      nodes.push({ ...node, x: 2 * CX - x });
+    }
+  }
+}
+
+const outlierScales = [
+  { a: -1.12, s: 2.58, r: 1.5 },
+  { a: -0.62, s: 2.7, r: 1.7 },
+  { a: 0.38, s: 2.62, r: 1.45 },
+  { a: 0.92, s: 2.5, r: 1.35 },
+];
+
+for (const [oi, out] of outlierScales.entries()) {
+  const x = CX + HELMET_RX * out.s * Math.cos(out.a);
+  const y = CY + HELMET_RY * out.s * Math.sin(out.a);
+  if (inTitleGap(x, y) || x > VIEW_W - 24 || y > VIEW_H - 24 || y < 24) continue;
+  const node: Node = {
+    x,
+    y,
+    r: out.r,
+    ring: 5,
+    spark: true,
+    delay: `${(0.4 + oi * 0.7).toFixed(2)}s`,
+  };
+  nodes.push(node);
+  nodes.push({ ...node, x: 2 * CX - x });
+}
+
+function dist(a: Node, b: Node) {
+  return Math.hypot(a.x - b.x, a.y - b.y);
+}
+
+function crossesHelmet(a: Node, b: Node) {
+  const steps = 4;
+  for (let s = 1; s < steps; s++) {
+    const t = s / steps;
+    if (insidePaddedHelmet(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, 1.1)) return true;
+  }
+  return false;
+}
+
+const edgeKeys = new Set<string>();
+const edges: Array<[number, number]> = [];
+
+function addEdge(i: number, j: number) {
+  if (i === j) return;
+  const a = Math.min(i, j);
+  const b = Math.max(i, j);
+  const key = `${a},${b}`;
+  if (edgeKeys.has(key)) return;
+  if (crossesHelmet(nodes[a], nodes[b])) return;
+  edgeKeys.add(key);
+  edges.push([a, b]);
+}
+
+for (let i = 0; i < nodes.length; i++) {
+  const maxD = 78 + nodes[i].ring * 26;
+  const candidates = nodes
+    .map((n, j) => ({ j, d: dist(nodes[i], n), ring: n.ring }))
+    .filter((c) => c.j !== i)
+    .sort((a, b) => a.d - b.d);
+
+  for (const c of candidates.slice(0, 2)) {
+    if (c.d < maxD) addEdge(i, c.j);
+  }
+
+  const next = candidates.find((c) => c.ring === nodes[i].ring + 1 && c.d < maxD + 36);
+  if (next) addEdge(i, next.j);
+}
 ---
 
 <section class="relative flex min-h-0 flex-1 flex-col overflow-hidden" aria-labelledby="hero-heading">
-  <div class="container-page grid min-h-0 flex-1 grid-rows-[auto_minmax(0,1fr)] items-center gap-4 py-3 sm:gap-6 lg:grid-cols-2 lg:grid-rows-1 lg:gap-8 lg:py-2">
-    <div class="relative z-10 max-w-xl lg:max-w-none lg:self-center lg:pr-6">
-      <h1
-        id="hero-heading"
-        class="font-serif text-4xl leading-[1.08] font-medium tracking-tight text-cream sm:text-5xl lg:text-[3.75rem] xl:text-[4.35rem]"
-      >
-        Ascend to the divine.
-      </h1>
-      <p class="mt-4 max-w-md font-sans text-sm leading-relaxed text-mist sm:mt-6 sm:text-base lg:text-lg">
-        Enterprise AI security, raised to a higher standard of visibility, control, and trust.
-      </p>
-      <a class="btn-gold btn-gold-lg mt-6 sm:mt-8" href="#platform">Explore Platform</a>
-    </div>
-
-    <div class="relative flex h-full min-h-0 w-full items-center justify-center overflow-hidden lg:justify-end">
+  <div class="relative flex min-h-0 flex-1 items-center justify-center px-4 pb-8 pt-1 sm:px-8">
+    <div class="hero-figure relative">
       <div class="hero-glow"></div>
 
-      {sparks.map((spark) => (
-        <span class:list={["spark", spark.class]} style={`animation-delay: ${spark.delay}`}></span>
-      ))}
-
-      <div class="relative mx-auto flex h-full w-full max-w-xs items-center justify-center sm:max-w-sm lg:mx-0 lg:max-w-none lg:justify-end">
-        <img
-          src="/spartan-helmet-front-hero.png"
-          alt="Weathered bronze Spartan helmet"
-          width="1006"
-          height="1523"
-          class="mx-auto h-full w-auto max-w-full object-contain object-center drop-shadow-[0_20px_60px_rgb(0_0_0_/_0.65)]"
-        />
-
-        <svg
-          class="pointer-events-none absolute inset-0 z-20 h-full w-full opacity-70 mix-blend-screen"
-          viewBox="0 0 400 560"
-          fill="none"
-          aria-hidden="true"
-        >
-          <g stroke="#d8bc82" stroke-opacity="0.55" stroke-width="0.7">
-            <line x1="168" y1="92" x2="214" y2="128"></line>
-            <line x1="214" y1="128" x2="262" y2="118"></line>
-            <line x1="214" y1="128" x2="236" y2="188"></line>
-            <line x1="262" y1="118" x2="298" y2="162"></line>
-            <line x1="236" y1="188" x2="298" y2="162"></line>
-            <line x1="236" y1="188" x2="198" y2="242"></line>
-            <line x1="198" y1="242" x2="148" y2="228"></line>
-            <line x1="148" y1="228" x2="168" y2="92"></line>
-            <line x1="198" y1="242" x2="228" y2="312"></line>
-            <line x1="228" y1="312" x2="286" y2="286"></line>
-            <line x1="286" y1="286" x2="298" y2="162"></line>
-            <line x1="228" y1="312" x2="176" y2="368"></line>
-            <line x1="176" y1="368" x2="132" y2="318"></line>
-            <line x1="132" y1="318" x2="148" y2="228"></line>
-            <line x1="176" y1="368" x2="210" y2="430"></line>
-            <line x1="210" y1="430" x2="268" y2="402"></line>
-            <line x1="268" y1="402" x2="286" y2="286"></line>
-            <line x1="210" y1="430" x2="154" y2="456"></line>
+      <svg
+        class="hero-constellation"
+        viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
+        fill="none"
+        aria-hidden="true"
+      >
+        <defs>
+          <mask id="constellation-hole" maskUnits="userSpaceOnUse">
+            <rect width={VIEW_W} height={VIEW_H} fill="white"></rect>
+            <ellipse cx={CX} cy={CY} rx={HELMET_RX * 1.13} ry={HELMET_RY * 1.11} fill="black"></ellipse>
+          </mask>
+        </defs>
+        <g mask="url(#constellation-hole)">
+          <g stroke="#d8bc82" stroke-opacity="0.55" stroke-width="1.05">
+            {edges.map(([a, b]) => (
+              <line x1={fmt(nodes[a].x)} y1={fmt(nodes[a].y)} x2={fmt(nodes[b].x)} y2={fmt(nodes[b].y)}></line>
+            ))}
           </g>
           <g fill="#e8d09a">
-            <circle cx="168" cy="92" r="2.2"></circle>
-            <circle cx="214" cy="128" r="2.8"></circle>
-            <circle cx="262" cy="118" r="2"></circle>
-            <circle cx="298" cy="162" r="2.4"></circle>
-            <circle cx="236" cy="188" r="3.1"></circle>
-            <circle cx="198" cy="242" r="2.6"></circle>
-            <circle cx="148" cy="228" r="2.1"></circle>
-            <circle cx="228" cy="312" r="2.9"></circle>
-            <circle cx="286" cy="286" r="2.3"></circle>
-            <circle cx="176" cy="368" r="2.5"></circle>
-            <circle cx="132" cy="318" r="1.8"></circle>
-            <circle cx="210" cy="430" r="2.7"></circle>
-            <circle cx="268" cy="402" r="2"></circle>
-            <circle cx="154" cy="456" r="1.9"></circle>
+            {nodes.map((node) =>
+              node.spark ? (
+                <circle
+                  class="spark-node"
+                  cx={fmt(node.x)}
+                  cy={fmt(node.y)}
+                  r={fmt(node.r)}
+                  style={`animation-delay: ${node.delay}`}
+                ></circle>
+              ) : (
+                <circle cx={fmt(node.x)} cy={fmt(node.y)} r={fmt(node.r)}></circle>
+              )
+            )}
           </g>
-        </svg>
-      </div>
-    </div>
-  </div>
+        </g>
+      </svg>
 
-  <div class="container-page mt-auto shrink-0 pb-4 pt-2">
-    <p class="section-kicker mb-3">Platform</p>
-    <div class="h-px w-full bg-gold/45"></div>
+      <img
+        src="/spartan-helmet-front-hero-snug.png"
+        alt="Weathered bronze Spartan helmet"
+        width="2053"
+        height="3790"
+        fetchpriority="high"
+        class="relative z-[2] h-[min(62svh,36.5rem)] w-auto max-w-[min(72vw,22rem)] object-contain object-center drop-shadow-[0_24px_60px_rgb(0_0_0_/_0.55)] sm:max-w-[min(58vw,26rem)]"
+      />
+
+      <h1
+        id="hero-heading"
+        class="pointer-events-none absolute left-1/2 top-[36%] z-[3] w-screen -translate-x-1/2 text-center sm:top-[38%]"
+      >
+        <span class="sr-only">Ascend to the divine.</span>
+        <span aria-hidden="true" class="flex flex-col items-center">
+          <span class="hero-word-lg hero-metal">
+            <svg class="hero-lambda" viewBox="0 0 78 82" fill="currentColor">
+              <path d="M39 2.4 20.2 79.2H8.1L34.6 2.4H39Z"></path>
+              <path d="M39 2.4h4.8L69.9 79.2H57.6L39 2.4Z"></path>
+            </svg>SCEND
+          </span>
+          <span class="hero-word-sm hero-metal">TO THE</span>
+          <span class="hero-word-lg hero-metal">DIVINE</span>
+        </span>
+      </h1>
+    </div>
   </div>
 </section>
