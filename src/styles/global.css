@@ -284,4 +284,27 @@
 		white-space: nowrap;
 		font-synthesis: none;
 	}
+
+	@media (max-width: 640px) {
+		.hero-cluster {
+			margin-top: 1.2vh;
+		}
+
+		.hero-helmet {
+			height: min(50svh, calc(100svh - 14rem));
+			max-width: 62vw;
+		}
+
+		.hero-word-ascend {
+			font-size: min(9.6svh, 18vw);
+		}
+
+		.hero-word-divine {
+			font-size: min(8.9svh, 16.5vw);
+		}
+
+		.hero-word-mid {
+			font-size: min(4.8svh, 7.2vw);
+		}
+	}
 }
