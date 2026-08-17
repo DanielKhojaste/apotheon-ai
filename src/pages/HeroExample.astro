@@ -1,18 +1,20 @@
 ---
-import DivineFlow from "../components/DivineFlow"
+import "../styles/global.css";
+import DivineFlow from "../components/DivineFlow";
 ---
 
 <section class="hero">
-  <DivineFlow
-    client:load
-    className="hero-flow"
-    lineCount={7}
-    innerGap={275}
-    originY={0.48}
-    motion={1}
-    pointerRadius={200}
-    pointerStrength={26}
-  />
+  <div class="hero-flow">
+    <DivineFlow
+      client:load
+      lineCount={7}
+      innerGap={275}
+      originY={0.48}
+      motion={1}
+      pointerRadius={200}
+      pointerStrength={26}
+    />
+  </div>
 
   <!-- Optional: adds a dark center pocket behind the helmet/text. -->
   <div class="center-vignette" aria-hidden="true"></div>
@@ -47,7 +49,7 @@ import DivineFlow from "../components/DivineFlow"
     z-index: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.95;
+    pointer-events: none;
   }
 
   .center-vignette {
@@ -108,7 +110,7 @@ import DivineFlow from "../components/DivineFlow"
 
   @media (max-width: 760px) {
     .hero-flow {
-      opacity: 0.72;
+      opacity: 0.85;
     }
 
     .helmet {
