@@ -1,0 +1,128 @@
+---
+import DivineFlow from "../components/DivineFlow"
+---
+
+<section class="hero">
+  <DivineFlow
+    client:load
+    className="hero-flow"
+    lineCount={7}
+    innerGap={275}
+    originY={0.48}
+    motion={1}
+    pointerRadius={200}
+    pointerStrength={26}
+  />
+
+  <!-- Optional: adds a dark center pocket behind the helmet/text. -->
+  <div class="center-vignette" aria-hidden="true"></div>
+
+  <img
+    class="helmet"
+    src="/spartan-helmet-front-hero-snug.png"
+    alt="Bronze Spartan helmet"
+  />
+
+  <div class="hero-copy">
+    <div class="ascend">ASCEND</div>
+    <div class="to-the">TO THE</div>
+    <div class="divine">DIVINE</div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    overflow: hidden;
+    isolation: isolate;
+    background:
+      radial-gradient(circle at 50% 44%, rgba(74, 50, 20, 0.18), transparent 30%),
+      #020202;
+  }
+
+  .hero-flow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.95;
+  }
+
+  .center-vignette {
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    top: 48%;
+    width: min(38vw, 640px);
+    aspect-ratio: 0.86;
+    translate: -50% -50%;
+    border-radius: 48%;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(0, 0, 0, 0.8) 0%,
+      rgba(0, 0, 0, 0.55) 50%,
+      transparent 76%
+    );
+    pointer-events: none;
+  }
+
+  .helmet {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    top: 46%;
+    width: min(27vw, 460px);
+    max-height: 70vh;
+    translate: -50% -50%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 25px rgba(195, 142, 55, 0.12));
+  }
+
+  .hero-copy {
+    position: absolute;
+    z-index: 3;
+    left: 50%;
+    top: 64%;
+    translate: -50% -50%;
+    text-align: center;
+    color: #f4efe5;
+    pointer-events: none;
+  }
+
+  .ascend,
+  .divine {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(4rem, 7vw, 8rem);
+    line-height: 0.8;
+    letter-spacing: -0.04em;
+  }
+
+  .to-the {
+    margin: 0.85rem 0 0.7rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(1.4rem, 2vw, 2.3rem);
+    letter-spacing: 0.48em;
+  }
+
+  @media (max-width: 760px) {
+    .hero-flow {
+      opacity: 0.72;
+    }
+
+    .helmet {
+      width: min(58vw, 390px);
+      top: 43%;
+    }
+
+    .hero-copy {
+      top: 65%;
+    }
+
+    .center-vignette {
+      width: 76vw;
+      top: 47%;
+    }
+  }
+</style>
