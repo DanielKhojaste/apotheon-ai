@@ -2,8 +2,10 @@ import { useEffect, useRef } from "react";
 
 type DivineFlowProps = {
 	className?: string;
-	/** Independent filaments per side. */
+	/** Main-band filaments per side. */
 	lineCount?: number;
+	/** Extra high/low filaments per side. */
+	scatterCount?: number;
 	/** How far from center filaments emerge (CSS px, capped by viewport). */
 	innerGap?: number;
 	/** 0..1 vertical position of the helmet / flow origin. */
@@ -117,7 +119,7 @@ function strokeRange(
 	u0: number,
 	u1: number,
 	width: number,
-	color: string,
+	color: string | CanvasGradient,
 ) {
 	const i0 = Math.max(0, Math.floor(u0 * samples));
 	const i1 = Math.min(samples, Math.ceil(u1 * samples));
@@ -151,6 +153,27 @@ function normalAt(points: Pt[], samples: number, u: number): Pt {
 	return { x: -dy / len, y: dx / len };
 }
 
+function makeTrailGradient(
+	ctx: CanvasRenderingContext2D,
+	points: Pt[],
+	samples: number,
+	r: number,
+	g: number,
+	b: number,
+	alpha: number,
+) {
+	const from = points[0];
+	const to = points[samples];
+	const grad = ctx.createLinearGradient(from.x, from.y, to.x, to.y);
+	grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, 0)`);
+	grad.addColorStop(0.1, `rgba(${r}, ${g}, ${b}, ${alpha * 0.8})`);
+	grad.addColorStop(0.42, `rgba(${r}, ${g}, ${b}, ${alpha})`);
+	grad.addColorStop(0.66, `rgba(${r}, ${g}, ${b}, ${alpha * 0.42})`);
+	grad.addColorStop(0.83, `rgba(${r}, ${g}, ${b}, ${alpha * 0.1})`);
+	grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+	return grad;
+}
+
 function makePointBuffer() {
 	return Array.from({ length: MAX_SAMPLES + 1 }, () => ({ x: 0, y: 0 }));
 }
@@ -158,6 +181,7 @@ function makePointBuffer() {
 export default function DivineFlow({
 	className,
 	lineCount = 7,
+	scatterCount = 2,
 	innerGap = 108,
 	originY = 0.5,
 	motion = 1,
@@ -206,7 +230,7 @@ export default function DivineFlow({
 					startY,
 					endY,
 					startInset: random(),
-					reach: 0.68 + random() * 0.4,
+					reach: 1.08 + random() * 0.12,
 					c1t: 0.18 + random() * 0.2,
 					c2t: 0.5 + random() * 0.28,
 					bow1: centered * 0.05 + (random() - 0.5) * 0.1,
@@ -224,6 +248,36 @@ export default function DivineFlow({
 					pulseLength: 0.06 + random() * 0.08,
 					shimmerSpeed: 0.2 + random() * 0.32,
 					hasPulse: hero,
+				});
+			}
+
+			for (let s = 0; s < scatterCount; s += 1) {
+				const pole = s % 2 === 0 ? 1 : -1;
+				const sign = pole * (random() > 0.18 ? 1 : -1);
+
+				threads.push({
+					side,
+					startY: sign * (0.03 + random() * 0.05),
+					endY: sign * (0.48 + random() * 0.18),
+					startInset: random(),
+					reach: 1.08 + random() * 0.14,
+					c1t: 0.2 + random() * 0.22,
+					c2t: 0.52 + random() * 0.26,
+					bow1: sign * (0.06 + random() * 0.08),
+					bow2: (random() - 0.5) * 0.1,
+					amp1: 0.005 + random() * 0.01,
+					amp2: 0.002 + random() * 0.006,
+					speed: 0.14 + random() * 0.24,
+					phase: random() * TAU,
+					seed: 40 + random() * 200,
+					coreWidth: 0.26 + random() * 0.28,
+					glowWidth: 1.6 + random() * 2,
+					alpha: 0.16 + random() * 0.28,
+					pulsePhase: random(),
+					pulseSpeed: 0.03 + random() * 0.045,
+					pulseLength: 0.05 + random() * 0.07,
+					shimmerSpeed: 0.18 + random() * 0.3,
+					hasPulse: false,
 				});
 			}
 		}
@@ -250,7 +304,7 @@ export default function DivineFlow({
 		for (let i = 0; i < speckCount; i += 1) {
 			specks.push({
 				thread: Math.floor(speckRandom() * threads.length),
-				u: 0.14 + speckRandom() * 0.74,
+				u: 0.14 + speckRandom() * 0.58,
 				nOff: (speckRandom() - 0.5) * 22,
 				size: 0.3 + speckRandom() * 0.75,
 				phase: speckRandom() * TAU,
@@ -409,6 +463,7 @@ export default function DivineFlow({
 			for (let i = 0; i < threads.length; i += 1) {
 				const thread = threads[i];
 				const shimmer = 0.8 + 0.2 * Math.sin(time * thread.shimmerSpeed + thread.phase);
+				const a = thread.alpha * shimmer;
 				strokeRange(
 					bloomCtx,
 					sampled[i],
@@ -416,7 +471,7 @@ export default function DivineFlow({
 					0,
 					1,
 					thread.glowWidth * 1.7,
-					`rgba(214, 154, 64, ${thread.alpha * shimmer * 0.5})`,
+					makeTrailGradient(bloomCtx, sampled[i], samples, 214, 154, 64, a * 0.5),
 				);
 			}
 
@@ -432,12 +487,14 @@ export default function DivineFlow({
 				const points = sampled[i];
 				const shimmer = 0.82 + 0.18 * Math.sin(time * thread.shimmerSpeed + thread.phase);
 				const a = Math.min(1, thread.alpha * shimmer);
+				const glow = makeTrailGradient(ctx, points, samples, 224, 170, 82, a * 0.22);
+				const core = makeTrailGradient(ctx, points, samples, 255, 232, 186, a * 0.78);
 
-				strokeRange(ctx, points, samples, 0.05, 0.98, thread.glowWidth * 0.32, `rgba(224, 170, 82, ${a * 0.22})`);
-				strokeRange(ctx, points, samples, 0.08, 0.96, thread.coreWidth, `rgba(255, 232, 186, ${a * 0.78})`);
+				strokeRange(ctx, points, samples, 0, 1, thread.glowWidth * 0.32, glow);
+				strokeRange(ctx, points, samples, 0, 1, thread.coreWidth, core);
 
 				if (thread.hasPulse && !reducedMotion && motion > 0) {
-					const pulseU = (thread.pulsePhase + time * thread.pulseSpeed * motion) % 1;
+					const pulseU = ((thread.pulsePhase + time * thread.pulseSpeed * motion) % 0.58) + 0.1;
 					strokeRange(
 						ctx,
 						points,
@@ -465,7 +522,7 @@ export default function DivineFlow({
 			for (const sparkle of sparkles) {
 				const u = reducedMotion
 					? sparkle.phase
-					: ((sparkle.phase + time * sparkle.speed * motion) % 0.8) + 0.12;
+					: ((sparkle.phase + time * sparkle.speed * motion) % 0.62) + 0.12;
 				const p = pointAt(sampled[sparkle.thread], samples, u);
 				const twinkle = Math.pow(
 					0.5 + 0.5 * Math.sin(time * sparkle.twinkleSpeed + sparkle.twinklePhase),
@@ -519,7 +576,7 @@ export default function DivineFlow({
 			window.removeEventListener("resize", resize);
 			document.removeEventListener("visibilitychange", onVisibility);
 		};
-	}, [innerGap, lineCount, motion, originY]);
+	}, [innerGap, lineCount, motion, originY, scatterCount]);
 
 	return (
 		<div
