@@ -3,8 +3,8 @@ import "../styles/global.css";
 import Header from "../components/Header.astro";
 
 interface Props {
-  title: string;
-  fillViewport?: boolean;
+	title: string;
+	fillViewport?: boolean;
 }
 
 const { title, fillViewport = false } = Astro.props;
@@ -12,27 +12,32 @@ const { title, fillViewport = false } = Astro.props;
 
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
-  </head>
-  <body class:list={["flex flex-col overflow-x-hidden", fillViewport ? "h-svh overflow-hidden" : "min-h-svh"]}>
-    <Header />
-    <main class="relative z-10 flex min-h-0 flex-1 flex-col">
-      <slot />
-    </main>
-    <script>
-      import "../scripts/preline.ts";
-    </script>
-  </body>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body
+		class:list={[
+			"flex flex-col overflow-x-hidden",
+			fillViewport ? "h-svh overflow-hidden" : "min-h-svh",
+		]}
+	>
+		<Header />
+		<main class="relative z-10 flex min-h-0 flex-1 flex-col">
+			<slot />
+		</main>
+		<script>
+			import "../scripts/preline.ts";
+		</script>
+	</body>
 </html>

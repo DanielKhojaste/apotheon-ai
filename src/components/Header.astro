@@ -1,71 +1,80 @@
 ---
 const links = [
-  { href: "#platform", label: "Platform" },
-  { href: "#solutions", label: "Solutions" },
-  { href: "#insights", label: "Insights" },
-  { href: "/about", label: "Company" },
+	{ href: "#platform", label: "Platform" },
+	{ href: "#solutions", label: "Solutions" },
+	{ href: "#insights", label: "Insights" },
+	{ href: "/about", label: "Company" },
 ];
 ---
 
 <header class="relative z-30 shrink-0">
-  <nav class="container-page relative z-50 flex items-center justify-between py-4 lg:py-5" aria-label="Primary">
-    <a href="/" class="group flex items-center" aria-label="ApotheonAI home">
-      <span
-        class="logo-mark h-9 w-5 bg-cream transition-colors duration-200 sm:h-10 sm:w-[1.4rem] group-hover:bg-gold"
-        aria-hidden="true"
-      ></span>
-    </a>
+	<nav
+		class="container-page relative z-50 flex items-center justify-between py-4 lg:py-5"
+		aria-label="Primary"
+	>
+		<a href="/" class="group flex items-center" aria-label="ApotheonAI home">
+			<span
+				class="logo-mark h-9 w-5 bg-cream transition-colors duration-200 sm:h-10 sm:w-[1.4rem] group-hover:bg-gold"
+				aria-hidden="true"></span>
+		</a>
 
-    <button
-      type="button"
-      class="hs-collapse-toggle nav-toggle flex items-center justify-center text-cream hover:text-gold"
-      id="hs-header-collapse"
-      aria-expanded="false"
-      aria-controls="hs-header-collapse-nav"
-      aria-label="Toggle navigation"
-      data-hs-collapse="#hs-header-collapse-nav"
-    >
-      <svg
-        class="hs-collapse-open:hidden nav-burger"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        aria-hidden="true"
-      >
-        <line x1="3.5" x2="20.5" y1="7" y2="7"></line>
-        <line x1="3.5" x2="20.5" y1="12" y2="12"></line>
-        <line x1="3.5" x2="20.5" y1="17" y2="17"></line>
-      </svg>
-      <svg
-        class="hs-collapse-open:block nav-burger hidden"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        aria-hidden="true"
-      >
-        <path d="M18 6 6 18"></path>
-        <path d="m6 6 12 12"></path>
-      </svg>
-    </button>
-  </nav>
+		<button
+			type="button"
+			class="hs-collapse-toggle nav-toggle flex items-center justify-center text-cream hover:text-gold"
+			id="hs-header-collapse"
+			aria-expanded="false"
+			aria-controls="hs-header-collapse-nav"
+			aria-label="Toggle navigation"
+			data-hs-collapse="#hs-header-collapse-nav"
+		>
+			<svg
+				class="hs-collapse-open:hidden nav-burger"
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="1.5"
+				stroke-linecap="round"
+				aria-hidden="true"
+			>
+				<line x1="3.5" x2="20.5" y1="7" y2="7"></line>
+				<line x1="3.5" x2="20.5" y1="12" y2="12"></line>
+				<line x1="3.5" x2="20.5" y1="17" y2="17"></line>
+			</svg>
+			<svg
+				class="hs-collapse-open:block nav-burger hidden"
+				xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="1.5"
+				stroke-linecap="round"
+				aria-hidden="true"
+			>
+				<path d="M18 6 6 18"></path>
+				<path d="m6 6 12 12"></path>
+			</svg>
+		</button>
+	</nav>
 
-  <div
-    id="hs-header-collapse-nav"
-    class="hs-collapse hidden absolute inset-x-0 top-0 z-40 min-h-svh bg-void/94"
-    aria-labelledby="hs-header-collapse"
-  >
-    <div class="flex min-h-svh flex-col items-center justify-center gap-8 px-6 pb-16 pt-24">
-      {links.map((link) => (
-        <a class="font-serif text-2xl tracking-wide text-cream/90 transition-colors duration-200 hover:text-gold sm:text-3xl" href={link.href}>
-          {link.label}
-        </a>
-      ))}
-    </div>
-  </div>
+	<div
+		id="hs-header-collapse-nav"
+		class="hs-collapse hidden absolute inset-x-0 top-0 z-40 min-h-svh bg-void/94"
+		aria-labelledby="hs-header-collapse"
+	>
+		<div
+			class="flex min-h-svh flex-col items-center justify-center gap-8 px-6 pb-16 pt-24"
+		>
+			{
+				links.map((link) => (
+					<a
+						class="font-serif text-2xl tracking-wide text-cream/90 transition-colors duration-200 hover:text-gold sm:text-3xl"
+						href={link.href}
+					>
+						{link.label}
+					</a>
+				))
+			}
+		</div>
+	</div>
 </header>

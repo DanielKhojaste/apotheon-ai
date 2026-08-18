@@ -67,8 +67,16 @@
 
 	body {
 		background-image:
-			radial-gradient(ellipse 55% 50% at 72% 46%, rgb(90 62 28 / 0.22), transparent 62%),
-			radial-gradient(ellipse 40% 36% at 18% 38%, rgb(32 24 12 / 0.35), transparent 58%);
+			radial-gradient(
+				ellipse 55% 50% at 72% 46%,
+				rgb(90 62 28 / 0.22),
+				transparent 62%
+			),
+			radial-gradient(
+				ellipse 40% 36% at 18% 38%,
+				rgb(32 24 12 / 0.35),
+				transparent 58%
+			);
 	}
 
 	/* Fine grain so the black field is not perfectly flat */

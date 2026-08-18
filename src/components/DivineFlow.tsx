@@ -73,14 +73,33 @@ function mulberry32(seed: number) {
 	};
 }
 
-function cubicBezier(t: number, p0: number, p1: number, p2: number, p3: number) {
+function cubicBezier(
+	t: number,
+	p0: number,
+	p1: number,
+	p2: number,
+	p3: number,
+) {
 	const mt = 1 - t;
-	return mt * mt * mt * p0 + 3 * mt * mt * t * p1 + 3 * mt * t * t * p2 + t * t * t * p3;
+	return (
+		mt * mt * mt * p0 +
+		3 * mt * mt * t * p1 +
+		3 * mt * t * t * p2 +
+		t * t * t * p3
+	);
 }
 
-function cubicBezier1(t: number, p0: number, p1: number, p2: number, p3: number) {
+function cubicBezier1(
+	t: number,
+	p0: number,
+	p1: number,
+	p2: number,
+	p3: number,
+) {
 	const mt = 1 - t;
-	return 3 * mt * mt * (p1 - p0) + 6 * mt * t * (p2 - p1) + 3 * t * t * (p3 - p2);
+	return (
+		3 * mt * mt * (p1 - p0) + 6 * mt * t * (p2 - p1) + 3 * t * t * (p3 - p2)
+	);
 }
 
 function smoothNoise(x: number, seed: number) {
@@ -234,7 +253,9 @@ export default function DivineFlow({
 		const bloomCtx = bloomCanvas.getContext("2d", { alpha: true });
 		if (!bloomCtx) return;
 
-		const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+		const reducedMotion = window.matchMedia(
+			"(prefers-reduced-motion: reduce)",
+		).matches;
 
 		let width = 1;
 		let height = 1;
@@ -323,8 +344,14 @@ export default function DivineFlow({
 			sparkles.push({
 				thread: Math.floor(sparkleRandom() * threads.length),
 				phase: 0.16 + sparkleRandom() * 0.7,
-				speed: sparkleRandom() < 0.4 ? 0.01 + sparkleRandom() * 0.018 : 0.003 + sparkleRandom() * 0.007,
-				size: sparkleRandom() < 0.3 ? 1.5 + sparkleRandom() * 1.2 : 0.7 + sparkleRandom() * 0.7,
+				speed:
+					sparkleRandom() < 0.4
+						? 0.01 + sparkleRandom() * 0.018
+						: 0.003 + sparkleRandom() * 0.007,
+				size:
+					sparkleRandom() < 0.3
+						? 1.5 + sparkleRandom() * 1.2
+						: 0.7 + sparkleRandom() * 0.7,
 				flare: sparkleRandom() < 0.28,
 				tilt: (sparkleRandom() - 0.5) * 0.55,
 				twinklePhase: sparkleRandom() * TAU,
@@ -363,7 +390,14 @@ export default function DivineFlow({
 			const bloomScale = 0.28;
 			bloomCanvas.width = Math.max(1, Math.round(width * bloomScale));
 			bloomCanvas.height = Math.max(1, Math.round(height * bloomScale));
-			bloomCtx.setTransform(bloomCanvas.width / width, 0, 0, bloomCanvas.height / height, 0, 0);
+			bloomCtx.setTransform(
+				bloomCanvas.width / width,
+				0,
+				0,
+				bloomCanvas.height / height,
+				0,
+				0,
+			);
 			bloomCtx.lineCap = "round";
 			bloomCtx.lineJoin = "round";
 		}
@@ -372,7 +406,8 @@ export default function DivineFlow({
 			const cx = width * 0.5;
 			const cy = height * originY;
 			const originR = Math.min(innerGap, Math.max(64, width * 0.072));
-			const startX = cx + thread.side * originR * (0.4 + thread.startInset * 0.34);
+			const startX =
+				cx + thread.side * originR * (0.4 + thread.startInset * 0.34);
 			const startY = cy + thread.startY * height;
 			const edgeX = thread.side === 1 ? width + 48 : -48;
 			const endX = startX + (edgeX - startX) * thread.reach;
@@ -393,10 +428,19 @@ export default function DivineFlow({
 
 			const tMotion = reducedMotion ? 0 : time;
 			const envelope = Math.sin(Math.PI * u);
-			const n1 = smoothNoise(u * 2.1 + tMotion * thread.speed + thread.phase, thread.seed);
-			const n2 = smoothNoise(u * 5.4 - tMotion * thread.speed * 0.4 + thread.phase * 1.4, thread.seed + 11);
+			const n1 = smoothNoise(
+				u * 2.1 + tMotion * thread.speed + thread.phase,
+				thread.seed,
+			);
+			const n2 = smoothNoise(
+				u * 5.4 - tMotion * thread.speed * 0.4 + thread.phase * 1.4,
+				thread.seed + 11,
+			);
 			const wave =
-				((n1 - 0.5) * thread.amp1 + (n2 - 0.5) * thread.amp2) * envelope * motion * height;
+				((n1 - 0.5) * thread.amp1 + (n2 - 0.5) * thread.amp2) *
+				envelope *
+				motion *
+				height;
 
 			out.x = x0 + nx * wave;
 			out.y = y0 + ny * wave;
@@ -495,7 +539,8 @@ export default function DivineFlow({
 
 			for (let i = 0; i < threads.length; i += 1) {
 				const thread = threads[i];
-				const shimmer = 0.8 + 0.2 * Math.sin(time * thread.shimmerSpeed + thread.phase);
+				const shimmer =
+					0.8 + 0.2 * Math.sin(time * thread.shimmerSpeed + thread.phase);
 				const a = thread.alpha * shimmer;
 				strokeRange(
 					bloomCtx,
@@ -504,7 +549,15 @@ export default function DivineFlow({
 					0,
 					1,
 					thread.glowWidth * 1.7,
-					makeTrailGradient(bloomCtx, sampled[i], samples, 214, 154, 64, a * 0.5),
+					makeTrailGradient(
+						bloomCtx,
+						sampled[i],
+						samples,
+						214,
+						154,
+						64,
+						a * 0.5,
+					),
 				);
 			}
 
@@ -518,16 +571,35 @@ export default function DivineFlow({
 			for (let i = 0; i < threads.length; i += 1) {
 				const thread = threads[i];
 				const points = sampled[i];
-				const shimmer = 0.82 + 0.18 * Math.sin(time * thread.shimmerSpeed + thread.phase);
+				const shimmer =
+					0.82 + 0.18 * Math.sin(time * thread.shimmerSpeed + thread.phase);
 				const a = Math.min(1, thread.alpha * shimmer);
-				const glow = makeTrailGradient(ctx, points, samples, 224, 170, 82, a * 0.22);
-				const core = makeTrailGradient(ctx, points, samples, 255, 232, 186, a * 0.78);
+				const glow = makeTrailGradient(
+					ctx,
+					points,
+					samples,
+					224,
+					170,
+					82,
+					a * 0.22,
+				);
+				const core = makeTrailGradient(
+					ctx,
+					points,
+					samples,
+					255,
+					232,
+					186,
+					a * 0.78,
+				);
 
 				strokeRange(ctx, points, samples, 0, 1, thread.glowWidth * 0.32, glow);
 				strokeRange(ctx, points, samples, 0, 1, thread.coreWidth, core);
 
 				if (thread.hasPulse && !reducedMotion && motion > 0) {
-					const pulseU = ((thread.pulsePhase + time * thread.pulseSpeed * motion) % 0.58) + 0.12;
+					const pulseU =
+						((thread.pulsePhase + time * thread.pulseSpeed * motion) % 0.58) +
+						0.12;
 					strokeShimmer(
 						ctx,
 						points,
@@ -544,11 +616,19 @@ export default function DivineFlow({
 				const points = sampled[speck.thread];
 				const p = pointAt(points, samples, speck.u);
 				const n = normalAt(points, samples, speck.u);
-				const wander = reducedMotion ? 0 : Math.sin(time * speck.drift + speck.phase) * 2 * motion;
+				const wander = reducedMotion
+					? 0
+					: Math.sin(time * speck.drift + speck.phase) * 2 * motion;
 				const pulse = 0.06 + (Math.sin(time * 0.7 + speck.phase) + 1) * 0.05;
 				ctx.fillStyle = `rgba(228, 178, 92, ${pulse})`;
 				ctx.beginPath();
-				ctx.arc(p.x + n.x * speck.nOff, p.y + n.y * speck.nOff + wander, speck.size, 0, TAU);
+				ctx.arc(
+					p.x + n.x * speck.nOff,
+					p.y + n.y * speck.nOff + wander,
+					speck.size,
+					0,
+					TAU,
+				);
 				ctx.fill();
 			}
 
@@ -558,10 +638,18 @@ export default function DivineFlow({
 					: ((sparkle.phase + time * sparkle.speed * motion) % 0.62) + 0.12;
 				const p = pointAt(sampled[sparkle.thread], samples, u);
 				const twinkle = Math.pow(
-					0.5 + 0.5 * Math.sin(time * sparkle.twinkleSpeed + sparkle.twinklePhase),
+					0.5 +
+						0.5 * Math.sin(time * sparkle.twinkleSpeed + sparkle.twinklePhase),
 					2.2,
 				);
-				drawSparkle(p.x, p.y, sparkle.size, 0.3 + twinkle * 0.7, sparkle.flare, sparkle.tilt);
+				drawSparkle(
+					p.x,
+					p.y,
+					sparkle.size,
+					0.3 + twinkle * 0.7,
+					sparkle.flare,
+					sparkle.tilt,
+				);
 			}
 
 			ctx.globalCompositeOperation = "source-over";
@@ -572,7 +660,14 @@ export default function DivineFlow({
 		}
 
 		function resume() {
-			if (!running || reducedMotion || motion <= 0 || document.hidden || !onScreen) return;
+			if (
+				!running ||
+				reducedMotion ||
+				motion <= 0 ||
+				document.hidden ||
+				!onScreen
+			)
+				return;
 			cancelAnimationFrame(raf);
 			raf = requestAnimationFrame(render);
 		}
