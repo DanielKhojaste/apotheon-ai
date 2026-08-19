@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 
 interface Props {
@@ -36,6 +37,7 @@ const { title, fillViewport = false } = Astro.props;
 		<main class="relative z-10 flex min-h-0 flex-1 flex-col">
 			<slot />
 		</main>
+		<Footer />
 		<script>
 			import "../scripts/preline.ts";
 		</script>

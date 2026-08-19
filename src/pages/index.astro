@@ -1,6 +1,83 @@
 ---
 import Hero from "../components/Hero.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const capabilities = [
+	{
+		title: "AI Visibility",
+		body: "Discover how AI tools, models, and services are being used across your organization and bring fragmented activity into a clearer operational view.",
+	},
+	{
+		title: "AI Threat Detection",
+		body: "Identify suspicious activity, risky interactions, and unexpected behavior across AI-powered workflows before they become larger security problems.",
+	},
+	{
+		title: "Prompt Protection",
+		body: "Reduce exposure to unsafe prompts, sensitive data leakage, and malicious interactions across generative AI experiences.",
+	},
+	{
+		title: "AI Governance",
+		body: "Translate policies into practical controls that help security, risk, and engineering teams adopt AI responsibly.",
+	},
+];
+
+const principles = [
+	{
+		number: "01",
+		title: "See the Full Picture",
+		body: "Bring AI activity into a shared view so teams can understand what is being used, where it is being used, and how it affects the organization.",
+	},
+	{
+		number: "02",
+		title: "Protect What Matters",
+		body: "Apply practical security controls around AI workflows, sensitive information, and high-risk interactions.",
+	},
+	{
+		number: "03",
+		title: "Enable Responsible Growth",
+		body: "Give teams the confidence to explore new AI capabilities while maintaining governance and accountability.",
+	},
+];
+
+const path = [
+	{
+		title: "Discover",
+		body: "Understand where AI is being used.",
+	},
+	{
+		title: "Protect",
+		body: "Secure interactions, workflows, models, and data.",
+	},
+	{
+		title: "Govern",
+		body: "Establish consistent controls as AI adoption scales.",
+	},
+];
+
+const assessmentQuestions = [
+	"How broadly is AI used across your organization?",
+	"How much visibility do you have into AI usage?",
+	"Are AI governance policies documented?",
+	"Do teams actively monitor AI-related security risks?",
+];
+
+const insights = [
+	{
+		kicker: "AI Security",
+		title: "Building Visibility Across Enterprise AI",
+		body: "Why understanding where AI is used is becoming a foundational part of enterprise security.",
+	},
+	{
+		kicker: "Generative AI",
+		title: "Understanding Prompt-Based Security Risk",
+		body: "How prompts, sensitive information, and model behavior introduce new security considerations.",
+	},
+	{
+		kicker: "Governance",
+		title: "From AI Policy to Practical Controls",
+		body: "How organizations can turn high-level AI principles into workflows teams can actually follow.",
+	},
+];
 ---
 
 <BaseLayout title="ApotheonAI | Ascend to the divine">
@@ -11,65 +88,188 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 		class="container-page border-t border-gold/15 py-24 sm:py-28"
 	>
 		<p class="section-kicker mb-4">Platform</p>
+
 		<h2
 			class="font-serif text-3xl font-medium tracking-tight text-cream sm:text-4xl"
 		>
-			Lorem ipsum dolor sit amet
+			Bring order to your AI domain.
 		</h2>
+
 		<div
 			class="mt-8 max-w-3xl space-y-5 font-sans text-base leading-relaxed text-mist sm:text-lg"
 		>
 			<p>
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vitae
-				nisl vitae sapien feugiat tincidunt. Sed at arcu a lorem vehicula
-				volutpat. Pellentesque habitant morbi tristique senectus et netus et
-				malesuada fames ac turpis egestas.
+				AI adoption is expanding across tools, teams, and workflows. As
+				organizations move faster, understanding where AI is being used and what
+				risks come with it becomes increasingly difficult.
 			</p>
+
 			<p>
-				Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere
-				cubilia curae; Donec vel libero at nisl tincidunt fermentum. Curabitur
-				non urna sit amet lacus tristique eleifend. Aliquam erat volutpat. Nam
-				at lacus nec nisl volutpat tristique.
+				ApotheonAI brings AI activity into a clearer operational view, helping
+				security and engineering teams understand how models, applications, and
+				services interact across the organization.
 			</p>
+
 			<p>
-				Mauris volutpat, sapien in facilisis luctus, nisl lorem fermentum lorem,
-				a ultricies nisl lorem non nisl. Proin auctor, nunc a luctus tincidunt,
-				nisl nisl aliquam nisl, a tincidunt nisl nisl sit amet nisl. Suspendisse
-				potenti.
+				From visibility and threat detection to prompt protection and
+				governance, the platform is designed to help organizations advance AI
+				without giving up control.
 			</p>
+		</div>
+
+		<a href="/platform" class="btn-gold btn-gold-lg mt-8">
+			Explore the Platform
+		</a>
+	</section>
+
+	<section
+		id="capabilities"
+		class="container-page border-t border-gold/15 py-24 sm:py-28"
+	>
+		<p class="section-kicker mb-4">Capabilities</p>
+
+		<h2
+			class="font-serif text-3xl font-medium tracking-tight text-cream sm:text-4xl"
+		>
+			Command the full AI lifecycle.
+		</h2>
+
+		<!-- TODO: Update styling to match Figma design -->
+		<div
+			class="mt-12 grid max-w-5xl gap-10 sm:grid-cols-2 sm:gap-x-16 sm:gap-y-12"
+		>
+			{
+				capabilities.map((capability) => (
+					<div>
+						<h3 class="font-serif text-xl font-medium tracking-tight text-cream sm:text-2xl">
+							{capability.title}
+						</h3>
+						<p class="mt-3 font-sans text-base leading-relaxed text-mist sm:text-lg">
+							{capability.body}
+						</p>
+					</div>
+				))
+			}
+		</div>
+
+		<a href="/platform" class="btn-gold btn-gold-lg mt-12">
+			Explore all capabilities
+		</a>
+	</section>
+
+	<section
+		id="why"
+		class="container-page border-t border-gold/15 py-24 sm:py-28"
+	>
+		<p class="section-kicker mb-4">Why ApotheonAI</p>
+
+		<h2
+			class="font-serif text-3xl font-medium tracking-tight text-cream sm:text-4xl"
+		>
+			Rise without losing control.
+		</h2>
+
+		<p
+			class="mt-8 max-w-3xl font-sans text-base leading-relaxed text-mist sm:text-lg"
+		>
+			AI maturity should not mean choosing between innovation and security.
+			ApotheonAI is built around three principles that help organizations
+			advance responsibly.
+		</p>
+
+		<div class="mt-12 max-w-3xl space-y-10">
+			{
+				principles.map((principle) => (
+					<div>
+						<p class="section-kicker mb-3">{principle.number}</p>
+						<h3 class="font-serif text-xl font-medium tracking-tight text-cream sm:text-2xl">
+							{principle.title}
+						</h3>
+						<p class="mt-3 font-sans text-base leading-relaxed text-mist sm:text-lg">
+							{principle.body}
+						</p>
+					</div>
+				))
+			}
 		</div>
 	</section>
 
 	<section
-		id="solutions"
+		id="path"
 		class="container-page border-t border-gold/15 py-24 sm:py-28"
 	>
-		<p class="section-kicker mb-4">Solutions</p>
+		<p class="section-kicker mb-4">From Adoption to Control</p>
+
 		<h2
 			class="font-serif text-3xl font-medium tracking-tight text-cream sm:text-4xl"
 		>
-			Consectetur adipiscing elit
+			Forge a clearer path to trusted AI.
 		</h2>
-		<div
-			class="mt-8 max-w-3xl space-y-5 font-sans text-base leading-relaxed text-mist sm:text-lg"
+
+		<div class="mt-12 grid max-w-5xl gap-10 sm:grid-cols-3 sm:gap-12">
+			{
+				path.map((step) => (
+					<div>
+						<p class="section-kicker mb-3">{step.title}</p>
+						<p class="font-sans text-base leading-relaxed text-mist sm:text-lg">
+							{step.body}
+						</p>
+					</div>
+				))
+			}
+		</div>
+
+		<p
+			class="mt-14 font-serif text-xl tracking-[0.08em] text-cream sm:text-2xl"
 		>
-			<p>
-				Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-				accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab
-				illo inventore veritatis et quasi architecto beatae vitae dicta sunt
-				explicabo.
+			<!-- TODO: Update styling to match Figma design -->
+			Discover → Protect → Govern
+		</p>
+	</section>
+
+	<section
+		id="assessment"
+		class="container-page border-t border-gold/15 py-24 sm:py-28"
+	>
+		<p class="section-kicker mb-4">AI Security Readiness</p>
+
+		<h2
+			class="font-serif text-3xl font-medium tracking-tight text-cream sm:text-4xl"
+		>
+			How prepared is your organization to rise securely?
+		</h2>
+
+		<p
+			class="mt-8 max-w-3xl font-sans text-base leading-relaxed text-mist sm:text-lg"
+		>
+			Answer four questions to get a simple assessment of your current AI
+			security posture and identify where stronger visibility or governance may
+			be needed.
+		</p>
+
+		<a href="#assessment-questions" class="btn-gold btn-gold-lg mt-8">
+			Begin Assessment
+		</a>
+
+		<ol
+			id="assessment-questions"
+			class="mt-12 max-w-3xl list-decimal space-y-4 pl-5 font-sans text-base leading-relaxed text-mist sm:text-lg"
+		>
+			{assessmentQuestions.map((question) => <li>{question}</li>)}
+		</ol>
+
+		<div class="mt-12 max-w-3xl">
+			<p
+				class="font-serif text-4xl font-medium tracking-tight text-cream sm:text-5xl"
+			>
+				64 / 100
 			</p>
-			<p>
-				Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut
-				fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem
-				sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor
-				sit amet, consectetur, adipisci velit.
+			<p class="mt-4 font-sans text-base leading-relaxed text-mist sm:text-lg">
+				Your organization has a developing AI security foundation.
 			</p>
-			<p>
-				Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis
-				suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis
-				autem vel eum iure reprehenderit qui in ea voluptate velit esse quam
-				nihil molestiae consequatur.
+			<p class="mt-5 font-sans text-base leading-relaxed text-mist sm:text-lg">
+				Improve visibility across AI usage and formalize governance controls
+				before expanding higher-risk AI workflows.
 			</p>
 		</div>
 	</section>
@@ -79,32 +279,68 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 		class="container-page border-t border-gold/15 py-24 sm:py-28"
 	>
 		<p class="section-kicker mb-4">Insights</p>
+
 		<h2
 			class="font-serif text-3xl font-medium tracking-tight text-cream sm:text-4xl"
 		>
-			At vero eos et accusamus
+			Explore the frontier of AI security.
 		</h2>
-		<div
-			class="mt-8 max-w-3xl space-y-5 font-sans text-base leading-relaxed text-mist sm:text-lg"
+
+		<p
+			class="mt-8 max-w-3xl font-sans text-base leading-relaxed text-mist sm:text-lg"
 		>
-			<p>
-				At vero eos et accusamus et iusto odio dignissimos ducimus qui
-				blanditiis praesentium voluptatum deleniti atque corrupti quos dolores
-				et quas molestias excepturi sint occaecati cupiditate non provident,
-				similique sunt in culpa qui officia deserunt mollitia animi.
-			</p>
-			<p>
-				Temporibus autem quibusdam et aut officiis debitis aut rerum
-				necessitatibus saepe eveniet ut et voluptates repudiandae sint et
-				molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente
-				delectus, ut aut reiciendis voluptatibus maiores alias consequatur.
-			</p>
-			<p>
-				Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil
-				impedit quo minus id quod maxime placeat facere possimus, omnis voluptas
-				assumenda est, omnis dolor repellendus. Et harum quidem rerum facilis
-				est et expedita distinctio.
-			</p>
+			Practical perspectives on enterprise AI, generative AI security,
+			governance, and responsible adoption.
+		</p>
+
+		<div class="mt-12 grid max-w-5xl gap-10 sm:grid-cols-3 sm:gap-12">
+			{
+				insights.map((article) => (
+					<article>
+						<p class="section-kicker mb-3">{article.kicker}</p>
+						<h3 class="font-serif text-xl font-medium tracking-tight text-cream sm:text-2xl">
+							{article.title}
+						</h3>
+						<p class="mt-3 font-sans text-base leading-relaxed text-mist sm:text-lg">
+							{article.body}
+						</p>
+					</article>
+				))
+			}
+		</div>
+
+		<a href="#insights" class="btn-gold btn-gold-lg mt-12">
+			View All Insights
+		</a>
+	</section>
+
+	<section
+		id="contact"
+		class="container-page border-t border-gold/15 py-24 sm:py-28"
+	>
+		<p class="section-kicker mb-4">The Next Level</p>
+
+		<h2
+			class="font-serif text-3xl font-medium tracking-tight text-cream sm:text-4xl"
+		>
+			Elevate the standard of AI security.
+		</h2>
+
+		<p
+			class="mt-8 max-w-3xl font-sans text-base leading-relaxed text-mist sm:text-lg"
+		>
+			Build greater visibility, stronger protection, and responsible governance
+			into the foundation of your AI environment.
+		</p>
+
+		<div class="mt-8 flex flex-wrap items-center gap-4">
+			<a href="/platform" class="btn-gold btn-gold-lg">Explore the Platform</a>
+			<a
+				href="/contact"
+				class="inline-flex items-center justify-center rounded-md border border-gold/40 px-7 py-3 font-sans text-sm font-medium tracking-wide text-gold transition duration-200 hover:border-gold hover:text-gold-bright sm:px-8 sm:py-3.5 sm:text-[0.95rem]"
+			>
+				Talk to Us
+			</a>
 		</div>
 	</section>
 </BaseLayout>
