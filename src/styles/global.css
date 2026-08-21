@@ -16,6 +16,7 @@
   Logo:    .logo-gold  (tints the black /Logo.svg)
            .logo-mark  (tints the black /ApotheonAI.svg)
   Layout:  .container-page  .section-kicker  .nav-link
+  Nav:     .nav-toggle  .nav-burger  (--nav-burger-thickness, --nav-burger-gap)
 */
 
 @font-face {
@@ -161,13 +162,43 @@
 	}
 
 	.nav-toggle {
+		position: relative;
+		z-index: 50;
 		width: 3.4rem;
 		height: 3.4rem;
 	}
 
 	.nav-burger {
-		width: 2.7rem;
-		height: 2.7rem;
+		--nav-burger-width: 2.2rem;
+		--nav-burger-thickness: 0.2rem;
+		--nav-burger-gap: 0.4rem;
+
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		width: var(--nav-burger-width);
+		height: calc(
+			var(--nav-burger-thickness) * 3 + var(--nav-burger-gap) * 2
+		);
+	}
+
+	.nav-burger span {
+		display: block;
+		flex: none;
+		width: 100%;
+		height: var(--nav-burger-thickness);
+		background-color: currentColor;
+		border-radius: calc(var(--nav-burger-thickness) / 2);
+	}
+
+	.nav-burger span:nth-child(2) {
+		width: 75%;
+		margin-inline-start: auto;
+		transition: width 200ms ease;
+	}
+
+	.nav-toggle:hover .nav-burger span:nth-child(2) {
+		width: 100%;
 	}
 
 	.hero-section {
