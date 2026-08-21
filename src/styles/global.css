@@ -213,7 +213,7 @@
 
 	.hero-title {
 		position: absolute;
-		top: 70%;
+		top: 75%;
 		left: 50%;
 		z-index: 3;
 		width: 92vw;
@@ -298,6 +298,10 @@
 		.hero-helmet {
 			height: min(50svh, calc(100svh - 14rem));
 			max-width: 62vw;
+		}
+
+		.hero-title {
+			top: 86%;
 		}
 
 		.hero-word-ascend {
