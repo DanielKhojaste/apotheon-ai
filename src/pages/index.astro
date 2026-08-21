@@ -8,18 +8,22 @@ const capabilities = [
 	{
 		title: "AI Visibility",
 		body: "Discover how AI tools, models, and services are being used across your organization and bring fragmented activity into a clearer operational view.",
+		className: "capability-card capability-card-wide",
 	},
 	{
 		title: "AI Threat Detection",
 		body: "Identify suspicious activity, risky interactions, and unexpected behavior across AI-powered workflows before they become larger security problems.",
+		className: "capability-card",
 	},
 	{
 		title: "Prompt Protection",
 		body: "Reduce exposure to unsafe prompts, sensitive data leakage, and malicious interactions across generative AI experiences.",
+		className: "capability-card",
 	},
 	{
 		title: "AI Governance",
 		body: "Translate policies into practical controls that help security, risk, and engineering teams adopt AI responsibly.",
+		className: "capability-card capability-card-wide",
 	},
 ];
 
@@ -43,14 +47,17 @@ const principles = [
 
 const path = [
 	{
+		number: "01",
 		title: "Discover",
 		body: "Understand where AI is being used.",
 	},
 	{
+		number: "02",
 		title: "Protect",
 		body: "Secure interactions, workflows, models, and data.",
 	},
 	{
+		number: "03",
 		title: "Govern",
 		body: "Establish consistent controls as AI adoption scales.",
 	},
@@ -90,31 +97,49 @@ const insights = [
 		kicker="Platform"
 		heading="Bring order to your AI domain."
 	>
-		<div
-			class="mt-8 max-w-3xl space-y-5 font-sans text-base leading-relaxed text-mist sm:text-lg"
-		>
-			<p>
-				AI adoption is expanding across tools, teams, and workflows. As
-				organizations move faster, understanding where AI is being used and what
-				risks come with it becomes increasingly difficult.
-			</p>
+		<div class="platform-intro mt-10">
+			<div class="max-w-2xl space-y-5 font-sans text-base leading-relaxed text-mist sm:text-lg">
+				<p>
+					AI adoption is expanding across tools, teams, and workflows. As
+					organizations move faster, understanding where AI is being used and what
+					risks come with it becomes increasingly difficult.
+				</p>
 
-			<p>
-				ApotheonAI brings AI activity into a clearer operational view, helping
-				security and engineering teams understand how models, applications, and
-				services interact across the organization.
-			</p>
+				<p>
+					ApotheonAI brings AI activity into a clearer operational view, helping
+					security and engineering teams understand how models, applications, and
+					services interact across the organization.
+				</p>
 
-			<p>
-				From visibility and threat detection to prompt protection and
-				governance, the platform is designed to help organizations advance AI
-				without giving up control.
-			</p>
+				<p>
+					From visibility and threat detection to prompt protection and
+					governance, the platform is designed to help organizations advance AI
+					without giving up control.
+				</p>
+
+				<a href="/platform" class="btn-gold btn-gold-lg mt-3">
+					Explore the Platform
+				</a>
+			</div>
+
+			<div class="security-map" aria-hidden="true">
+				<div class="security-map-ring security-map-ring-outer"></div>
+				<div class="security-map-ring security-map-ring-inner"></div>
+				<div class="security-map-axis security-map-axis-x"></div>
+				<div class="security-map-axis security-map-axis-y"></div>
+
+				<div class="security-map-core">
+					<span class="security-map-mark">A</span>
+					<span>APOTHEON</span>
+				</div>
+
+				<span class="security-map-node security-map-node-models">Models</span>
+				<span class="security-map-node security-map-node-agents">Agents</span>
+				<span class="security-map-node security-map-node-data">Data</span>
+				<span class="security-map-node security-map-node-apps">Applications</span>
+				<span class="security-map-caption">Observe · Protect · Govern</span>
+			</div>
 		</div>
-
-		<a href="/platform" class="btn-gold btn-gold-lg mt-8">
-			Explore the Platform
-		</a>
 	</HomeSection>
 
 	<HomeSection
@@ -122,14 +147,15 @@ const insights = [
 		kicker="Capabilities"
 		heading="Command the full AI lifecycle."
 	>
-		<div class="mt-12 grid max-w-5xl gap-5 sm:grid-cols-2 sm:gap-6">
+		<div class="capability-grid mt-12 max-w-6xl">
 			{
 				capabilities.map((capability) => (
-					<TextCard>
+					<TextCard class={capability.className}>
+						<span class="capability-corner" aria-hidden="true"></span>
 						<h3 class="font-serif text-xl font-medium tracking-tight text-cream sm:text-2xl">
 							{capability.title}
 						</h3>
-						<p class="mt-3 font-sans text-base leading-relaxed text-mist sm:text-lg">
+						<p class="mt-3 max-w-xl font-sans text-base leading-relaxed text-mist sm:text-lg">
 							{capability.body}
 						</p>
 					</TextCard>
@@ -142,31 +168,47 @@ const insights = [
 		</a>
 	</HomeSection>
 
+	<section class="home-manifesto" aria-labelledby="manifesto-title">
+		<div class="container-page">
+			<div class="manifesto-rule" aria-hidden="true">
+				<span></span>
+				<i></i>
+				<span></span>
+			</div>
+			<p class="section-kicker text-center">The New Security Reality</p>
+			<h2 id="manifesto-title" class="manifesto-title">
+				<span>AI is moving</span>
+				<span>faster than</span>
+				<span class="manifesto-gold">governance.</span>
+			</h2>
+			<p class="manifesto-subtitle">ApotheonAI closes the gap.</p>
+		</div>
+	</section>
+
 	<HomeSection
 		id="why"
 		kicker="Why ApotheonAI"
 		heading="Rise without losing control."
 	>
-		<p
-			class="mt-8 max-w-3xl font-sans text-base leading-relaxed text-mist sm:text-lg"
-		>
+		<p class="mt-8 max-w-3xl font-sans text-base leading-relaxed text-mist sm:text-lg">
 			AI maturity should not mean choosing between innovation and security.
 			ApotheonAI is built around three principles that help organizations
 			advance responsibly.
 		</p>
 
-		<div class="mt-12 grid max-w-5xl gap-4 sm:grid-cols-3 sm:gap-5">
+		<div class="principle-rail mt-14 max-w-6xl">
 			{
 				principles.map((principle) => (
-					<TextCard size="sm">
-						<p class="section-kicker mb-2">{principle.number}</p>
-						<h3 class="font-serif text-lg font-medium tracking-tight text-cream sm:text-xl">
+					<article class="principle-item">
+						<p class="principle-number">{principle.number}</p>
+						<div class="principle-rule" aria-hidden="true"></div>
+						<h3 class="font-serif text-2xl font-medium tracking-tight text-cream sm:text-3xl">
 							{principle.title}
 						</h3>
-						<p class="mt-2 font-sans text-sm leading-relaxed text-mist sm:text-base">
+						<p class="mt-4 font-sans text-sm leading-relaxed text-mist sm:text-base">
 							{principle.body}
 						</p>
-					</TextCard>
+					</article>
 				))
 			}
 		</div>
@@ -177,15 +219,20 @@ const insights = [
 		kicker="From Adoption to Control"
 		heading="Forge a clearer path to trusted AI."
 	>
-		<div class="mt-12 grid max-w-5xl gap-5 sm:grid-cols-3 sm:gap-6">
+		<div class="ascension-path mt-14 max-w-6xl">
+			<div class="ascension-line" aria-hidden="true"></div>
 			{
 				path.map((step) => (
-					<TextCard>
-						<p class="section-kicker mb-3">{step.title}</p>
-						<p class="font-sans text-base leading-relaxed text-mist sm:text-lg">
+					<article class="ascension-step">
+						<div class="ascension-node" aria-hidden="true"></div>
+						<p class="ascension-number">{step.number}</p>
+						<h3 class="mt-3 font-serif text-2xl font-medium tracking-tight text-cream sm:text-3xl">
+							{step.title}
+						</h3>
+						<p class="mt-3 max-w-xs font-sans text-base leading-relaxed text-mist">
 							{step.body}
 						</p>
-					</TextCard>
+					</article>
 				))
 			}
 		</div>
@@ -196,39 +243,45 @@ const insights = [
 		kicker="AI Security Readiness"
 		heading="How prepared is your organization to rise securely?"
 	>
-		<p
-			class="mt-8 max-w-3xl font-sans text-base leading-relaxed text-mist sm:text-lg"
-		>
-			Answer four questions to get a simple assessment of your current AI
-			security posture and identify where stronger visibility or governance may
-			be needed.
-		</p>
+		<div class="assessment-layout mt-12 max-w-6xl">
+			<div class="assessment-copy">
+				<p class="max-w-2xl font-sans text-base leading-relaxed text-mist sm:text-lg">
+					Answer four questions to get a simple assessment of your current AI
+					security posture and identify where stronger visibility or governance may
+					be needed.
+				</p>
 
-		<a href="#assessment-questions" class="btn-gold btn-gold-lg mt-8">
-			Begin Assessment
-		</a>
+				<ol id="assessment-questions" class="assessment-questions mt-9">
+					{assessmentQuestions.map((question, index) => (
+						<li>
+							<span>{String(index + 1).padStart(2, "0")}</span>
+							<p>{question}</p>
+						</li>
+					))}
+				</ol>
 
-		<ol
-			id="assessment-questions"
-			class="mt-12 max-w-3xl list-decimal space-y-4 pl-5 font-sans text-base leading-relaxed text-mist sm:text-lg"
-		>
-			{assessmentQuestions.map((question) => <li>{question}</li>)}
-		</ol>
+				<a href="#assessment-questions" class="btn-gold btn-gold-lg mt-9">
+					Begin Assessment
+				</a>
+			</div>
 
-		<TextCard class="mt-12 max-w-3xl">
-			<p
-				class="font-serif text-4xl font-medium tracking-tight text-cream sm:text-5xl"
-			>
-				64 / 100
-			</p>
-			<p class="mt-4 font-sans text-base leading-relaxed text-mist sm:text-lg">
-				Your organization has a developing AI security foundation.
-			</p>
-			<p class="mt-5 font-sans text-base leading-relaxed text-mist sm:text-lg">
-				Improve visibility across AI usage and formalize governance controls
-				before expanding higher-risk AI workflows.
-			</p>
-		</TextCard>
+			<aside class="assessment-score" aria-label="Example AI security readiness score">
+				<div class="assessment-score-ring">
+					<div>
+						<strong>64</strong>
+						<span>/ 100</span>
+					</div>
+				</div>
+				<p class="section-kicker mt-8">Developing Foundation</p>
+				<p class="mt-4 font-serif text-2xl leading-snug text-cream">
+					Greater visibility creates the foundation for safer scale.
+				</p>
+				<p class="mt-4 font-sans text-sm leading-relaxed text-mist sm:text-base">
+					Improve visibility across AI usage and formalize governance controls
+					before expanding higher-risk AI workflows.
+				</p>
+			</aside>
+		</div>
 	</HomeSection>
 
 	<HomeSection
@@ -236,27 +289,41 @@ const insights = [
 		kicker="Insights"
 		heading="Explore the frontier of AI security."
 	>
-		<p
-			class="mt-8 max-w-3xl font-sans text-base leading-relaxed text-mist sm:text-lg"
-		>
+		<p class="mt-8 max-w-3xl font-sans text-base leading-relaxed text-mist sm:text-lg">
 			Practical perspectives on enterprise AI, generative AI security,
 			governance, and responsible adoption.
 		</p>
 
-		<div class="mt-12 grid max-w-5xl gap-5 sm:grid-cols-3 sm:gap-6">
-			{
-				insights.map((article) => (
-					<TextCard as="article">
-						<p class="section-kicker mb-3">{article.kicker}</p>
-						<h3 class="font-serif text-xl font-medium tracking-tight text-cream sm:text-2xl">
-							{article.title}
-						</h3>
-						<p class="mt-3 font-sans text-base leading-relaxed text-mist sm:text-lg">
-							{article.body}
-						</p>
-					</TextCard>
-				))
-			}
+		<div class="insights-layout mt-12 max-w-6xl">
+			<article class="insight-featured">
+				<p class="section-kicker mb-4">{insights[0].kicker}</p>
+				<h3 class="font-serif text-3xl font-medium tracking-tight text-cream sm:text-4xl lg:text-5xl">
+					{insights[0].title}
+				</h3>
+				<p class="mt-5 max-w-xl font-sans text-base leading-relaxed text-mist sm:text-lg">
+					{insights[0].body}
+				</p>
+				<span class="insight-arrow" aria-hidden="true">↗</span>
+			</article>
+
+			<div class="insight-list">
+				{
+					insights.slice(1).map((article) => (
+						<article class="insight-row">
+							<div>
+								<p class="section-kicker mb-3">{article.kicker}</p>
+								<h3 class="font-serif text-xl font-medium tracking-tight text-cream sm:text-2xl">
+									{article.title}
+								</h3>
+								<p class="mt-3 font-sans text-sm leading-relaxed text-mist sm:text-base">
+									{article.body}
+								</p>
+							</div>
+							<span aria-hidden="true">↗</span>
+						</article>
+					))
+				}
+			</div>
 		</div>
 
 		<a href="#insights" class="btn-gold btn-gold-lg mt-12">
@@ -264,28 +331,20 @@ const insights = [
 		</a>
 	</HomeSection>
 
-	<HomeSection
-		id="contact"
-		kicker="The Next Level"
-		heading="Elevate the standard of AI security."
-	>
-		<p
-			class="mt-8 max-w-3xl font-sans text-base leading-relaxed text-mist sm:text-lg"
-		>
-			Build greater visibility, stronger protection, and responsible governance
-			into the foundation of your AI environment.
-		</p>
-
-		<div class="mt-8 flex flex-wrap items-center gap-4">
-			<a href="/platform" class="btn-gold btn-gold-lg">
-				Explore the Platform
-			</a>
-			<a
-				href="/contact"
-				class="inline-flex items-center justify-center rounded-md border border-gold/40 px-7 py-3 font-sans text-sm font-medium tracking-wide text-gold transition duration-200 hover:border-gold hover:text-gold-bright sm:px-8 sm:py-3.5 sm:text-[0.95rem]"
-			>
-				Talk to Us
-			</a>
+	<section id="contact" class="home-final-cta">
+		<div class="container-page">
+			<div class="home-final-cta-inner">
+				<p class="section-kicker">The Next Level</p>
+				<h2>Elevate the standard of AI security.</h2>
+				<p>
+					Build greater visibility, stronger protection, and responsible governance
+					into the foundation of your AI environment.
+				</p>
+				<div class="mt-9 flex flex-wrap justify-center gap-4">
+					<a href="/platform" class="btn-gold btn-gold-lg">Explore the Platform</a>
+					<a href="/contact" class="home-secondary-cta">Talk to Us</a>
+				</div>
+			</div>
 		</div>
-	</HomeSection>
+	</section>
 </BaseLayout>
