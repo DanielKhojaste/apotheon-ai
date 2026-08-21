@@ -1,5 +1,6 @@
 ---
 import Hero from "../components/Hero.astro";
+import HomeSection from "../components/HomeSection.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const capabilities = [
@@ -83,18 +84,11 @@ const insights = [
 <BaseLayout title="ApotheonAI | Ascend to the divine">
 	<Hero />
 
-	<section
+	<HomeSection
 		id="platform"
-		class="container-page border-t border-gold/15 py-24 sm:py-28"
+		kicker="Platform"
+		heading="Bring order to your AI domain."
 	>
-		<p class="section-kicker mb-4">Platform</p>
-
-		<h2
-			class="font-serif text-3xl font-medium tracking-tight text-cream sm:text-4xl"
-		>
-			Bring order to your AI domain.
-		</h2>
-
 		<div
 			class="mt-8 max-w-3xl space-y-5 font-sans text-base leading-relaxed text-mist sm:text-lg"
 		>
@@ -120,20 +114,13 @@ const insights = [
 		<a href="/platform" class="btn-gold btn-gold-lg mt-8">
 			Explore the Platform
 		</a>
-	</section>
+	</HomeSection>
 
-	<section
+	<HomeSection
 		id="capabilities"
-		class="container-page border-t border-gold/15 py-24 sm:py-28"
+		kicker="Capabilities"
+		heading="Command the full AI lifecycle."
 	>
-		<p class="section-kicker mb-4">Capabilities</p>
-
-		<h2
-			class="font-serif text-3xl font-medium tracking-tight text-cream sm:text-4xl"
-		>
-			Command the full AI lifecycle.
-		</h2>
-
 		<!-- TODO: Update styling to match Figma design -->
 		<div
 			class="mt-12 grid max-w-5xl gap-10 sm:grid-cols-2 sm:gap-x-16 sm:gap-y-12"
@@ -155,20 +142,13 @@ const insights = [
 		<a href="/platform" class="btn-gold btn-gold-lg mt-12">
 			Explore all capabilities
 		</a>
-	</section>
+	</HomeSection>
 
-	<section
+	<HomeSection
 		id="why"
-		class="container-page border-t border-gold/15 py-24 sm:py-28"
+		kicker="Why ApotheonAI"
+		heading="Rise without losing control."
 	>
-		<p class="section-kicker mb-4">Why ApotheonAI</p>
-
-		<h2
-			class="font-serif text-3xl font-medium tracking-tight text-cream sm:text-4xl"
-		>
-			Rise without losing control.
-		</h2>
-
 		<p
 			class="mt-8 max-w-3xl font-sans text-base leading-relaxed text-mist sm:text-lg"
 		>
@@ -192,20 +172,13 @@ const insights = [
 				))
 			}
 		</div>
-	</section>
+	</HomeSection>
 
-	<section
+	<HomeSection
 		id="path"
-		class="container-page border-t border-gold/15 py-24 sm:py-28"
+		kicker="From Adoption to Control"
+		heading="Forge a clearer path to trusted AI."
 	>
-		<p class="section-kicker mb-4">From Adoption to Control</p>
-
-		<h2
-			class="font-serif text-3xl font-medium tracking-tight text-cream sm:text-4xl"
-		>
-			Forge a clearer path to trusted AI.
-		</h2>
-
 		<div class="mt-12 grid max-w-5xl gap-10 sm:grid-cols-3 sm:gap-12">
 			{
 				path.map((step) => (
@@ -225,20 +198,13 @@ const insights = [
 			<!-- TODO: Update styling to match Figma design -->
 			Discover → Protect → Govern
 		</p>
-	</section>
+	</HomeSection>
 
-	<section
+	<HomeSection
 		id="assessment"
-		class="container-page border-t border-gold/15 py-24 sm:py-28"
+		kicker="AI Security Readiness"
+		heading="How prepared is your organization to rise securely?"
 	>
-		<p class="section-kicker mb-4">AI Security Readiness</p>
-
-		<h2
-			class="font-serif text-3xl font-medium tracking-tight text-cream sm:text-4xl"
-		>
-			How prepared is your organization to rise securely?
-		</h2>
-
 		<p
 			class="mt-8 max-w-3xl font-sans text-base leading-relaxed text-mist sm:text-lg"
 		>
@@ -272,20 +238,13 @@ const insights = [
 				before expanding higher-risk AI workflows.
 			</p>
 		</div>
-	</section>
+	</HomeSection>
 
-	<section
+	<HomeSection
 		id="insights"
-		class="container-page border-t border-gold/15 py-24 sm:py-28"
+		kicker="Insights"
+		heading="Explore the frontier of AI security."
 	>
-		<p class="section-kicker mb-4">Insights</p>
-
-		<h2
-			class="font-serif text-3xl font-medium tracking-tight text-cream sm:text-4xl"
-		>
-			Explore the frontier of AI security.
-		</h2>
-
 		<p
 			class="mt-8 max-w-3xl font-sans text-base leading-relaxed text-mist sm:text-lg"
 		>
@@ -312,20 +271,13 @@ const insights = [
 		<a href="#insights" class="btn-gold btn-gold-lg mt-12">
 			View All Insights
 		</a>
-	</section>
+	</HomeSection>
 
-	<section
+	<HomeSection
 		id="contact"
-		class="container-page border-t border-gold/15 py-24 sm:py-28"
+		kicker="The Next Level"
+		heading="Elevate the standard of AI security."
 	>
-		<p class="section-kicker mb-4">The Next Level</p>
-
-		<h2
-			class="font-serif text-3xl font-medium tracking-tight text-cream sm:text-4xl"
-		>
-			Elevate the standard of AI security.
-		</h2>
-
 		<p
 			class="mt-8 max-w-3xl font-sans text-base leading-relaxed text-mist sm:text-lg"
 		>
@@ -334,7 +286,9 @@ const insights = [
 		</p>
 
 		<div class="mt-8 flex flex-wrap items-center gap-4">
-			<a href="/platform" class="btn-gold btn-gold-lg">Explore the Platform</a>
+			<a href="/platform" class="btn-gold btn-gold-lg">
+				Explore the Platform
+			</a>
 			<a
 				href="/contact"
 				class="inline-flex items-center justify-center rounded-md border border-gold/40 px-7 py-3 font-sans text-sm font-medium tracking-wide text-gold transition duration-200 hover:border-gold hover:text-gold-bright sm:px-8 sm:py-3.5 sm:text-[0.95rem]"
@@ -342,5 +296,5 @@ const insights = [
 				Talk to Us
 			</a>
 		</div>
-	</section>
+	</HomeSection>
 </BaseLayout>
