@@ -4,6 +4,10 @@
 
 ApotheonAI is a fictional enterprise AI security brand focused on helping organizations adopt AI with better **visibility, security, and governance**.
 
+## Preview
+
+![ApotheonAI homepage hero](./screenshots/home-hero.png)
+
 ## Why "ApotheonAI"?
 
 The name was inspired by **Apotheon**, one of my favorite video games, which is set in Ancient Greek mythology and centers on ascending Mount Olympus and confronting the gods.
@@ -22,9 +26,9 @@ For this fictional brand, that idea represents **elevating AI toward a higher st
 - [ ] Integrate selected Preline UI components
 - [ ] Add React only where client-side interactivity is useful
 - [ ] Build an interactive AI Security Readiness assessment
-- [ ] Build a blog powered by a headless CMS
-- [ ] Create CMS-managed blog posts with dynamic Astro routes
-- [ ] Make blog content editable without changing frontend code
+- [ ] Build an insights/blog section powered by a headless CMS
+- [ ] Create CMS-managed articles with dynamic Astro routes
+- [ ] Make article content editable without changing frontend code
 - [ ] Follow accessibility and responsive-design best practices
 - [ ] Optimize performance and SEO with Lighthouse
 - [ ] Add automated testing with Playwright
@@ -41,13 +45,13 @@ For this fictional brand, that idea represents **elevating AI toward a higher st
 - **Playwright**
 - **Headless CMS**
 - **Vercel / Netlify**
-- **AWS** (later in the project)
+- **AWS** — later in the project
 
 ## Design
 
 I am designing the site myself in **Figma**, including the visual identity, layout, typography, component direction, and responsive UI.
 
-The design direction is intended to feel modern, premium, minimal, enterprise-focused, secure, and slightly futuristic.
+The design direction is intended to feel modern, premium, minimal, enterprise-focused, secure, and slightly futuristic, with visual inspiration drawn from classical mythology and the ApotheonAI brand identity.
 
 ## AI-Assisted Development
 
@@ -65,48 +69,31 @@ The goal is not to have AI build the entire site. I am using these tools to acce
 
 I am still making and reviewing the main decisions around architecture, component structure, Astro vs. React usage, data flow, and overall implementation so I can understand and explain the code I ship.
 
-## Blog & Headless CMS
+## Insights & Headless CMS
 
-A planned part of the project is a **blog powered by a headless CMS**.
+A planned part of the project is an **Insights section powered by a headless CMS**.
 
-The goal is to separate content management from the frontend so blog posts can be created and updated through the CMS without editing Astro source files.
+The goal is to separate content management from the frontend so articles can be created and updated through the CMS without editing Astro source files.
 
 Planned features include:
 
 - CMS-managed article content
-- blog post categories and metadata
-- dynamic routes such as `/blog/[slug]`
+- article categories and metadata
+- dynamic routes such as `/insights/[slug]`
 - reusable Astro article layouts
-- SEO metadata for individual posts
+- SEO metadata for individual articles
 - a workflow that demonstrates how a non-technical content editor could publish updates
-
-## Current Status
-
-The project is in its **early development stage**.
-
-- [x] Initialize the Astro project
-- [x] Begin the Figma design
-- [ ] Build the shared Astro layout
-- [ ] Build navigation and footer components
-- [ ] Create the homepage structure
-- [ ] Apply the ApotheonAI design system
-- [ ] Integrate Tailwind CSS and Preline
-- [ ] Add supporting pages
-- [ ] Add the React interactive component
-- [ ] Build the blog UI
-- [ ] Connect the blog to a headless CMS
-- [ ] Add dynamic blog post routes
-- [ ] Deploy the first live version
 
 ## Planned Pages
 
-- Home
-- Platform
-- Solutions
-- Resources
-- Blog
-- About
-- Contact
+- **Home** — introduction to the ApotheonAI platform and brand
+- **Platform** — AI visibility, threat detection, prompt protection, and governance
+- **AI Security Readiness** — interactive security maturity assessment
+- **Insights** — articles on AI security, governance, and responsible adoption
+- **About** — the idea, design philosophy, and story behind ApotheonAI
+- **Contact** — contact and product inquiry page
+
+Additional trust, privacy, and security documentation may be added as the project develops.
 
 ## Disclaimer
 
