@@ -15,7 +15,7 @@
   Buttons: .btn-gold  .btn-gold-sm  .btn-gold-lg
   Logo:    .logo-gold  (tints the black /Logo.svg)
            .logo-mark  (tints the black /ApotheonAI.svg)
-  Layout:  .container-page  .section-kicker  .capability-card  .nav-link
+  Layout:  .container-page  .section-kicker  .text-card  .nav-link
   Nav:     .nav-toggle  .nav-burger  (--nav-burger-thickness, --nav-burger-gap)
 */
 
@@ -161,12 +161,16 @@
 		@apply font-sans text-[0.65rem] font-medium tracking-[0.32em] text-gold uppercase;
 	}
 
-	.capability-card {
+	.text-card {
 		@apply rounded-md border border-gold/15 bg-ink/50 p-6 transition duration-200 sm:p-7;
 		box-shadow: inset 0 1px 0 rgb(201 165 106 / 0.06);
 	}
 
-	.capability-card:hover {
+	.text-card-sm {
+		@apply p-4 sm:p-5;
+	}
+
+	.text-card:hover {
 		@apply border-gold/30;
 		background-color: rgb(20 15 9 / 0.72);
 	}

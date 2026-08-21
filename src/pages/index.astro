@@ -1,6 +1,7 @@
 ---
 import Hero from "../components/Hero.astro";
 import HomeSection from "../components/HomeSection.astro";
+import TextCard from "../components/TextCard.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const capabilities = [
@@ -124,14 +125,14 @@ const insights = [
 		<div class="mt-12 grid max-w-5xl gap-5 sm:grid-cols-2 sm:gap-6">
 			{
 				capabilities.map((capability) => (
-					<div class="capability-card">
+					<TextCard>
 						<h3 class="font-serif text-xl font-medium tracking-tight text-cream sm:text-2xl">
 							{capability.title}
 						</h3>
 						<p class="mt-3 font-sans text-base leading-relaxed text-mist sm:text-lg">
 							{capability.body}
 						</p>
-					</div>
+					</TextCard>
 				))
 			}
 		</div>
@@ -154,18 +155,18 @@ const insights = [
 			advance responsibly.
 		</p>
 
-		<div class="mt-12 max-w-3xl space-y-10">
+		<div class="mt-12 grid max-w-5xl gap-4 sm:grid-cols-3 sm:gap-5">
 			{
 				principles.map((principle) => (
-					<div>
-						<p class="section-kicker mb-3">{principle.number}</p>
-						<h3 class="font-serif text-xl font-medium tracking-tight text-cream sm:text-2xl">
+					<TextCard size="sm">
+						<p class="section-kicker mb-2">{principle.number}</p>
+						<h3 class="font-serif text-lg font-medium tracking-tight text-cream sm:text-xl">
 							{principle.title}
 						</h3>
-						<p class="mt-3 font-sans text-base leading-relaxed text-mist sm:text-lg">
+						<p class="mt-2 font-sans text-sm leading-relaxed text-mist sm:text-base">
 							{principle.body}
 						</p>
-					</div>
+					</TextCard>
 				))
 			}
 		</div>
@@ -176,25 +177,18 @@ const insights = [
 		kicker="From Adoption to Control"
 		heading="Forge a clearer path to trusted AI."
 	>
-		<div class="mt-12 grid max-w-5xl gap-10 sm:grid-cols-3 sm:gap-12">
+		<div class="mt-12 grid max-w-5xl gap-5 sm:grid-cols-3 sm:gap-6">
 			{
 				path.map((step) => (
-					<div>
+					<TextCard>
 						<p class="section-kicker mb-3">{step.title}</p>
 						<p class="font-sans text-base leading-relaxed text-mist sm:text-lg">
 							{step.body}
 						</p>
-					</div>
+					</TextCard>
 				))
 			}
 		</div>
-
-		<p
-			class="mt-14 font-serif text-xl tracking-[0.08em] text-cream sm:text-2xl"
-		>
-			<!-- TODO: Update styling to match Figma design -->
-			Discover → Protect → Govern
-		</p>
 	</HomeSection>
 
 	<HomeSection
@@ -221,7 +215,7 @@ const insights = [
 			{assessmentQuestions.map((question) => <li>{question}</li>)}
 		</ol>
 
-		<div class="mt-12 max-w-3xl">
+		<TextCard class="mt-12 max-w-3xl">
 			<p
 				class="font-serif text-4xl font-medium tracking-tight text-cream sm:text-5xl"
 			>
@@ -234,7 +228,7 @@ const insights = [
 				Improve visibility across AI usage and formalize governance controls
 				before expanding higher-risk AI workflows.
 			</p>
-		</div>
+		</TextCard>
 	</HomeSection>
 
 	<HomeSection
@@ -249,10 +243,10 @@ const insights = [
 			governance, and responsible adoption.
 		</p>
 
-		<div class="mt-12 grid max-w-5xl gap-10 sm:grid-cols-3 sm:gap-12">
+		<div class="mt-12 grid max-w-5xl gap-5 sm:grid-cols-3 sm:gap-6">
 			{
 				insights.map((article) => (
-					<article>
+					<TextCard as="article">
 						<p class="section-kicker mb-3">{article.kicker}</p>
 						<h3 class="font-serif text-xl font-medium tracking-tight text-cream sm:text-2xl">
 							{article.title}
@@ -260,7 +254,7 @@ const insights = [
 						<p class="mt-3 font-sans text-base leading-relaxed text-mist sm:text-lg">
 							{article.body}
 						</p>
-					</article>
+					</TextCard>
 				))
 			}
 		</div>
