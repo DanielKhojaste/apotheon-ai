@@ -7,9 +7,9 @@ const links = [
 ];
 ---
 
-<header class="sticky top-0 z-30 shrink-0 bg-void">
+<header class="site-header is-visible" data-site-header>
 	<nav
-		class="container-page relative flex items-center justify-between py-4 lg:py-5"
+		class="site-header-bar container-page relative flex items-center justify-between py-4 lg:py-5"
 		aria-label="Primary"
 	>
 		<a href="/" class="group flex items-center" aria-label="ApotheonAI home">
@@ -38,7 +38,7 @@ const links = [
 
 	<div
 		id="hs-header-overlay-nav"
-		class="hs-overlay hidden fixed inset-0 z-40 flex min-h-svh flex-col items-center justify-center gap-8 bg-void/94 px-6 pb-16 pt-24 [--close-when-click-inside:true] [--overlay-backdrop:false]"
+		class="hs-overlay pointer-events-auto hidden fixed inset-0 z-40 flex min-h-svh flex-col items-center justify-center gap-8 bg-void/94 px-6 pb-16 pt-24 [--close-when-click-inside:true] [--overlay-backdrop:false]"
 		role="dialog"
 		tabindex="-1"
 		aria-label="Site navigation"
@@ -55,3 +55,7 @@ const links = [
 		}
 	</div>
 </header>
+
+<script>
+	import "../scripts/header.ts";
+</script>
