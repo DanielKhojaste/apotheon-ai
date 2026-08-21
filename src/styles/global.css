@@ -646,7 +646,7 @@
 
 	.home-manifesto {
 		position: relative;
-		padding: clamp(7rem, 13vw, 13rem) 0;
+		padding: clamp(6rem, 10vw, 10rem) 0;
 		overflow: hidden;
 	}
 
@@ -699,8 +699,8 @@
 		align-items: center;
 		margin-top: 2rem;
 		font-family: var(--font-serif);
-		font-size: clamp(3.6rem, 8.8vw, 8.75rem);
-		font-weight: 500;
+		font-size: clamp(2.7rem, 5.4vw, 5.25rem);
+		font-weight: 100;
 		letter-spacing: -0.045em;
 		line-height: 0.88;
 		text-align: center;
@@ -717,11 +717,13 @@
 		z-index: 1;
 		margin-top: 2.25rem;
 		font-family: var(--font-sans);
-		font-size: 0.82rem;
-		letter-spacing: 0.18em;
+		font-size: clamp(0.95rem, 1.25vw, 1.08rem);
+		font-weight: 600;
+		letter-spacing: 0.14em;
 		text-align: center;
 		text-transform: uppercase;
-		color: rgb(183 168 144 / 0.75);
+		color: var(--color-gold-bright);
+		text-shadow: 0 0 1.5rem rgb(201 165 106 / 0.18);
 	}
 
 	.principle-rail {
@@ -742,8 +744,8 @@
 
 	.principle-number {
 		font-family: var(--font-serif);
-		font-size: clamp(3.8rem, 6vw, 6.5rem);
-		font-weight: 400;
+		font-size: clamp(3.1rem, 4.5vw, 5rem);
+		font-weight: 100;
 		line-height: 1;
 		color: rgb(201 165 106 / 0.78);
 	}
@@ -925,14 +927,6 @@
 			0 0 0 6rem rgb(201 165 106 / 0.008);
 	}
 
-	.insight-arrow {
-		position: absolute;
-		right: 2rem;
-		bottom: 1.7rem;
-		font-family: var(--font-serif);
-		font-size: 2rem;
-		color: rgb(201 165 106 / 0.76);
-	}
 
 	.insight-list {
 		border-top: 1px solid rgb(201 165 106 / 0.16);
@@ -940,17 +934,12 @@
 
 	.insight-row {
 		display: grid;
-		grid-template-columns: 1fr auto;
-		gap: 2rem;
+		grid-template-columns: 1fr;
+		gap: 0;
 		padding: 2rem 0;
 		border-bottom: 1px solid rgb(201 165 106 / 0.14);
 	}
 
-	.insight-row > span {
-		font-family: var(--font-serif);
-		font-size: 1.5rem;
-		color: rgb(201 165 106 / 0.72);
-	}
 
 	.home-final-cta {
 		position: relative;
@@ -982,8 +971,8 @@
 	.home-final-cta h2 {
 		margin-top: 1.6rem;
 		font-family: var(--font-serif);
-		font-size: clamp(3rem, 7vw, 6.8rem);
-		font-weight: 500;
+		font-size: clamp(2.6rem, 5.2vw, 5.25rem);
+		font-weight: 100;
 		letter-spacing: -0.04em;
 		line-height: 0.96;
 		color: var(--color-cream);
@@ -1097,7 +1086,6 @@
 
 		.insight-featured {
 			min-height: auto;
-			padding-bottom: 6rem;
 		}
 	}
 
@@ -1127,7 +1115,7 @@
 		}
 
 		.manifesto-title {
-			font-size: clamp(3rem, 17vw, 5rem);
+			font-size: clamp(2.35rem, 10.5vw, 3.2rem);
 		}
 
 		.assessment-score-ring strong {
