@@ -1,19 +1,337 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const links = [
+	{
+		label: "LinkedIn",
+		href: "https://www.linkedin.com/in/aref-khojaste/",
+		description:
+			"Connect with me professionally and see more of my background.",
+		number: "01",
+	},
+	{
+		label: "GitHub",
+		href: "https://github.com/DanielKhojaste",
+		description: "Explore my code, projects, and development work.",
+		number: "02",
+	},
+];
 ---
 
-<BaseLayout title="ApotheonAI | Capabilities">
-	<article class="container-page py-16">
-		<div class="max-w-3xl">
-			<p class="section-kicker mb-4">Contact Us</p>
-			<h1
-				class="font-serif text-4xl font-medium tracking-tight text-cream sm:text-5xl"
+<BaseLayout title="Contact | ApotheonAI">
+	<main>
+		<section class="relative overflow-hidden border-b border-white/10">
+			<div
+				class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_34%,rgba(197,157,86,0.12),transparent_31%)]"
+				aria-hidden="true"
 			>
-				Contact Us
-			</h1>
-			<p class="mt-6 font-sans text-base leading-relaxed text-mist sm:text-lg">
-				Daniel Khojaste
-			</p>
-		</div>
-	</article>
+			</div>
+
+			<div
+				class="container-page relative grid min-h-[72vh] items-center gap-14 py-20 sm:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20 lg:py-28"
+			>
+				<div class="max-w-3xl">
+					<p class="section-kicker">Contact</p>
+
+					<h1
+						class="mt-6 max-w-4xl font-serif text-5xl font-medium leading-[0.92] tracking-[-0.04em] text-cream sm:text-6xl lg:text-7xl xl:text-8xl"
+					>
+						Daniel Khojaste
+					</h1>
+
+					<p
+						class="mt-5 font-sans text-sm font-medium uppercase tracking-[0.16em] text-[#c59d56] sm:text-base"
+					>
+						Designer · Developer · Constant learner
+					</p>
+
+					<p
+						class="mt-7 max-w-2xl font-sans text-base leading-relaxed text-mist sm:text-lg"
+					>
+						I’m the designer and developer behind ApotheonAI. I enjoy learning
+						new tools by building with them, and I care about creating polished,
+						thoughtful digital experiences.
+					</p>
+
+					<p
+						class="mt-5 max-w-2xl font-sans text-base leading-relaxed text-mist sm:text-lg"
+					>
+						If you’d like to discuss an opportunity, a project, or this work,
+						you can reach me directly below.
+					</p>
+				</div>
+
+				<div
+					class="contact-visual relative mx-auto w-full max-w-[31rem]"
+					aria-hidden="true"
+				>
+					<div class="contact-visual-grid"></div>
+					<div class="contact-orbit contact-orbit-outer"></div>
+					<div class="contact-orbit contact-orbit-inner"></div>
+
+					<div class="contact-core">
+						<span class="contact-core-index">A</span>
+						<div>
+							<p>AVAILABLE TO CONNECT</p>
+							<span>Design · Development · AI</span>
+						</div>
+					</div>
+
+					<span class="contact-node contact-node-1"></span>
+					<span class="contact-node contact-node-2"></span>
+					<span class="contact-node contact-node-3"></span>
+				</div>
+			</div>
+		</section>
+
+		<section class="border-b border-white/10 py-20 sm:py-24 lg:py-28">
+			<div class="container-page">
+				<div class="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+					<div>
+						<p class="section-kicker">Connect</p>
+
+						<h2
+							class="mt-5 max-w-xl font-serif text-4xl font-medium leading-tight tracking-tight text-cream sm:text-5xl"
+						>
+							Let’s connect.
+						</h2>
+
+						<p
+							class="mt-6 max-w-lg font-sans text-base leading-relaxed text-mist"
+						>
+							LinkedIn is best for professional conversations. GitHub has more
+							of my development work.
+						</p>
+					</div>
+
+					<nav aria-label="Contact links" class="contact-links">
+						{
+							links.map((link) => (
+								<a
+									href={link.href}
+									target="_blank"
+									rel="noopener noreferrer"
+									class="contact-link group"
+								>
+									<span class="contact-link-number">{link.number}</span>
+
+									<div>
+										<h3 class="contact-link-title">{link.label}</h3>
+										<p class="contact-link-description">{link.description}</p>
+									</div>
+
+									<span class="contact-link-arrow" aria-hidden="true">
+										↗
+									</span>
+								</a>
+							))
+						}
+					</nav>
+				</div>
+			</div>
+		</section>
+	</main>
 </BaseLayout>
+
+<style>
+	.contact-visual {
+		aspect-ratio: 1 / 1;
+		min-height: 24rem;
+	}
+
+	.contact-visual-grid {
+		position: absolute;
+		inset: 8%;
+		background-image:
+			linear-gradient(rgba(197, 157, 86, 0.07) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(197, 157, 86, 0.07) 1px, transparent 1px);
+		background-size: 42px 42px;
+		mask-image: radial-gradient(circle, black 28%, transparent 72%);
+		-webkit-mask-image: radial-gradient(circle, black 28%, transparent 72%);
+	}
+
+	.contact-orbit {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 9999px;
+		transform: translate(-50%, -50%);
+	}
+
+	.contact-orbit-outer {
+		width: 78%;
+		height: 78%;
+	}
+
+	.contact-orbit-inner {
+		width: 48%;
+		height: 48%;
+		border-color: rgba(197, 157, 86, 0.32);
+	}
+
+	.contact-core {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		display: flex;
+		width: 14rem;
+		align-items: center;
+		gap: 0.9rem;
+		border: 1px solid rgba(197, 157, 86, 0.34);
+		background: rgba(9, 9, 11, 0.94);
+		padding: 1rem 1.1rem;
+		transform: translate(-50%, -50%);
+		box-shadow: 0 0 42px rgba(197, 157, 86, 0.08);
+	}
+
+	.contact-core-index {
+		display: grid;
+		width: 2.45rem;
+		height: 2.45rem;
+		flex: 0 0 auto;
+		place-items: center;
+		border: 1px solid rgba(197, 157, 86, 0.45);
+		color: #c59d56;
+		font-family: var(--font-serif);
+		font-size: 1.2rem;
+	}
+
+	.contact-core p {
+		margin: 0;
+		color: var(--color-cream);
+		font-family: var(--font-sans);
+		font-size: 0.62rem;
+		font-weight: 700;
+		letter-spacing: 0.16em;
+	}
+
+	.contact-core div span {
+		display: block;
+		margin-top: 0.3rem;
+		color: rgba(210, 207, 199, 0.58);
+		font-family: var(--font-sans);
+		font-size: 0.56rem;
+		letter-spacing: 0.12em;
+	}
+
+	.contact-node {
+		position: absolute;
+		width: 0.52rem;
+		height: 0.52rem;
+		border: 1px solid rgba(197, 157, 86, 0.8);
+		border-radius: 999px;
+		background: #09090b;
+		box-shadow: 0 0 14px rgba(197, 157, 86, 0.25);
+	}
+
+	.contact-node-1 {
+		left: 17%;
+		top: 38%;
+	}
+
+	.contact-node-2 {
+		right: 18%;
+		top: 26%;
+	}
+
+	.contact-node-3 {
+		right: 22%;
+		bottom: 21%;
+	}
+
+	.contact-links {
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.contact-link {
+		display: grid;
+		grid-template-columns: 2.5rem 1fr auto;
+		align-items: center;
+		gap: 1rem;
+		min-height: 9rem;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+		padding: 1.5rem 0;
+		transition:
+			border-color 220ms ease,
+			padding-left 260ms cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.contact-link:hover {
+		border-color: rgba(197, 157, 86, 0.5);
+		padding-left: 0.45rem;
+	}
+
+	.contact-link:focus-visible {
+		outline: 2px solid var(--color-gold);
+		outline-offset: 4px;
+	}
+
+	.contact-link-number {
+		color: rgba(197, 157, 86, 0.7);
+		font-family: var(--font-sans);
+		font-size: 0.65rem;
+		font-weight: 700;
+		letter-spacing: 0.16em;
+	}
+
+	.contact-link-title {
+		color: var(--color-cream);
+		font-family: var(--font-serif);
+		font-size: clamp(1.6rem, 3vw, 2.2rem);
+		font-weight: 500;
+		line-height: 1;
+		transition: color 200ms ease;
+	}
+
+	.contact-link-description {
+		max-width: 32rem;
+		margin-top: 0.65rem;
+		color: rgba(210, 207, 199, 0.66);
+		font-family: var(--font-sans);
+		font-size: 0.82rem;
+		line-height: 1.6;
+	}
+
+	.contact-link-arrow {
+		color: rgba(197, 157, 86, 0.6);
+		font-family: var(--font-sans);
+		font-size: 1rem;
+		transition:
+			color 200ms ease,
+			transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.contact-link:hover .contact-link-title,
+	.contact-link:hover .contact-link-arrow {
+		color: var(--color-gold-bright);
+	}
+
+	.contact-link:hover .contact-link-arrow {
+		transform: translate(0.16rem, -0.16rem);
+	}
+
+	@media (max-width: 639px) {
+		.contact-visual {
+			min-height: 20rem;
+		}
+
+		.contact-core {
+			width: 12.4rem;
+			padding: 0.85rem;
+		}
+
+		.contact-link {
+			grid-template-columns: 2rem 1fr auto;
+			min-height: 8rem;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.contact-link,
+		.contact-link-title,
+		.contact-link-arrow {
+			transition: none;
+		}
+	}
+</style>
