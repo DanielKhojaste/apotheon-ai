@@ -3,17 +3,26 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 const links = [
 	{
+		label: "Email",
+		href: "mailto:danielkhojaste101@gmail.com",
+		description: "Reach me directly at danielkhojaste101@gmail.com.",
+		number: "01",
+		external: false,
+	},
+	{
 		label: "LinkedIn",
 		href: "https://www.linkedin.com/in/aref-khojaste/",
 		description:
 			"Connect with me professionally and see more of my background.",
-		number: "01",
+		number: "02",
+		external: true,
 	},
 	{
 		label: "GitHub",
 		href: "https://github.com/DanielKhojaste",
 		description: "Explore my code, projects, and development work.",
-		number: "02",
+		number: "03",
+		external: true,
 	},
 ];
 ---
@@ -99,8 +108,8 @@ const links = [
 						<p
 							class="mt-6 max-w-lg font-sans text-base leading-relaxed text-mist"
 						>
-							LinkedIn is best for professional conversations. GitHub has more
-							of my development work.
+							Email is the quickest way to reach me. You can also connect with
+							me on LinkedIn or explore more of my work on GitHub.
 						</p>
 					</div>
 
@@ -109,8 +118,8 @@ const links = [
 							links.map((link) => (
 								<a
 									href={link.href}
-									target="_blank"
-									rel="noopener noreferrer"
+									target={link.external ? "_blank" : undefined}
+									rel={link.external ? "noopener noreferrer" : undefined}
 									class="contact-link group"
 								>
 									<span class="contact-link-number">{link.number}</span>
