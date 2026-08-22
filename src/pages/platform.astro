@@ -1,22 +1,1008 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const capabilities = [
+	{
+		number: "01",
+		kicker: "AI Visibility",
+		title: "Understand where AI lives.",
+		body: "AI adoption rarely happens in one place. Teams experiment with external tools, internal models, APIs, copilots, and automated workflows. ApotheonAI brings those activities into a clearer operational view so teams can understand what is being used and where risk may be emerging.",
+		points: [
+			"Discover AI tools and services",
+			"Understand organizational usage patterns",
+			"Improve visibility across teams",
+			"Create a shared inventory of AI activity",
+		],
+		visualLabel: "Environment Map",
+		visualTitle: "One view across the AI estate",
+		tags: ["Models", "Agents", "Apps", "APIs"],
+	},
+	{
+		number: "02",
+		kicker: "Threat Detection",
+		title: "Detect unusual AI activity.",
+		body: "AI-powered workflows create new patterns of behavior that traditional monitoring may not capture clearly. ApotheonAI helps security teams surface suspicious interactions, policy violations, and unexpected model behavior for faster review.",
+		points: [
+			"Monitor high-risk activity",
+			"Surface suspicious interactions",
+			"Prioritize security events",
+			"Support faster investigation",
+		],
+		visualLabel: "Signal Monitor",
+		visualTitle: "Turn activity into actionable signals",
+		tags: ["Prompt spike", "Policy event", "Data access", "Model drift"],
+	},
+	{
+		number: "03",
+		kicker: "Prompt Protection",
+		title: "Protect every interaction.",
+		body: "Generative AI introduces new paths for sensitive information, unsafe prompts, and malicious input. ApotheonAI adds a conceptual security layer around the interactions between users, applications, enterprise data, and AI models.",
+		points: [
+			"Identify sensitive content",
+			"Detect unsafe prompt patterns",
+			"Reduce accidental exposure",
+			"Apply contextual controls",
+		],
+		visualLabel: "Interaction Guard",
+		visualTitle: "Inspect the path before it reaches the model",
+		tags: ["User", "Prompt", "Control", "Model"],
+	},
+	{
+		number: "04",
+		kicker: "AI Governance",
+		title: "Turn AI policy into action.",
+		body: "Policies are useful only when teams can apply them consistently. ApotheonAI connects governance requirements with the AI systems and workflows they are intended to protect, giving security, risk, and engineering teams a shared operating model.",
+		points: [
+			"Define practical controls",
+			"Support policy enforcement",
+			"Improve accountability",
+			"Maintain clearer oversight",
+		],
+		visualLabel: "Governance Layer",
+		visualTitle: "Connect policy, ownership, and control",
+		tags: ["Policy", "Owner", "Control", "Evidence"],
+	},
+];
+
+const lifecycle = [
+	{
+		number: "01",
+		title: "Discover",
+		body: "Map AI tools, models, applications, and services across the organization.",
+	},
+	{
+		number: "02",
+		title: "Protect",
+		body: "Apply security controls around interactions, workflows, and sensitive data.",
+	},
+	{
+		number: "03",
+		title: "Govern",
+		body: "Create consistent policies and accountability as AI adoption scales.",
+	},
+];
+
+const architectureLayers = [
+	{
+		label: "Users & Teams",
+		detail: "Employees · Developers · Security",
+	},
+	{
+		label: "AI Applications",
+		detail: "Copilots · Agents · Internal Apps",
+	},
+	{
+		label: "ApotheonAI Security Layer",
+		detail: "Visibility · Detection · Protection · Governance",
+		highlight: true,
+	},
+	{
+		label: "Models & Services",
+		detail: "Foundation Models · APIs · Enterprise Data",
+	},
+];
 ---
 
-<BaseLayout title="ApotheonAI | Platform">
-	<article class="container-page py-16">
-		<div class="max-w-3xl">
-			<p class="section-kicker mb-4">Platform</p>
-			<h1
-				class="font-serif text-4xl font-medium tracking-tight text-cream sm:text-5xl"
+<BaseLayout title="Platform | ApotheonAI">
+	<main>
+		<!-- Hero -->
+		<section class="relative overflow-hidden border-b border-white/10">
+			<div
+				class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_38%,rgba(197,157,86,0.14),transparent_30%)]"
+				aria-hidden="true"
 			>
-				The ApotheonAI Platform
-			</h1>
-			<p class="mt-6 font-sans text-base leading-relaxed text-mist sm:text-lg">
-				Bring AI activity across tools, teams, and workflows into a single
-				operational view. This page is a placeholder for the full platform
-				story, including visibility, threat detection, prompt protection, and
-				governance.
-			</p>
-		</div>
-	</article>
+			</div>
+
+			<div
+				class="container-page relative grid min-h-[82vh] items-center gap-14 py-20 sm:py-24 lg:grid-cols-[1.02fr_0.98fr] lg:gap-10 lg:py-28"
+			>
+				<div class="relative z-10 max-w-3xl">
+					<p class="section-kicker">The ApotheonAI Platform</p>
+
+					<h1
+						class="mt-6 max-w-3xl font-serif text-5xl font-medium leading-[0.95] tracking-[-0.035em] text-cream sm:text-6xl lg:text-7xl xl:text-8xl"
+					>
+						Security for the
+						<span class="block text-mist">full AI lifecycle.</span>
+					</h1>
+
+					<p
+						class="mt-8 max-w-2xl font-sans text-base leading-relaxed text-mist sm:text-lg"
+					>
+						ApotheonAI brings visibility, monitoring, protection, and governance
+						into one conceptual security layer so organizations can understand
+						AI activity, investigate emerging risk, and scale adoption with
+						clearer control.
+					</p>
+
+					<div class="mt-9 flex flex-wrap gap-4">
+						<a href="#capabilities" class="btn-gold btn-gold-lg">
+							Explore Capabilities
+						</a>
+					</div>
+
+					<div
+						class="mt-12 grid max-w-2xl grid-cols-2 gap-px overflow-hidden border border-white/10 bg-white/10 sm:grid-cols-4"
+						aria-label="Platform capabilities"
+					>
+						{
+							["Visibility", "Detection", "Protection", "Governance"].map(
+								(item) => (
+									<div class="bg-[#09090b] px-4 py-4 text-center">
+										<p class="font-sans text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-mist">
+											{item}
+										</p>
+									</div>
+								),
+							)
+						}
+					</div>
+				</div>
+
+				<!-- Technical platform visual -->
+				<div
+					class="platform-orbit relative mx-auto w-full max-w-[38rem]"
+					aria-hidden="true"
+				>
+					<div class="orbit-glow"></div>
+					<div class="orbit-ring orbit-ring-1"></div>
+					<div class="orbit-ring orbit-ring-2"></div>
+					<div class="orbit-axis orbit-axis-x"></div>
+					<div class="orbit-axis orbit-axis-y"></div>
+
+					<div class="orbit-core">
+						<span class="orbit-mark">A</span>
+						<div>
+							<p>APOTHEON</p>
+							<span>SECURITY LAYER</span>
+						</div>
+					</div>
+
+					<div class="orbit-node orbit-node-1">
+						<span>01</span>
+						<strong>Models</strong>
+					</div>
+					<div class="orbit-node orbit-node-2">
+						<span>02</span>
+						<strong>Agents</strong>
+					</div>
+					<div class="orbit-node orbit-node-3">
+						<span>03</span>
+						<strong>Data</strong>
+					</div>
+					<div class="orbit-node orbit-node-4">
+						<span>04</span>
+						<strong>Apps</strong>
+					</div>
+
+					<p class="orbit-caption">OBSERVE · PROTECT · GOVERN</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- Platform premise -->
+		<section class="border-b border-white/10 py-20 sm:py-24 lg:py-28">
+			<div class="container-page">
+				<div class="grid gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:gap-20">
+					<div>
+						<p class="section-kicker">One Operational View</p>
+						<h2
+							class="mt-5 max-w-xl font-serif text-4xl font-medium leading-tight tracking-tight text-cream sm:text-5xl"
+						>
+							Bring order to a fragmented AI environment.
+						</h2>
+					</div>
+
+					<div
+						class="max-w-3xl space-y-5 font-sans text-base leading-relaxed text-mist sm:text-lg"
+					>
+						<p>
+							AI adoption spreads across departments, cloud services, developer
+							tools, third-party applications, and internal workflows. That
+							speed can make it difficult for security and governance teams to
+							maintain a shared understanding of what is actually happening.
+						</p>
+						<p>
+							ApotheonAI is designed around a simple idea: visibility should
+							lead to protection, and protection should connect directly to
+							governance. Instead of treating each problem as a separate system,
+							the platform story brings them together as one continuous
+							operating model.
+						</p>
+					</div>
+				</div>
+
+				<div class="mt-16 grid border-y border-white/10 md:grid-cols-3">
+					{
+						lifecycle.map((step) => (
+							<article class="border-white/10 py-8 md:border-r md:px-8 md:first:pl-0 md:last:border-r-0 lg:py-10">
+								<p class="font-sans text-xs font-semibold tracking-[0.2em] text-[#c59d56]">
+									{step.number}
+								</p>
+								<h3 class="mt-5 font-serif text-2xl font-medium tracking-tight text-cream sm:text-3xl">
+									{step.title}
+								</h3>
+								<p class="mt-4 font-sans text-sm leading-relaxed text-mist sm:text-base">
+									{step.body}
+								</p>
+							</article>
+						))
+					}
+				</div>
+			</div>
+		</section>
+
+		<!-- Capabilities -->
+		<section id="capabilities" class="border-b border-white/10">
+			<div class="container-page py-20 sm:py-24 lg:py-28">
+				<div class="max-w-3xl">
+					<p class="section-kicker">Capabilities</p>
+					<h2
+						class="mt-5 font-serif text-4xl font-medium leading-tight tracking-tight text-cream sm:text-5xl lg:text-6xl"
+					>
+						Control the AI lifecycle without slowing it down.
+					</h2>
+					<p
+						class="mt-7 max-w-2xl font-sans text-base leading-relaxed text-mist sm:text-lg"
+					>
+						Four connected capabilities form the foundation of the platform
+						concept: understand the environment, detect risk, protect
+						interactions, and turn policy into practical control.
+					</p>
+				</div>
+
+				<div class="mt-16 border-t border-white/10">
+					{
+						capabilities.map((capability, index) => (
+							<article
+								class:list={[
+									"capability-row",
+									index % 2 === 1 && "capability-row-reverse",
+								]}
+							>
+								<div class="capability-copy">
+									<div class="flex items-center gap-4">
+										<span class="font-sans text-xs font-semibold tracking-[0.2em] text-[#c59d56]">
+											{capability.number}
+										</span>
+										<span
+											class="h-px w-10 bg-[#c59d56]/40"
+											aria-hidden="true"
+										/>
+										<p class="section-kicker">{capability.kicker}</p>
+									</div>
+
+									<h3 class="mt-6 max-w-xl font-serif text-3xl font-medium leading-tight tracking-tight text-cream sm:text-4xl lg:text-5xl">
+										{capability.title}
+									</h3>
+
+									<p class="mt-6 max-w-2xl font-sans text-base leading-relaxed text-mist sm:text-lg">
+										{capability.body}
+									</p>
+
+									<ul class="mt-8 grid gap-3 sm:grid-cols-2">
+										{capability.points.map((point) => (
+											<li class="flex items-start gap-3 border-t border-white/10 pt-3 font-sans text-sm leading-relaxed text-cream/90">
+												<span class="mt-[0.42rem] h-1.5 w-1.5 shrink-0 rounded-full bg-[#c59d56]" />
+												<span>{point}</span>
+											</li>
+										))}
+									</ul>
+								</div>
+
+								<div class="capability-visual" aria-hidden="true">
+									<div class="visual-header">
+										<p>{capability.visualLabel}</p>
+										<span>LIVE VIEW</span>
+									</div>
+
+									<div class="visual-body">
+										<p class="visual-title">{capability.visualTitle}</p>
+
+										<div class="visual-grid">
+											{capability.tags.map((tag, tagIndex) => (
+												<div class="visual-tile">
+													<div class="flex items-center justify-between gap-3">
+														<span class="visual-index">
+															{String(tagIndex + 1).padStart(2, "0")}
+														</span>
+														<span class="visual-status" />
+													</div>
+													<strong>{tag}</strong>
+													<div class="visual-line">
+														<span style={`width:${58 + tagIndex * 9}%`} />
+													</div>
+												</div>
+											))}
+										</div>
+
+										<div class="visual-footer">
+											<span>Signal</span>
+											<div>
+												<>
+													<i />
+													<i />
+													<i />
+													<i />
+													<i />
+												</>
+											</div>
+											<strong>Protected</strong>
+										</div>
+									</div>
+								</div>
+							</article>
+						))
+					}
+				</div>
+			</div>
+		</section>
+
+		<!-- Architecture -->
+		<section
+			class="relative overflow-hidden border-b border-white/10 py-20 sm:py-24 lg:py-28"
+		>
+			<div
+				class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(197,157,86,0.08),transparent_32%)]"
+				aria-hidden="true"
+			>
+			</div>
+
+			<div class="container-page relative">
+				<div class="grid gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20">
+					<div>
+						<p class="section-kicker">Platform Architecture</p>
+						<h2
+							class="mt-5 max-w-xl font-serif text-4xl font-medium leading-tight tracking-tight text-cream sm:text-5xl"
+						>
+							One security layer across your AI environment.
+						</h2>
+						<p
+							class="mt-6 max-w-xl font-sans text-base leading-relaxed text-mist sm:text-lg"
+						>
+							The architecture is intentionally simple: observe the systems
+							people use, place security controls around the AI application
+							layer, and keep governance connected to the same operational
+							picture.
+						</p>
+
+						<div
+							class="mt-8 flex flex-wrap gap-2"
+							aria-label="Security layer functions"
+						>
+							{
+								["Visibility", "Detection", "Protection", "Governance"].map(
+									(item) => (
+										<span class="border border-[#c59d56]/25 bg-[#c59d56]/[0.05] px-3 py-2 font-sans text-xs font-semibold uppercase tracking-[0.14em] text-[#c59d56]">
+											{item}
+										</span>
+									),
+								)
+							}
+						</div>
+					</div>
+
+					<div class="architecture-stack">
+						{
+							architectureLayers.map((layer, index) => (
+								<>
+									<div
+										class:list={[
+											"architecture-layer",
+											layer.highlight && "architecture-layer-highlight",
+										]}
+									>
+										<div>
+											<span>{String(index + 1).padStart(2, "0")}</span>
+											<strong>{layer.label}</strong>
+										</div>
+										<p>{layer.detail}</p>
+									</div>
+									{index < architectureLayers.length - 1 && (
+										<div class="architecture-connector" aria-hidden="true">
+											<span />
+										</div>
+									)}
+								</>
+							))
+						}
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Why this model -->
+		<section class="border-b border-white/10 py-20 sm:py-24 lg:py-28">
+			<div class="container-page">
+				<p class="section-kicker">Designed for Responsible Scale</p>
+				<h2
+					class="mt-5 max-w-3xl font-serif text-4xl font-medium leading-tight tracking-tight text-cream sm:text-5xl"
+				>
+					Move from experimentation to a more mature AI operating model.
+				</h2>
+
+				<div
+					class="mt-14 grid gap-px overflow-hidden border border-white/10 bg-white/10 lg:grid-cols-3"
+				>
+					<article class="bg-[#09090b] p-7 sm:p-8 lg:p-10">
+						<p class="section-kicker">Clarity</p>
+						<h3
+							class="mt-5 font-serif text-2xl font-medium tracking-tight text-cream"
+						>
+							See what is actually being used.
+						</h3>
+						<p
+							class="mt-4 font-sans text-sm leading-relaxed text-mist sm:text-base"
+						>
+							A shared view gives engineering, security, and governance teams a
+							common starting point instead of separate assumptions about the AI
+							environment.
+						</p>
+					</article>
+
+					<article class="bg-[#09090b] p-7 sm:p-8 lg:p-10">
+						<p class="section-kicker">Control</p>
+						<h3
+							class="mt-5 font-serif text-2xl font-medium tracking-tight text-cream"
+						>
+							Put protection closer to the interaction.
+						</h3>
+						<p
+							class="mt-4 font-sans text-sm leading-relaxed text-mist sm:text-base"
+						>
+							Controls are most useful when they sit close to the prompts,
+							applications, models, and data flows where AI-related risk
+							appears.
+						</p>
+					</article>
+
+					<article class="bg-[#09090b] p-7 sm:p-8 lg:p-10">
+						<p class="section-kicker">Accountability</p>
+						<h3
+							class="mt-5 font-serif text-2xl font-medium tracking-tight text-cream"
+						>
+							Make governance operational.
+						</h3>
+						<p
+							class="mt-4 font-sans text-sm leading-relaxed text-mist sm:text-base"
+						>
+							Connect policies with owners, workflows, and evidence so
+							responsible AI adoption becomes part of normal operations rather
+							than a separate exercise.
+						</p>
+					</article>
+				</div>
+			</div>
+		</section>
+
+		<!-- Final CTA -->
+		<section class="relative overflow-hidden py-24 sm:py-28 lg:py-32">
+			<div
+				class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_100%,rgba(197,157,86,0.12),transparent_38%)]"
+				aria-hidden="true"
+			>
+			</div>
+
+			<div class="container-page relative text-center">
+				<div class="mx-auto max-w-4xl">
+					<p class="section-kicker">The Next Layer</p>
+					<h2
+						class="mt-6 font-serif text-4xl font-medium leading-tight tracking-tight text-cream sm:text-5xl lg:text-6xl"
+					>
+						Build AI on a stronger foundation.
+					</h2>
+					<p
+						class="mx-auto mt-6 max-w-2xl font-sans text-base leading-relaxed text-mist sm:text-lg"
+					>
+						See how the ApotheonAI platform concept supports enterprise AI,
+						generative AI applications, governance teams, and security
+						operations.
+					</p>
+
+					<div class="mt-9 flex flex-wrap justify-center gap-4">
+						<a href="/blog" class="btn-gold btn-gold-lg">Read the Blog</a>
+						<a
+							href="/contact"
+							class="inline-flex min-h-12 items-center justify-center border border-white/15 px-6 py-3 font-sans text-sm font-semibold text-cream transition hover:border-[#c59d56]/60 hover:bg-white/[0.04] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c59d56]"
+						>
+							Talk to Us
+						</a>
+					</div>
+
+					<p
+						class="mx-auto mt-10 max-w-2xl border-t border-white/10 pt-6 font-sans text-xs leading-relaxed text-mist/75"
+					>
+						ApotheonAI is a fictional portfolio project. The platform concepts
+						shown on this page demonstrate product storytelling, frontend
+						development, and content architecture rather than a live
+						cybersecurity service.
+					</p>
+				</div>
+			</div>
+		</section>
+	</main>
 </BaseLayout>
+
+<style>
+	.platform-orbit {
+		aspect-ratio: 1 / 1;
+		min-height: 30rem;
+	}
+
+	.orbit-glow {
+		position: absolute;
+		inset: 18%;
+		border-radius: 9999px;
+		background: rgba(197, 157, 86, 0.08);
+		filter: blur(42px);
+	}
+
+	.orbit-ring {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 9999px;
+		transform: translate(-50%, -50%);
+	}
+
+	.orbit-ring-1 {
+		width: 72%;
+		height: 72%;
+	}
+
+	.orbit-ring-2 {
+		width: 46%;
+		height: 46%;
+		border-color: rgba(197, 157, 86, 0.25);
+	}
+
+	.orbit-axis {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		background: linear-gradient(
+			90deg,
+			transparent,
+			rgba(255, 255, 255, 0.1),
+			transparent
+		);
+		transform: translate(-50%, -50%);
+	}
+
+	.orbit-axis-x {
+		width: 86%;
+		height: 1px;
+	}
+
+	.orbit-axis-y {
+		width: 1px;
+		height: 86%;
+		background: linear-gradient(
+			180deg,
+			transparent,
+			rgba(255, 255, 255, 0.1),
+			transparent
+		);
+	}
+
+	.orbit-core {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		display: flex;
+		width: 12.5rem;
+		align-items: center;
+		gap: 0.9rem;
+		border: 1px solid rgba(197, 157, 86, 0.34);
+		background: #0c0c0f;
+		padding: 1rem 1.1rem;
+		transform: translate(-50%, -50%);
+		box-shadow: 0 0 45px rgba(197, 157, 86, 0.09);
+	}
+
+	.orbit-mark {
+		display: grid;
+		width: 2.45rem;
+		height: 2.45rem;
+		flex: 0 0 auto;
+		place-items: center;
+		border: 1px solid rgba(197, 157, 86, 0.45);
+		color: #c59d56;
+		font-family: serif;
+		font-size: 1.2rem;
+	}
+
+	.orbit-core p {
+		margin: 0;
+		color: #f2eadc;
+		font-family: sans-serif;
+		font-size: 0.72rem;
+		font-weight: 700;
+		letter-spacing: 0.18em;
+	}
+
+	.orbit-core div span {
+		display: block;
+		margin-top: 0.2rem;
+		color: rgba(210, 207, 199, 0.62);
+		font-family: sans-serif;
+		font-size: 0.55rem;
+		letter-spacing: 0.18em;
+	}
+
+	.orbit-node {
+		position: absolute;
+		min-width: 7.5rem;
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		background: rgba(9, 9, 11, 0.92);
+		padding: 0.8rem 0.9rem;
+	}
+
+	.orbit-node span {
+		display: block;
+		color: #c59d56;
+		font-family: sans-serif;
+		font-size: 0.58rem;
+		font-weight: 700;
+		letter-spacing: 0.16em;
+	}
+
+	.orbit-node strong {
+		display: block;
+		margin-top: 0.35rem;
+		color: #f2eadc;
+		font-family: serif;
+		font-size: 1.05rem;
+		font-weight: 500;
+	}
+
+	.orbit-node-1 {
+		left: 4%;
+		top: 28%;
+	}
+
+	.orbit-node-2 {
+		right: 5%;
+		top: 20%;
+	}
+
+	.orbit-node-3 {
+		left: 8%;
+		bottom: 20%;
+	}
+
+	.orbit-node-4 {
+		right: 3%;
+		bottom: 27%;
+	}
+
+	.orbit-caption {
+		position: absolute;
+		bottom: 5%;
+		left: 50%;
+		margin: 0;
+		transform: translateX(-50%);
+		white-space: nowrap;
+		color: rgba(197, 157, 86, 0.75);
+		font-family: sans-serif;
+		font-size: 0.62rem;
+		font-weight: 700;
+		letter-spacing: 0.22em;
+	}
+
+	.capability-row {
+		display: grid;
+		gap: 2.5rem;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+		padding: 4.5rem 0;
+	}
+
+	.capability-copy,
+	.capability-visual {
+		min-width: 0;
+	}
+
+	.capability-visual {
+		align-self: center;
+		border: 1px solid rgba(255, 255, 255, 0.11);
+		background:
+			linear-gradient(rgba(255, 255, 255, 0.018), rgba(255, 255, 255, 0.018)),
+			#09090b;
+	}
+
+	.visual-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+		padding: 0.9rem 1rem;
+	}
+
+	.visual-header p,
+	.visual-header span {
+		margin: 0;
+		font-family: sans-serif;
+		font-size: 0.58rem;
+		font-weight: 700;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+	}
+
+	.visual-header p {
+		color: rgba(242, 234, 220, 0.82);
+	}
+
+	.visual-header span {
+		color: #c59d56;
+	}
+
+	.visual-body {
+		padding: 1.4rem;
+	}
+
+	.visual-title {
+		max-width: 22rem;
+		margin: 0;
+		color: #f2eadc;
+		font-family: serif;
+		font-size: 1.5rem;
+		line-height: 1.2;
+	}
+
+	.visual-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.65rem;
+		margin-top: 1.4rem;
+	}
+
+	.visual-tile {
+		min-height: 7.4rem;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		padding: 0.85rem;
+	}
+
+	.visual-index {
+		color: rgba(197, 157, 86, 0.8);
+		font-family: sans-serif;
+		font-size: 0.58rem;
+		font-weight: 700;
+		letter-spacing: 0.16em;
+	}
+
+	.visual-status {
+		width: 0.42rem;
+		height: 0.42rem;
+		border-radius: 999px;
+		background: #c59d56;
+		box-shadow: 0 0 12px rgba(197, 157, 86, 0.35);
+	}
+
+	.visual-tile strong {
+		display: block;
+		margin-top: 1.15rem;
+		color: rgba(242, 234, 220, 0.9);
+		font-family: sans-serif;
+		font-size: 0.78rem;
+		font-weight: 600;
+	}
+
+	.visual-line {
+		height: 2px;
+		margin-top: 0.8rem;
+		background: rgba(255, 255, 255, 0.07);
+	}
+
+	.visual-line span {
+		display: block;
+		height: 100%;
+		background: rgba(197, 157, 86, 0.65);
+	}
+
+	.visual-footer {
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		align-items: center;
+		gap: 0.75rem;
+		margin-top: 1rem;
+		border-top: 1px solid rgba(255, 255, 255, 0.08);
+		padding-top: 0.9rem;
+		color: rgba(210, 207, 199, 0.6);
+		font-family: sans-serif;
+		font-size: 0.6rem;
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	.visual-footer div {
+		display: flex;
+		align-items: flex-end;
+		justify-content: center;
+		gap: 0.22rem;
+		height: 1rem;
+	}
+
+	.visual-footer i {
+		display: block;
+		width: 2px;
+		background: rgba(197, 157, 86, 0.65);
+	}
+
+	.visual-footer i:nth-child(1) {
+		height: 32%;
+	}
+	.visual-footer i:nth-child(2) {
+		height: 70%;
+	}
+	.visual-footer i:nth-child(3) {
+		height: 48%;
+	}
+	.visual-footer i:nth-child(4) {
+		height: 88%;
+	}
+	.visual-footer i:nth-child(5) {
+		height: 58%;
+	}
+
+	.visual-footer strong {
+		color: #c59d56;
+		font-size: 0.6rem;
+	}
+
+	.architecture-stack {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	.architecture-layer {
+		display: grid;
+		gap: 0.65rem;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		background: rgba(9, 9, 11, 0.82);
+		padding: 1.1rem 1.25rem;
+	}
+
+	.architecture-layer > div {
+		display: flex;
+		align-items: center;
+		gap: 0.85rem;
+	}
+
+	.architecture-layer span {
+		color: #c59d56;
+		font-family: sans-serif;
+		font-size: 0.62rem;
+		font-weight: 700;
+		letter-spacing: 0.16em;
+	}
+
+	.architecture-layer strong {
+		color: #f2eadc;
+		font-family: serif;
+		font-size: 1.25rem;
+		font-weight: 500;
+	}
+
+	.architecture-layer p {
+		margin: 0;
+		color: rgba(210, 207, 199, 0.66);
+		font-family: sans-serif;
+		font-size: 0.75rem;
+		line-height: 1.6;
+	}
+
+	.architecture-layer-highlight {
+		border-color: rgba(197, 157, 86, 0.48);
+		background: rgba(197, 157, 86, 0.055);
+		box-shadow: inset 0 0 0 1px rgba(197, 157, 86, 0.05);
+	}
+
+	.architecture-connector {
+		display: grid;
+		height: 2rem;
+		place-items: center;
+	}
+
+	.architecture-connector span {
+		display: block;
+		width: 1px;
+		height: 100%;
+		background: linear-gradient(
+			180deg,
+			rgba(197, 157, 86, 0.15),
+			rgba(197, 157, 86, 0.7),
+			rgba(197, 157, 86, 0.15)
+		);
+	}
+
+	@media (min-width: 1024px) {
+		.capability-row {
+			grid-template-columns: minmax(0, 1.05fr) minmax(23rem, 0.95fr);
+			align-items: center;
+			gap: 5rem;
+			padding: 6rem 0;
+		}
+
+		.capability-row-reverse .capability-copy {
+			order: 2;
+		}
+
+		.capability-row-reverse .capability-visual {
+			order: 1;
+		}
+	}
+
+	@media (max-width: 767px) {
+		.platform-orbit {
+			min-height: 23rem;
+		}
+
+		.orbit-core {
+			width: 10.5rem;
+			padding: 0.8rem;
+		}
+
+		.orbit-node {
+			min-width: 5.9rem;
+			padding: 0.65rem 0.7rem;
+		}
+
+		.orbit-node strong {
+			font-size: 0.9rem;
+		}
+
+		.orbit-node-1 {
+			left: 0;
+		}
+
+		.orbit-node-2 {
+			right: 0;
+		}
+
+		.orbit-node-3 {
+			left: 1%;
+		}
+
+		.orbit-node-4 {
+			right: 0;
+		}
+
+		.visual-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.visual-tile {
+			min-height: 6.5rem;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		* {
+			scroll-behavior: auto !important;
+		}
+	}
+</style>
