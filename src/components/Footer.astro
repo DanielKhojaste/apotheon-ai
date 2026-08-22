@@ -1,35 +1,335 @@
 ---
 const links = [
-	{ href: "/platform", label: "Platform" },
-	{ href: "/capabilities", label: "Solutions" },
-	{ href: "/insights", label: "Insights" },
-	{ href: "/about", label: "About" },
-	{ href: "/#contact", label: "Contact" },
+	{ href: "/platform", label: "Platform", number: "01" },
+	{ href: "/about", label: "About", number: "02" },
+	{ href: "/blog", label: "Blog", number: "03" },
+	{ href: "/contact", label: "Contact Us", number: "04" },
 ];
 ---
 
-<footer class="border-t border-gold/15">
-	<div class="container-page py-16 sm:py-20">
-		<p class="font-serif text-2xl font-medium tracking-tight text-cream">
-			ApotheonAI
-		</p>
-		<p class="mt-3 font-sans text-sm text-mist sm:text-base">
-			Elevate AI. Secure What Comes Next.
-		</p>
+<footer class="site-footer relative overflow-hidden border-t border-gold/15">
+	<!-- Single branded backdrop -->
+	<div class="footer-logo-backdrop" aria-hidden="true">
+		<img src="/ApotheonAI.svg" alt="" loading="lazy" />
+	</div>
 
-		<nav class="mt-8 flex flex-wrap gap-x-8 gap-y-3" aria-label="Footer">
-			{
-				links.map((link) => (
-					<a class="nav-link" href={link.href}>
-						{link.label}
+	<div class="footer-aura" aria-hidden="true"></div>
+	<div class="footer-grid" aria-hidden="true"></div>
+
+	<div class="container-page relative z-10">
+		<!-- Minimal top rail -->
+		<div
+			class="flex flex-col gap-3 border-b border-white/10 py-7 sm:flex-row sm:items-center sm:justify-between sm:py-8"
+		>
+			<p
+				class="font-sans text-[0.66rem] font-semibold uppercase tracking-[0.32em] text-gold"
+			>
+				ApotheonAI
+			</p>
+
+			<p
+				class="font-sans text-[0.62rem] font-medium uppercase tracking-[0.28em] text-mist/45"
+			>
+				AI Security · Portfolio Project
+			</p>
+		</div>
+
+		<!-- Main composition -->
+		<div
+			class="grid gap-14 py-16 sm:py-20 lg:grid-cols-[minmax(0,1.12fr)_minmax(22rem,0.88fr)] lg:items-end lg:gap-20 lg:py-24"
+		>
+			<div class="max-w-3xl">
+				<p class="section-kicker">The Next Level</p>
+
+				<h2
+					class="mt-5 font-serif text-4xl font-medium leading-[0.98] tracking-[-0.035em] text-cream sm:text-5xl lg:text-6xl"
+				>
+					Elevate AI.
+					<span class="block text-mist">Keep control on the way up.</span>
+				</h2>
+
+				<div
+					class="mt-8 flex max-w-2xl flex-col gap-6 border-l border-gold/30 pl-5 sm:pl-6"
+				>
+					<p class="font-sans text-sm leading-relaxed text-mist sm:text-base">
+						ApotheonAI is a fictional AI security concept exploring how
+						visibility, protection, and governance can become part of the
+						foundation of responsible AI adoption.
+					</p>
+
+					<a href="/contact" class="footer-cta group w-fit">
+						<span>Start a conversation</span>
+						<span
+							class="transition-transform duration-300 group-hover:translate-x-1"
+							aria-hidden="true"
+						>
+							↗
+						</span>
 					</a>
-				))
-			}
-		</nav>
+				</div>
+			</div>
 
-		<p class="mt-12 max-w-2xl font-sans text-xs leading-relaxed text-mist/70">
-			ApotheonAI is a fictional company created as a portfolio and learning
-			project.
-		</p>
+			<!-- Numbered navigation -->
+			<nav aria-label="Footer navigation" class="footer-nav">
+				<p class="section-kicker mb-3">Navigate</p>
+
+				{
+					links.map((link) => (
+						<a href={link.href} class="footer-nav-link group">
+							<span class="footer-nav-number">{link.number}</span>
+							<span class="footer-nav-label">{link.label}</span>
+							<span class="footer-nav-arrow" aria-hidden="true">
+								↗
+							</span>
+						</a>
+					))
+				}
+			</nav>
+		</div>
+
+		<!-- Bottom line -->
+		<div
+			class="flex flex-col gap-3 border-t border-white/10 py-6 sm:flex-row sm:items-center sm:justify-between"
+		>
+			<p class="font-sans text-[0.68rem] leading-relaxed text-mist/55">
+				© {new Date().getFullYear()} ApotheonAI. Fictional portfolio project.
+			</p>
+
+			<p
+				class="font-sans text-[0.68rem] uppercase tracking-[0.18em] text-mist/45"
+			>
+				Discover · Protect · Govern
+			</p>
+		</div>
 	</div>
 </footer>
+
+<style>
+	.site-footer {
+		background: linear-gradient(
+			180deg,
+			rgba(19, 14, 8, 0.25) 0%,
+			rgba(0, 0, 0, 0.94) 28%,
+			#000 100%
+		);
+		isolation: isolate;
+	}
+
+	.footer-logo-backdrop {
+		position: absolute;
+		z-index: 0;
+		left: 50%;
+		top: 50%;
+		width: min(86vw, 82rem);
+		transform: translate(-50%, -50%);
+		pointer-events: none;
+		opacity: 0.11;
+		mix-blend-mode: screen;
+		mask-image: linear-gradient(
+			to bottom,
+			transparent 2%,
+			black 18%,
+			black 82%,
+			transparent 98%
+		);
+		-webkit-mask-image: linear-gradient(
+			to bottom,
+			transparent 2%,
+			black 18%,
+			black 82%,
+			transparent 98%
+		);
+	}
+
+	.footer-logo-backdrop img {
+		display: block;
+		width: 100%;
+		height: auto;
+		max-height: 38rem;
+		object-fit: contain;
+		/* ApotheonAI.svg is black, so invert it first, then tint toward gold. */
+		filter: invert(79%) sepia(28%) saturate(715%) hue-rotate(357deg)
+			brightness(91%) contrast(85%);
+	}
+
+	.footer-aura {
+		position: absolute;
+		z-index: 0;
+		right: -14rem;
+		top: -18rem;
+		width: 48rem;
+		height: 48rem;
+		border-radius: 999px;
+		background: radial-gradient(
+			circle,
+			rgba(201, 165, 106, 0.12) 0%,
+			rgba(107, 79, 40, 0.045) 36%,
+			transparent 69%
+		);
+		pointer-events: none;
+	}
+
+	.footer-grid {
+		position: absolute;
+		z-index: 0;
+		inset: 0;
+		opacity: 0.18;
+		background-image:
+			linear-gradient(rgba(201, 165, 106, 0.05) 1px, transparent 1px),
+			linear-gradient(90deg, rgba(201, 165, 106, 0.05) 1px, transparent 1px);
+		background-size: 72px 72px;
+		mask-image: linear-gradient(
+			to bottom,
+			transparent 0%,
+			black 22%,
+			black 72%,
+			transparent 100%
+		);
+		-webkit-mask-image: linear-gradient(
+			to bottom,
+			transparent 0%,
+			black 22%,
+			black 72%,
+			transparent 100%
+		);
+		pointer-events: none;
+	}
+
+	.footer-cta {
+		display: inline-flex;
+		min-height: 3rem;
+		align-items: center;
+		justify-content: space-between;
+		gap: 2.5rem;
+		border-bottom: 1px solid rgba(201, 165, 106, 0.55);
+		padding: 0.65rem 0.1rem;
+		color: var(--color-gold-bright);
+		font-family: var(--font-sans);
+		font-size: 0.78rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		transition:
+			color 200ms ease,
+			border-color 200ms ease;
+	}
+
+	.footer-cta:hover {
+		border-color: var(--color-gold-bright);
+		color: var(--color-cream);
+	}
+
+	.footer-cta:focus-visible {
+		outline: 2px solid var(--color-gold);
+		outline-offset: 5px;
+	}
+
+	.footer-nav {
+		width: 100%;
+		max-width: 31rem;
+		justify-self: end;
+	}
+
+	.footer-nav-link {
+		display: grid;
+		grid-template-columns: 2rem 1fr auto;
+		align-items: center;
+		gap: 0.8rem;
+		min-height: 4.3rem;
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
+		transition:
+			border-color 220ms ease,
+			padding-left 260ms cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.footer-nav-link:last-child {
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.footer-nav-link:hover {
+		border-color: rgba(201, 165, 106, 0.52);
+		padding-left: 0.4rem;
+	}
+
+	.footer-nav-link:focus-visible {
+		outline: 2px solid var(--color-gold);
+		outline-offset: 4px;
+	}
+
+	.footer-nav-number {
+		color: rgba(201, 165, 106, 0.62);
+		font-family: var(--font-sans);
+		font-size: 0.62rem;
+		font-weight: 600;
+		letter-spacing: 0.15em;
+	}
+
+	.footer-nav-label {
+		color: var(--color-cream);
+		font-family: var(--font-serif);
+		font-size: clamp(1.2rem, 1.7vw, 1.65rem);
+		line-height: 1;
+		transition: color 200ms ease;
+	}
+
+	.footer-nav-link:hover .footer-nav-label {
+		color: var(--color-gold-bright);
+	}
+
+	.footer-nav-arrow {
+		color: rgba(201, 165, 106, 0.54);
+		font-family: var(--font-sans);
+		font-size: 0.9rem;
+		transition:
+			color 200ms ease,
+			transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.footer-nav-link:hover .footer-nav-arrow {
+		color: var(--color-gold-bright);
+		transform: translate(0.15rem, -0.15rem);
+	}
+
+	@media (max-width: 1023px) {
+		.footer-logo-backdrop {
+			top: 48%;
+			width: min(100vw, 56rem);
+			opacity: 0.09;
+		}
+
+		.footer-nav {
+			justify-self: start;
+			max-width: none;
+		}
+	}
+
+	@media (max-width: 639px) {
+		.footer-aura {
+			right: -22rem;
+			top: -17rem;
+		}
+
+		.footer-grid {
+			background-size: 52px 52px;
+		}
+
+		.footer-logo-backdrop {
+			top: 43%;
+			width: 132vw;
+			opacity: 0.075;
+		}
+
+		.footer-nav-link {
+			min-height: 3.9rem;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.footer-cta,
+		.footer-nav-link,
+		.footer-nav-label,
+		.footer-nav-arrow {
+			transition: none;
+		}
+	}
+</style>
