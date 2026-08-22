@@ -2,18 +2,93 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="ApotheonAI | Capabilities">
-	<article class="container-page py-16">
-		<div class="max-w-3xl">
-			<p class="section-kicker mb-4">Blog</p>
-			<h1
-				class="font-serif text-4xl font-medium tracking-tight text-cream sm:text-5xl"
+<BaseLayout title="Blog | ApotheonAI">
+	<main>
+		<!-- Hero -->
+		<section class="relative overflow-hidden border-b border-white/10">
+			<div
+				class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_76%_34%,rgba(197,157,86,0.12),transparent_31%)]"
+				aria-hidden="true"
 			>
-				Blog
-			</h1>
-			<p class="mt-6 font-sans text-base leading-relaxed text-mist sm:text-lg">
-				ApotheonAI Blog
-			</p>
-		</div>
-	</article>
+			</div>
+
+			<div class="container-page relative py-20 sm:py-24 lg:py-28">
+				<div class="max-w-4xl">
+					<p class="section-kicker">Blog</p>
+
+					<h1
+						class="mt-6 max-w-4xl font-serif text-5xl font-medium leading-[0.95] tracking-[-0.035em] text-cream sm:text-6xl lg:text-7xl xl:text-8xl"
+					>
+						Ideas, notes,
+						<span class="block text-mist">and things I’m learning.</span>
+					</h1>
+
+					<p
+						class="mt-8 max-w-2xl font-sans text-base leading-relaxed text-mist sm:text-lg"
+					>
+						This is where I’ll share posts about frontend development, AI,
+						product thinking, and the process behind projects like ApotheonAI.
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- Empty state -->
+		<section class="py-20 sm:py-24 lg:py-28">
+			<div class="container-page">
+				<div class="border-y border-white/10 py-16 sm:py-20 lg:py-24">
+					<div
+						class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-20"
+					>
+						<div>
+							<p class="section-kicker">Latest Posts</p>
+
+							<h2
+								class="mt-5 max-w-xl font-serif text-4xl font-medium leading-tight tracking-tight text-cream sm:text-5xl"
+							>
+								Nothing published yet.
+							</h2>
+						</div>
+
+						<div class="max-w-2xl">
+							<p
+								class="font-sans text-base leading-relaxed text-mist sm:text-lg"
+							>
+								I’m still setting up the publishing workflow. Once the CMS is
+								connected, this page will become a grid of articles with topics,
+								publish dates, summaries, and individual post pages.
+							</p>
+
+							<div
+								class="mt-8 flex flex-wrap gap-2"
+								aria-label="Future blog topics"
+							>
+								<span class="topic-chip">Frontend</span>
+								<span class="topic-chip">AI</span>
+								<span class="topic-chip">Product</span>
+								<span class="topic-chip">Learning</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
 </BaseLayout>
+
+<style>
+	.topic-chip {
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.25rem;
+		border: 1px solid rgba(197, 157, 86, 0.24);
+		background: rgba(197, 157, 86, 0.045);
+		padding: 0.45rem 0.8rem;
+		color: rgba(210, 170, 99, 0.9);
+		font-family: var(--font-sans);
+		font-size: 0.68rem;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+	}
+</style>
