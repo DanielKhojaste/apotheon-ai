@@ -72,17 +72,39 @@ const links = [
 
 		<!-- Bottom line -->
 		<div
-			class="flex flex-col gap-3 border-t border-white/10 py-6 sm:flex-row sm:items-center sm:justify-between"
+			class="flex flex-col gap-4 border-t border-white/10 py-6 sm:flex-row sm:items-center sm:justify-between"
 		>
 			<p class="font-sans text-[0.68rem] leading-relaxed text-mist/55">
 				© {new Date().getFullYear()} ApotheonAI. Fictional portfolio project.
 			</p>
 
-			<p
-				class="font-sans text-[0.68rem] uppercase tracking-[0.18em] text-mist/45"
-			>
-				Discover · Protect · Govern
-			</p>
+			<div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+				<a
+					href="https://www.linkedin.com/in/aref-khojaste/"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="footer-social-link"
+				>
+					<span>LinkedIn</span>
+					<span aria-hidden="true">↗</span>
+				</a>
+
+				<a
+					href="https://github.com/DanielKhojaste"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="footer-social-link"
+				>
+					<span>GitHub</span>
+					<span aria-hidden="true">↗</span>
+				</a>
+
+				<p
+					class="font-sans text-[0.68rem] uppercase tracking-[0.18em] text-mist/45"
+				>
+					Discover · Protect · Govern
+				</p>
+			</div>
 		</div>
 	</div>
 </footer>
@@ -271,6 +293,37 @@ const links = [
 	.footer-nav-link:hover .footer-nav-arrow {
 		color: var(--color-gold-bright);
 		transform: translate(0.15rem, -0.15rem);
+	}
+
+	.footer-social-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		color: rgba(210, 207, 199, 0.62);
+		font-family: var(--font-sans);
+		font-size: 0.68rem;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		transition: color 200ms ease;
+	}
+
+	.footer-social-link:hover {
+		color: var(--color-gold-bright);
+	}
+
+	.footer-social-link span:last-child {
+		color: rgba(201, 165, 106, 0.72);
+		transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.footer-social-link:hover span:last-child {
+		transform: translate(0.1rem, -0.1rem);
+	}
+
+	.footer-social-link:focus-visible {
+		outline: 2px solid var(--color-gold);
+		outline-offset: 4px;
 	}
 
 	@media (max-width: 1023px) {
