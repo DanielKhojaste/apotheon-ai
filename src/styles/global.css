@@ -16,7 +16,7 @@
   Logo:    .logo-gold  (tints the black /Logo.svg)
            .logo-mark  (tints the black /ApotheonAI.svg)
   Layout:  .container-page  .section-kicker  .text-card  .nav-link
-  Nav:     .nav-toggle  .nav-burger  (--nav-burger-thickness, --nav-burger-gap)
+  Nav:     .nav-toggle  .nav-burger  (--nav-burger-width, --nav-burger-thickness)
 */
 
 @font-face {
@@ -222,13 +222,11 @@
 	.nav-burger {
 		--nav-burger-width: 1.8rem;
 		--nav-burger-thickness: 0.15rem;
-		--nav-burger-gap: 0.3rem;
 
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
+		display: block;
 		width: var(--nav-burger-width);
-		height: calc(var(--nav-burger-thickness) * 3 + var(--nav-burger-gap) * 2);
+		height: var(--nav-burger-width);
+		overflow: visible;
 	}
 
 	@media (min-width: 640px) {
@@ -240,7 +238,6 @@
 		.nav-burger {
 			--nav-burger-width: 2rem;
 			--nav-burger-thickness: 0.17rem;
-			--nav-burger-gap: 0.34rem;
 		}
 	}
 
@@ -253,54 +250,33 @@
 		.nav-burger {
 			--nav-burger-width: 2.2rem;
 			--nav-burger-thickness: 0.2rem;
-			--nav-burger-gap: 0.4rem;
 		}
 	}
 
-	.nav-burger span {
-		display: block;
-		flex: none;
-		width: 100%;
-		height: var(--nav-burger-thickness);
-		background-color: currentColor;
-		border-radius: calc(var(--nav-burger-thickness) / 2);
-		transform-origin: center;
-		transition:
-			transform 220ms ease,
-			opacity 160ms ease;
+	.nav-burger path {
+		fill: none;
+		stroke: currentColor;
+		stroke-width: var(--nav-burger-thickness);
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		vector-effect: non-scaling-stroke;
+		shape-rendering: geometricPrecision;
 	}
 
-	.nav-burger span:nth-child(2) {
-		width: 75%;
-		margin-inline-start: auto;
-		transition:
-			width 200ms ease,
-			transform 220ms ease,
-			opacity 160ms ease;
+	/* Preserve the original shorter middle-bar hover treatment while closed. */
+	.nav-burger [data-nav-line="middle"] {
+		transform-box: view-box;
+		transform-origin: 100% 50%;
+		transition: transform 200ms ease;
 	}
 
-	.nav-toggle:hover .nav-burger span:nth-child(2) {
-		width: 100%;
-	}
-
-	/* Keep the original burger geometry; transform those same bars into the close icon. */
-	.nav-toggle[aria-expanded="true"] .nav-burger span:nth-child(1) {
-		transform: translateY(
-				calc(var(--nav-burger-thickness) + var(--nav-burger-gap))
-			)
-			rotate(45deg);
-	}
-
-	.nav-toggle[aria-expanded="true"] .nav-burger span:nth-child(2) {
-		opacity: 0;
-		transform: scaleX(0);
-	}
-
-	.nav-toggle[aria-expanded="true"] .nav-burger span:nth-child(3) {
-		transform: translateY(
-				calc(0px - var(--nav-burger-thickness) - var(--nav-burger-gap))
-			)
-			rotate(-45deg);
+	@media (hover: hover) and (pointer: fine) {
+		.site-header:not(.is-menu-open):not(.is-menu-transitioning)
+			.nav-toggle:hover
+			.nav-burger
+			[data-nav-line="middle"] {
+			transform: scaleX(1.333333);
+		}
 	}
 
 	.hero-section {

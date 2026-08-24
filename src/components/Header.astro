@@ -28,11 +28,16 @@ const links = [
 			aria-label="Open navigation"
 			data-hs-overlay="#hs-header-overlay-nav"
 		>
-			<span class="nav-burger" aria-hidden="true">
-				<span></span>
-				<span></span>
-				<span></span>
-			</span>
+			<svg
+				class="nav-burger"
+				viewBox="0 0 100 100"
+				aria-hidden="true"
+				focusable="false"
+			>
+				<path data-nav-line="top" d="M 0 20 L 100 20"></path>
+				<path data-nav-line="middle" d="M 25 50 L 100 50"></path>
+				<path data-nav-line="bottom" d="M 0 80 L 100 80"></path>
+			</svg>
 		</button>
 	</nav>
 
