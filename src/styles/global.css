@@ -185,6 +185,8 @@
 	}
 
 	.site-header-bar {
+		position: relative;
+		z-index: 50;
 		pointer-events: auto;
 		background-color: transparent;
 		transform: translateY(-100%);
@@ -199,11 +201,6 @@
 
 	.site-header.is-solid .site-header-bar {
 		background-color: rgb(0 0 0 / 0.5);
-	}
-
-	/* The transformed header bar is its own stacking context; raise it only while the menu is open. */
-	.site-header.is-menu-open .site-header-bar {
-		z-index: 50;
 	}
 
 	@media (prefers-reduced-motion: reduce) {

@@ -32,6 +32,7 @@ let heroObserver: IntersectionObserver | null = null;
 let overlayObserver: MutationObserver | null = null;
 let menuTimeline: gsap.core.Timeline | null = null;
 let lastMenuOpen: boolean | null = null;
+const boundToggles = new WeakSet<HTMLButtonElement>();
 
 function getHeader(): HTMLElement | null {
 	return document.querySelector<HTMLElement>(HEADER_SELECTOR);
@@ -223,6 +224,38 @@ function syncMenuToggle(animate = true) {
 	lastMenuOpen = open;
 }
 
+function previewMenuToggle() {
+	const toggle = getToggle();
+
+	if (!toggle) {
+		return;
+	}
+
+	// Run before Preline's normal click handler so the icon starts morphing
+	// while the current frame is still visible. This prevents the overlay from
+	// painting over the hamburger for a frame before our observer catches up.
+	const opening = !isOverlayOpen();
+
+	// Keep the header visible and start the morph, but leave Preline-owned
+	// overlay/ARIA state untouched until Preline performs the actual toggle.
+	setHeaderState(true, !heroInView);
+	setMenuIconState(opening, true);
+}
+
+function bindTogglePreview() {
+	const toggle = getToggle();
+
+	if (!toggle || boundToggles.has(toggle)) {
+		return;
+	}
+
+	// Capture runs before Preline's target/bubble click listener. There is no
+	// paint between these handlers, so the same icon remains continuously
+	// visible as the overlay opens.
+	toggle.addEventListener("click", previewMenuToggle, { capture: true });
+	boundToggles.add(toggle);
+}
+
 function observeOverlay() {
 	overlayObserver?.disconnect();
 	overlayObserver = null;
@@ -238,6 +271,7 @@ function observeOverlay() {
 
 	buildMenuTimeline();
 	syncMenuToggle(false);
+	bindTogglePreview();
 
 	overlayObserver = new MutationObserver(() => {
 		syncMenuToggle(true);
