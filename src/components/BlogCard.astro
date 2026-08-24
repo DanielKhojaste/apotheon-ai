@@ -1,0 +1,113 @@
+---
+export interface Props {
+	title: string;
+	slug: string;
+	publishedAt?: string;
+	authorName?: string;
+	headerImageUrl?: string;
+	headerImageAlt?: string;
+	priority?: boolean;
+}
+
+const {
+	title,
+	slug,
+	publishedAt,
+	authorName,
+	headerImageUrl,
+	headerImageAlt,
+	priority = false,
+} = Astro.props;
+
+const publishedDate = publishedAt
+	? new Date(publishedAt).toLocaleDateString("en-CA", {
+			year: "numeric",
+			month: "long",
+			day: "numeric",
+		})
+	: null;
+---
+
+<article class="group">
+	<a
+		href={`/blog/${slug}`}
+		class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-4 focus-visible:ring-offset-black"
+		aria-label={`Read ${title}`}
+	>
+		<div
+			class="relative aspect-[16/10] overflow-hidden border border-white/10 bg-white/[0.025]"
+		>
+			{
+				headerImageUrl ? (
+					<img
+						src={headerImageUrl}
+						alt={headerImageAlt ?? ""}
+						loading={priority ? "eager" : "lazy"}
+						class="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-[1.025]"
+					/>
+				) : (
+					<div
+						class="flex h-full items-end bg-[radial-gradient(circle_at_72%_24%,rgba(197,157,86,0.16),transparent_36%),linear-gradient(145deg,rgba(255,255,255,0.025),transparent_55%)] p-6"
+						aria-hidden="true"
+					>
+						<span class="font-sans text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-gold/80">
+							ApotheonAI Journal
+						</span>
+					</div>
+				)
+			}
+
+			<div
+				class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+				aria-hidden="true"
+			>
+			</div>
+		</div>
+
+		<div
+			class="border-b border-white/10 py-6 transition-colors duration-300 group-hover:border-gold/40"
+		>
+			<div
+				class="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 font-sans text-[0.68rem] font-semibold uppercase tracking-[0.14em]"
+			>
+				{authorName && <span class="text-gold">{authorName}</span>}
+
+				{
+					authorName && publishedDate && (
+						<span class="text-white/25" aria-hidden="true">
+							/
+						</span>
+					)
+				}
+
+				{
+					publishedDate && (
+						<time datetime={publishedAt} class="text-mist">
+							{publishedDate}
+						</time>
+					)
+				}
+			</div>
+
+			<h3
+				class="font-serif text-3xl font-medium leading-[1.06] tracking-[-0.025em] text-cream transition-colors duration-300 group-hover:text-gold"
+			>
+				{title}
+			</h3>
+
+			<div class="mt-6 flex items-center gap-3">
+				<span
+					class="font-sans text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-mist transition-colors duration-300 group-hover:text-cream"
+				>
+					Read article
+				</span>
+				<span
+					class="font-sans text-lg leading-none text-gold transition-transform duration-300 group-hover:translate-x-1"
+					aria-hidden="true"
+				>
+					→
+				</span>
+			</div>
+		</div>
+	</a>
+</article>

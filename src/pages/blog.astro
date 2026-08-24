@@ -1,8 +1,9 @@
 ---
 import { sanityClient } from "sanity:client";
+import BlogCard from "../components/BlogCard.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-type BlogCard = {
+type BlogPost = {
 	_id: string;
 	title: string;
 	slug: {
@@ -14,7 +15,7 @@ type BlogCard = {
 	headerImageAlt?: string;
 };
 
-const posts = await sanityClient.fetch<BlogCard[]>(`
+const posts = await sanityClient.fetch<BlogPost[]>(`
 	*[_type == "post" && defined(slug.current)]
 	| order(publishedAt desc, _createdAt desc) {
 		_id,
@@ -26,16 +27,6 @@ const posts = await sanityClient.fetch<BlogCard[]>(`
 		"headerImageAlt": headerImage.alt
 	}
 `);
-
-const formatDate = (date?: string) => {
-	if (!date) return null;
-
-	return new Date(date).toLocaleDateString("en-CA", {
-		year: "numeric",
-		month: "long",
-		day: "numeric",
-	});
-};
 ---
 
 <BaseLayout title="Blog | ApotheonAI">
@@ -87,88 +78,24 @@ const formatDate = (date?: string) => {
 					<p
 						class="hidden font-sans text-xs font-medium uppercase tracking-[0.16em] text-mist sm:block"
 					>
-						{posts.length}
-						{posts.length === 1 ? " Article" : " Articles"}
+						{posts.length}{posts.length === 1 ? " Article" : " Articles"}
 					</p>
 				</div>
 
 				{
 					posts.length > 0 ? (
 						<div class="grid gap-x-6 gap-y-8 md:grid-cols-2 xl:grid-cols-3">
-							{posts.map((post, index) => {
-								const publishedDate = formatDate(post.publishedAt);
-
-								return (
-									<article class="group">
-										<a
-											href={`/blog/${post.slug.current}`}
-											class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-4 focus-visible:ring-offset-black"
-											aria-label={`Read ${post.title}`}
-										>
-											<div class="relative aspect-[16/10] overflow-hidden border border-white/10 bg-white/[0.025]">
-												{post.headerImageUrl ? (
-													<img
-														src={post.headerImageUrl}
-														alt={post.headerImageAlt ?? ""}
-														loading={index === 0 ? "eager" : "lazy"}
-														class="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-[1.025]"
-													/>
-												) : (
-													<div
-														class="flex h-full items-end bg-[radial-gradient(circle_at_72%_24%,rgba(197,157,86,0.16),transparent_36%),linear-gradient(145deg,rgba(255,255,255,0.025),transparent_55%)] p-6"
-														aria-hidden="true"
-													>
-														<span class="font-sans text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-gold/80">
-															ApotheonAI Journal
-														</span>
-													</div>
-												)}
-
-												<div
-													class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-													aria-hidden="true"
-												/>
-											</div>
-
-											<div class="border-b border-white/10 py-6 transition-colors duration-300 group-hover:border-gold/40">
-												<div class="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 font-sans text-[0.68rem] font-semibold uppercase tracking-[0.14em]">
-													{post.authorName && (
-														<span class="text-gold">{post.authorName}</span>
-													)}
-
-													{post.authorName && publishedDate && (
-														<span class="text-white/25" aria-hidden="true">
-															/
-														</span>
-													)}
-
-													{publishedDate && (
-														<time datetime={post.publishedAt} class="text-mist">
-															{publishedDate}
-														</time>
-													)}
-												</div>
-
-												<h3 class="font-serif text-3xl font-medium leading-[1.06] tracking-[-0.025em] text-cream transition-colors duration-300 group-hover:text-gold">
-													{post.title}
-												</h3>
-
-												<div class="mt-6 flex items-center gap-3">
-													<span class="font-sans text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-mist transition-colors duration-300 group-hover:text-cream">
-														Read article
-													</span>
-													<span
-														class="font-sans text-lg leading-none text-gold transition-transform duration-300 group-hover:translate-x-1"
-														aria-hidden="true"
-													>
-														→
-													</span>
-												</div>
-											</div>
-										</a>
-									</article>
-								);
-							})}
+							{posts.map((post, index) => (
+								<BlogCard
+									title={post.title}
+									slug={post.slug.current}
+									publishedAt={post.publishedAt}
+									authorName={post.authorName}
+									headerImageUrl={post.headerImageUrl}
+									headerImageAlt={post.headerImageAlt}
+									priority={index === 0}
+								/>
+							))}
 						</div>
 					) : (
 						<div class="border-y border-white/10 py-16 sm:py-20">
