@@ -62,31 +62,6 @@ const path = [
 		body: "Establish consistent controls as AI adoption scales.",
 	},
 ];
-
-const assessmentQuestions = [
-	"How broadly is AI used across your organization?",
-	"How much visibility do you have into AI usage?",
-	"Are AI governance policies documented?",
-	"Do teams actively monitor AI-related security risks?",
-];
-
-const insights = [
-	{
-		kicker: "AI Security",
-		title: "Building Visibility Across Enterprise AI",
-		body: "Why understanding where AI is used is becoming a foundational part of enterprise security.",
-	},
-	{
-		kicker: "Generative AI",
-		title: "Understanding Prompt-Based Security Risk",
-		body: "How prompts, sensitive information, and model behavior introduce new security considerations.",
-	},
-	{
-		kicker: "Governance",
-		title: "From AI Policy to Practical Controls",
-		body: "How organizations can turn high-level AI principles into workflows teams can actually follow.",
-	},
-];
 ---
 
 <BaseLayout title="ApotheonAI | Ascend to the divine">
@@ -245,112 +220,6 @@ const insights = [
 		</div>
 	</HomeSection>
 
-	<HomeSection
-		id="assessment"
-		kicker="AI Security Readiness"
-		heading="How prepared is your organization to rise securely?"
-	>
-		<div class="assessment-layout mt-12 max-w-6xl">
-			<div class="assessment-copy">
-				<p
-					class="max-w-2xl font-sans text-base leading-relaxed text-mist sm:text-lg"
-				>
-					Answer four questions to get a simple assessment of your current AI
-					security posture and identify where stronger visibility or governance
-					may be needed.
-				</p>
-
-				<ol id="assessment-questions" class="assessment-questions mt-9">
-					{
-						assessmentQuestions.map((question, index) => (
-							<li>
-								<span>{String(index + 1).padStart(2, "0")}</span>
-								<p>{question}</p>
-							</li>
-						))
-					}
-				</ol>
-
-				<a href="#assessment-questions" class="btn-gold btn-gold-lg mt-9">
-					Begin Assessment
-				</a>
-			</div>
-
-			<aside
-				class="assessment-score"
-				aria-label="Example AI security readiness score"
-			>
-				<div class="assessment-score-ring">
-					<div>
-						<strong>64</strong>
-						<span>/ 100</span>
-					</div>
-				</div>
-				<p class="section-kicker mt-8">Developing Foundation</p>
-				<p class="mt-4 font-serif text-2xl leading-snug text-cream">
-					Greater visibility creates the foundation for safer scale.
-				</p>
-				<p
-					class="mt-4 font-sans text-sm leading-relaxed text-mist sm:text-base"
-				>
-					Improve visibility across AI usage and formalize governance controls
-					before expanding higher-risk AI workflows.
-				</p>
-			</aside>
-		</div>
-	</HomeSection>
-
-	<HomeSection
-		id="insights"
-		kicker="Insights"
-		heading="Explore the frontier of AI security."
-	>
-		<p
-			class="mt-8 max-w-3xl font-sans text-base leading-relaxed text-mist sm:text-lg"
-		>
-			Practical perspectives on enterprise AI, generative AI security,
-			governance, and responsible adoption.
-		</p>
-
-		<div class="insights-layout mt-12 max-w-6xl">
-			<article class="insight-featured">
-				<p class="section-kicker mb-4">{insights[0].kicker}</p>
-				<h3
-					class="font-serif text-3xl font-medium tracking-tight text-cream sm:text-4xl lg:text-5xl"
-				>
-					{insights[0].title}
-				</h3>
-				<p
-					class="mt-5 max-w-xl font-sans text-base leading-relaxed text-mist sm:text-lg"
-				>
-					{insights[0].body}
-				</p>
-			</article>
-
-			<div class="insight-list">
-				{
-					insights.slice(1).map((article) => (
-						<article class="insight-row">
-							<div>
-								<p class="section-kicker mb-3">{article.kicker}</p>
-								<h3 class="font-serif text-xl font-medium tracking-tight text-cream sm:text-2xl">
-									{article.title}
-								</h3>
-								<p class="mt-3 font-sans text-sm leading-relaxed text-mist sm:text-base">
-									{article.body}
-								</p>
-							</div>
-						</article>
-					))
-				}
-			</div>
-		</div>
-
-		<a href="#insights" class="btn-gold btn-gold-lg mt-12">
-			View All Insights
-		</a>
-	</HomeSection>
-
 	<section id="contact" class="home-final-cta">
 		<div class="container-page">
 			<div class="home-final-cta-inner">
@@ -370,3 +239,53 @@ const insights = [
 		</div>
 	</section>
 </BaseLayout>
+
+<style is:global>
+	/* Match the roomier vertical rhythm used on the Platform page. */
+	#platform,
+	#capabilities,
+	#why,
+	#path,
+	.home-manifesto,
+	.home-final-cta {
+		padding-top: 7rem;
+		padding-bottom: 7rem;
+	}
+
+	/* Keep the first section closer to the hero so the transition feels tighter. */
+	#platform {
+		padding-top: 5rem;
+	}
+
+	@media (min-width: 640px) {
+		#platform,
+		#capabilities,
+		#why,
+		#path,
+		.home-manifesto,
+		.home-final-cta {
+			padding-top: 8rem;
+			padding-bottom: 8rem;
+		}
+
+		#platform {
+			padding-top: 6rem;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		#platform,
+		#capabilities,
+		#why,
+		#path,
+		.home-manifesto,
+		.home-final-cta {
+			padding-top: 9rem;
+			padding-bottom: 9rem;
+		}
+
+		#platform {
+			padding-top: 7rem;
+		}
+	}
+</style>
