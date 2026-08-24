@@ -48,11 +48,11 @@ The header is one example:
 Header.astro
     -> markup
     -> accessible menu button
-    -> overlay navigation
+    -> Preline overlay trigger and navigation
 
 header.ts
     -> scroll behavior
-    -> overlay state
+    -> overlay state coordination
     -> GSAP hamburger-to-X animation
 ```
 
@@ -89,6 +89,16 @@ The menu icon uses SVG geometry animated with GSAP.
 The same menu button stays above the navigation overlay while it transitions between the hamburger and X states.
 
 This avoids swapping between two different controls and prevents the icon from blinking when the overlay opens.
+
+## Preline UI
+
+Preline is used for the header navigation overlay.
+
+I evaluated Preline and used its overlay component for the navigation instead of building the overlay lifecycle from scratch. Preline handles the core open and close behavior and the overlay state, while the header scroll behavior and hamburger-to-X animation remain custom.
+
+Most of the site does not need component-library behavior, so components such as BlogCard remain custom Astro and Tailwind components instead of being rewritten around Preline without a clear benefit.
+
+This keeps Preline focused on the part of the project where it saves useful implementation work rather than introducing it purely for visibility in the project.
 
 ## Sanity
 
