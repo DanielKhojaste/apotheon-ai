@@ -27,6 +27,18 @@ export const postType = defineType({
 		}),
 
 		defineField({
+			name: 'excerpt',
+			title: 'Excerpt',
+			type: 'text',
+			rows: 3,
+			description: 'A short summary used in blog listings and previews.',
+			validation: (rule) => [
+				rule.required().error('Excerpt is required.'),
+				rule.max(220).warning('Keep excerpts under 220 characters for consistent blog cards.'),
+			],
+		}),
+
+		defineField({
 			name: 'publishedAt',
 			title: 'Published At',
 			type: 'datetime',
