@@ -122,30 +122,10 @@ const publishedDate = post.publishedAt
 			<div
 				class="container-page flex w-full flex-col justify-between pb-10 pt-28 sm:pb-12 sm:pt-32 lg:pb-14 lg:pt-36"
 			>
-				<div class="flex justify-end">
-					<a
-						href="/blog"
-						class="group inline-flex w-fit items-center gap-2 font-sans text-[0.64rem] font-semibold uppercase tracking-[0.18em] text-mist/70 transition-colors hover:text-cream focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-					>
-						<span
-							class="text-gold transition-transform duration-300 group-hover:-translate-x-1"
-							aria-hidden="true"
-						>
-							←
-						</span>
-						Blog
-					</a>
-				</div>
-
 				<header class="max-w-4xl pt-16 sm:pt-20 lg:pt-24">
 					<div class="flex items-center gap-4">
-						<span class="section-kicker">Article</span>
 						<span class="h-px w-12 bg-gold/45" aria-hidden="true"></span>
-						<span
-							class="font-sans text-[0.64rem] font-medium uppercase tracking-[0.24em] text-mist"
-						>
-							ApotheonAI Journal
-						</span>
+						<span class="section-kicker">Article</span>
 					</div>
 
 					<h1
@@ -188,13 +168,18 @@ const publishedDate = post.publishedAt
 				</header>
 
 				<div class="mt-12 flex items-end justify-between gap-6">
-					<div
-						class="hidden items-center gap-3 font-sans text-[0.62rem] font-medium uppercase tracking-[0.18em] text-mist/60 sm:flex"
-						aria-hidden="true"
+					<a
+						href="/blog"
+						class="group inline-flex w-fit items-center gap-2 font-sans text-[0.64rem] font-semibold uppercase tracking-[0.18em] text-mist/70 transition-colors hover:text-cream focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
 					>
-						<span class="h-px w-8 bg-white/20"></span>
-						Scroll to read
-					</div>
+						<span
+							class="text-gold transition-transform duration-300 group-hover:-translate-x-1"
+							aria-hidden="true"
+						>
+							←
+						</span>
+						Back to blog
+					</a>
 
 					{
 						post.headerImageUrl &&
