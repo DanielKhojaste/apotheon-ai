@@ -430,23 +430,23 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 
 	#path .ascension-title-glow {
 		position: absolute;
-		left: -1.75rem;
+		left: -3rem;
 		top: 50%;
 		z-index: 0;
-		width: min(32rem, calc(100% + 5rem));
-		height: 12.5rem;
+		width: min(26rem, calc(100% + 3rem));
+		height: 11.5rem;
 		border-radius: 50%;
 		background: radial-gradient(
-			ellipse at center,
-			rgba(197, 157, 86, 0.28) 0%,
-			rgba(197, 157, 86, 0.15) 34%,
-			rgba(197, 157, 86, 0.065) 58%,
+			ellipse at 30% 50%,
+			rgba(197, 157, 86, 0.3) 0%,
+			rgba(197, 157, 86, 0.16) 34%,
+			rgba(197, 157, 86, 0.07) 58%,
 			transparent 78%
 		);
-		filter: blur(11px);
+		filter: blur(10px);
 		opacity: 0;
 		transform: translateY(-50%) scale(0.82);
-		transform-origin: center;
+		transform-origin: 30% 50%;
 		pointer-events: none;
 	}
 
@@ -481,8 +481,8 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 		}
 
 		#path .ascension-title-glow {
-			left: -1rem;
-			width: min(26rem, calc(100% + 2rem));
+			left: -2rem;
+			width: min(23rem, calc(100% + 1.5rem));
 			height: 10rem;
 		}
 	}
