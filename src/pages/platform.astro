@@ -6,79 +6,25 @@ const capabilities = [
 		number: "01",
 		kicker: "AI Visibility",
 		title: "Understand where AI lives.",
-		body: "AI adoption rarely happens in one place. Teams experiment with external tools, internal models, APIs, copilots, and automated workflows. ApotheonAI brings those activities into a clearer operational view so teams can understand what is being used and where risk may be emerging.",
-		points: [
-			"Discover AI tools and services",
-			"Understand organizational usage patterns",
-			"Improve visibility across teams",
-			"Create a shared inventory of AI activity",
-		],
-		visualLabel: "Environment Map",
-		visualTitle: "One view across the AI estate",
-		tags: ["Models", "Agents", "Apps", "APIs"],
+		body: "Map the models, tools, applications, and services in use across an organization.",
 	},
 	{
 		number: "02",
 		kicker: "Threat Detection",
-		title: "Detect unusual AI activity.",
-		body: "AI-powered workflows create new patterns of behavior that traditional monitoring may not capture clearly. ApotheonAI helps security teams surface suspicious interactions, policy violations, and unexpected model behavior for faster review.",
-		points: [
-			"Monitor high-risk activity",
-			"Surface suspicious interactions",
-			"Prioritize security events",
-			"Support faster investigation",
-		],
-		visualLabel: "Signal Monitor",
-		visualTitle: "Turn activity into actionable signals",
-		tags: ["Prompt spike", "Policy event", "Data access", "Model drift"],
+		title: "Surface unusual activity.",
+		body: "Bring risky interactions, policy events, and unexpected behavior into one review flow.",
 	},
 	{
 		number: "03",
 		kicker: "Prompt Protection",
-		title: "Protect every interaction.",
-		body: "Generative AI introduces new paths for sensitive information, unsafe prompts, and malicious input. ApotheonAI adds a conceptual security layer around the interactions between users, applications, enterprise data, and AI models.",
-		points: [
-			"Identify sensitive content",
-			"Detect unsafe prompt patterns",
-			"Reduce accidental exposure",
-			"Apply contextual controls",
-		],
-		visualLabel: "Interaction Guard",
-		visualTitle: "Inspect the path before it reaches the model",
-		tags: ["User", "Prompt", "Control", "Model"],
+		title: "Protect AI interactions.",
+		body: "Inspect the path between users, applications, enterprise data, and models.",
 	},
 	{
 		number: "04",
 		kicker: "AI Governance",
-		title: "Turn AI policy into action.",
-		body: "Policies are useful only when teams can apply them consistently. ApotheonAI connects governance requirements with the AI systems and workflows they are intended to protect, giving security, risk, and engineering teams a shared operating model.",
-		points: [
-			"Define practical controls",
-			"Support policy enforcement",
-			"Improve accountability",
-			"Maintain clearer oversight",
-		],
-		visualLabel: "Governance Layer",
-		visualTitle: "Connect policy, ownership, and control",
-		tags: ["Policy", "Owner", "Control", "Evidence"],
-	},
-];
-
-const lifecycle = [
-	{
-		number: "01",
-		title: "Discover",
-		body: "Map AI tools, models, applications, and services across the organization.",
-	},
-	{
-		number: "02",
-		title: "Protect",
-		body: "Apply security controls around interactions, workflows, and sensitive data.",
-	},
-	{
-		number: "03",
-		title: "Govern",
-		body: "Create consistent policies and accountability as AI adoption scales.",
+		title: "Connect policy to ownership.",
+		body: "Tie requirements to the systems, controls, and people responsible for them.",
 	},
 ];
 
@@ -114,7 +60,7 @@ const architectureLayers = [
 			</div>
 
 			<div
-				class="container-page relative grid min-h-[82vh] items-center gap-14 py-20 sm:py-24 lg:grid-cols-[1.02fr_0.98fr] lg:gap-10 lg:py-28"
+				class="container-page relative grid min-h-[82vh] items-center gap-16 py-24 sm:py-28 lg:grid-cols-[1.02fr_0.98fr] lg:gap-14 lg:py-32"
 			>
 				<div class="relative z-10 max-w-3xl">
 					<p class="section-kicker">The ApotheonAI Platform</p>
@@ -129,33 +75,16 @@ const architectureLayers = [
 					<p
 						class="mt-8 max-w-2xl font-sans text-base leading-relaxed text-mist sm:text-lg"
 					>
-						ApotheonAI brings visibility, monitoring, protection, and governance
-						into one conceptual security layer so organizations can understand
-						AI activity, investigate emerging risk, and scale adoption with
-						clearer control.
+						ApotheonAI is a fictional AI security brand I designed as a
+						portfolio project. The platform page explores one simple idea: a
+						security layer between the people using AI and the models, data,
+						applications, and services behind it.
 					</p>
 
 					<div class="mt-9 flex flex-wrap gap-4">
 						<a href="#capabilities" class="btn-gold btn-gold-lg">
 							Explore Capabilities
 						</a>
-					</div>
-
-					<div
-						class="mt-12 grid max-w-2xl grid-cols-2 gap-px overflow-hidden border border-white/10 bg-white/10 sm:grid-cols-4"
-						aria-label="Platform capabilities"
-					>
-						{
-							["Visibility", "Detection", "Protection", "Governance"].map(
-								(item) => (
-									<div class="bg-[#09090b] px-4 py-4 text-center">
-										<p class="font-sans text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-mist">
-											{item}
-										</p>
-									</div>
-								),
-							)
-						}
 					</div>
 				</div>
 
@@ -200,167 +129,102 @@ const architectureLayers = [
 			</div>
 		</section>
 
-		<!-- Platform premise -->
-		<section class="border-b border-white/10 py-20 sm:py-24 lg:py-28">
-			<div class="container-page">
-				<div class="grid gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:gap-20">
-					<div>
-						<p class="section-kicker">One Operational View</p>
-						<h2
-							class="mt-5 max-w-xl font-serif text-4xl font-medium leading-tight tracking-tight text-cream sm:text-5xl"
-						>
-							Bring order to a fragmented AI environment.
-						</h2>
-					</div>
-
-					<div
-						class="max-w-3xl space-y-5 font-sans text-base leading-relaxed text-mist sm:text-lg"
-					>
-						<p>
-							AI adoption spreads across departments, cloud services, developer
-							tools, third-party applications, and internal workflows. That
-							speed can make it difficult for security and governance teams to
-							maintain a shared understanding of what is actually happening.
-						</p>
-						<p>
-							ApotheonAI is designed around a simple idea: visibility should
-							lead to protection, and protection should connect directly to
-							governance. Instead of treating each problem as a separate system,
-							the platform story brings them together as one continuous
-							operating model.
-						</p>
-					</div>
-				</div>
-
-				<div class="mt-16 grid border-y border-white/10 md:grid-cols-3">
-					{
-						lifecycle.map((step) => (
-							<article class="border-white/10 py-8 md:border-r md:px-8 md:first:pl-0 md:last:border-r-0 lg:py-10">
-								<p class="font-sans text-xs font-semibold tracking-[0.2em] text-[#c59d56]">
-									{step.number}
-								</p>
-								<h3 class="mt-5 font-serif text-2xl font-medium tracking-tight text-cream sm:text-3xl">
-									{step.title}
-								</h3>
-								<p class="mt-4 font-sans text-sm leading-relaxed text-mist sm:text-base">
-									{step.body}
-								</p>
-							</article>
-						))
-					}
-				</div>
-			</div>
-		</section>
-
 		<!-- Capabilities -->
 		<section id="capabilities" class="border-b border-white/10">
-			<div class="container-page py-20 sm:py-24 lg:py-28">
-				<div class="max-w-3xl">
-					<p class="section-kicker">Capabilities</p>
-					<h2
-						class="mt-5 font-serif text-4xl font-medium leading-tight tracking-tight text-cream sm:text-5xl lg:text-6xl"
-					>
-						Control the AI lifecycle without slowing it down.
-					</h2>
-					<p
-						class="mt-7 max-w-2xl font-sans text-base leading-relaxed text-mist sm:text-lg"
-					>
-						Four connected capabilities form the foundation of the platform
-						concept: understand the environment, detect risk, protect
-						interactions, and turn policy into practical control.
-					</p>
-				</div>
+			<div class="container-page py-28 sm:py-32 lg:py-36">
+				<div
+					class="grid gap-16 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:gap-24"
+				>
+					<div>
+						<p class="section-kicker">Platform Concept</p>
+						<h2
+							class="mt-5 max-w-2xl font-serif text-4xl font-medium leading-tight tracking-tight text-cream sm:text-5xl lg:text-6xl"
+						>
+							Four ideas. One clear product story.
+						</h2>
+						<p
+							class="mt-7 max-w-xl font-sans text-base leading-relaxed text-mist sm:text-lg"
+						>
+							The page keeps the product concept intentionally simple so the
+							design, hierarchy, and interactions do the work.
+						</p>
 
-				<div class="mt-16 border-t border-white/10">
-					{
-						capabilities.map((capability, index) => (
-							<article
-								class:list={[
-									"capability-row",
-									index % 2 === 1 && "capability-row-reverse",
-								]}
-							>
-								<div class="capability-copy">
-									<div class="capability-label-row flex items-center gap-4">
-										<span class="font-sans text-xs font-semibold tracking-[0.2em] text-[#c59d56]">
-											{capability.number}
-										</span>
-										<span
-											class="h-px w-10 bg-[#c59d56]/40"
-											aria-hidden="true"
-										/>
-										<p class="section-kicker">{capability.kicker}</p>
-									</div>
-
-									<h3 class="mt-6 max-w-xl font-serif text-3xl font-medium leading-tight tracking-tight text-cream sm:text-4xl lg:text-5xl">
-										{capability.title}
-									</h3>
-
-									<p class="mt-6 max-w-2xl font-sans text-base leading-relaxed text-mist sm:text-lg">
-										{capability.body}
-									</p>
-
-									<ul class="mt-8 grid gap-3 sm:grid-cols-2">
-										{capability.points.map((point) => (
-											<li class="flex items-start gap-3 border-t border-white/10 pt-3 font-sans text-sm leading-relaxed text-cream/90">
-												<span class="mt-[0.42rem] h-1.5 w-1.5 shrink-0 rounded-full bg-[#c59d56]" />
-												<span>{point}</span>
-											</li>
-										))}
-									</ul>
-								</div>
-
-								<div class="capability-visual" aria-hidden="true">
-									<div class="visual-header">
-										<p>{capability.visualLabel}</p>
-										<span>LIVE VIEW</span>
-									</div>
-
-									<div class="visual-body">
-										<p class="visual-title">{capability.visualTitle}</p>
-
-										<div class="visual-grid">
-											{capability.tags.map((tag, tagIndex) => (
-												<div class="visual-tile">
-													<div class="flex items-center justify-between gap-3">
-														<span class="visual-index">
-															{String(tagIndex + 1).padStart(2, "0")}
-														</span>
-														<span class="visual-status" />
-													</div>
-													<strong>{tag}</strong>
-													<div class="visual-line">
-														<span style={`width:${58 + tagIndex * 9}%`} />
-													</div>
-												</div>
-											))}
+						<div class="mt-14 border-t border-white/10">
+							{
+								capabilities.map((capability) => (
+									<article class="border-b border-white/10 py-9 sm:py-10">
+										<div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+											<span class="font-sans text-xs font-semibold tracking-[0.18em] text-[#c59d56]">
+												{capability.number}
+											</span>
+											<p class="font-sans text-xs font-semibold uppercase tracking-[0.16em] text-mist/70">
+												{capability.kicker}
+											</p>
 										</div>
 
-										<div class="visual-footer">
-											<span>Signal</span>
-											<div>
-												<>
-													<i />
-													<i />
-													<i />
-													<i />
-													<i />
-												</>
+										<h3 class="mt-4 font-serif text-2xl font-medium leading-tight tracking-tight text-cream sm:text-3xl">
+											{capability.title}
+										</h3>
+
+										<p class="mt-4 max-w-xl font-sans text-sm leading-relaxed text-mist sm:text-base">
+											{capability.body}
+										</p>
+									</article>
+								))
+							}
+						</div>
+					</div>
+
+					<div class="capability-visual" aria-hidden="true">
+						<div class="visual-header">
+							<p>Environment Map</p>
+							<span>CONCEPT VIEW</span>
+						</div>
+
+						<div class="visual-body">
+							<p class="visual-title">One view across the AI estate</p>
+
+							<div class="visual-grid">
+								{
+									["Models", "Agents", "Apps", "APIs"].map((tag, tagIndex) => (
+										<div class="visual-tile">
+											<div class="flex items-center justify-between gap-3">
+												<span class="visual-index">
+													{String(tagIndex + 1).padStart(2, "0")}
+												</span>
+												<span class="visual-status" />
 											</div>
-											<strong>Protected</strong>
+											<strong>{tag}</strong>
+											<div class="visual-line">
+												<span style={`width:${58 + tagIndex * 9}%`} />
+											</div>
 										</div>
-									</div>
+									))
+								}
+							</div>
+
+							<div class="visual-footer">
+								<span>Signal</span>
+								<div>
+									<>
+										<i></i>
+										<i></i>
+										<i></i>
+										<i></i>
+										<i></i>
+									</>
 								</div>
-							</article>
-						))
-					}
+								<strong>Protected</strong>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</section>
 
 		<!-- Architecture -->
 		<section
-			class="relative overflow-hidden border-b border-white/10 py-20 sm:py-24 lg:py-28"
+			class="relative overflow-hidden border-b border-white/10 py-28 sm:py-32 lg:py-36"
 		>
 			<div
 				class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(197,157,86,0.08),transparent_32%)]"
@@ -369,37 +233,23 @@ const architectureLayers = [
 			</div>
 
 			<div class="container-page relative">
-				<div class="grid gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20">
+				<div class="grid gap-16 lg:grid-cols-[0.75fr_1.25fr] lg:gap-24">
 					<div>
 						<p class="section-kicker">Platform Architecture</p>
 						<h2
 							class="mt-5 max-w-xl font-serif text-4xl font-medium leading-tight tracking-tight text-cream sm:text-5xl"
 						>
-							One security layer across your AI environment.
+							A simple architecture for the concept.
 						</h2>
 						<p
 							class="mt-6 max-w-xl font-sans text-base leading-relaxed text-mist sm:text-lg"
 						>
-							The architecture is intentionally simple: observe the systems
-							people use, place security controls around the AI application
-							layer, and keep governance connected to the same operational
-							picture.
+							The architecture places the security layer between AI applications
+							and the models, services, and enterprise data behind them. That
+							position creates a common point for observing activity and
+							applying controls without changing how every individual tool is
+							built.
 						</p>
-
-						<div
-							class="mt-8 flex flex-wrap gap-2"
-							aria-label="Security layer functions"
-						>
-							{
-								["Visibility", "Detection", "Protection", "Governance"].map(
-									(item) => (
-										<span class="border border-[#c59d56]/25 bg-[#c59d56]/[0.05] px-3 py-2 font-sans text-xs font-semibold uppercase tracking-[0.14em] text-[#c59d56]">
-											{item}
-										</span>
-									),
-								)
-							}
-						</div>
 					</div>
 
 					<div class="architecture-stack">
@@ -431,72 +281,8 @@ const architectureLayers = [
 			</div>
 		</section>
 
-		<!-- Why this model -->
-		<section class="border-b border-white/10 py-20 sm:py-24 lg:py-28">
-			<div class="container-page">
-				<p class="section-kicker">Designed for Responsible Scale</p>
-				<h2
-					class="mt-5 max-w-3xl font-serif text-4xl font-medium leading-tight tracking-tight text-cream sm:text-5xl"
-				>
-					Move from experimentation to a more mature AI operating model.
-				</h2>
-
-				<div
-					class="mt-14 grid gap-px overflow-hidden border border-white/10 bg-white/10 lg:grid-cols-3"
-				>
-					<article class="bg-[#09090b] p-7 sm:p-8 lg:p-10">
-						<p class="section-kicker">Clarity</p>
-						<h3
-							class="mt-5 font-serif text-2xl font-medium tracking-tight text-cream"
-						>
-							See what is actually being used.
-						</h3>
-						<p
-							class="mt-4 font-sans text-sm leading-relaxed text-mist sm:text-base"
-						>
-							A shared view gives engineering, security, and governance teams a
-							common starting point instead of separate assumptions about the AI
-							environment.
-						</p>
-					</article>
-
-					<article class="bg-[#09090b] p-7 sm:p-8 lg:p-10">
-						<p class="section-kicker">Control</p>
-						<h3
-							class="mt-5 font-serif text-2xl font-medium tracking-tight text-cream"
-						>
-							Put protection closer to the interaction.
-						</h3>
-						<p
-							class="mt-4 font-sans text-sm leading-relaxed text-mist sm:text-base"
-						>
-							Controls are most useful when they sit close to the prompts,
-							applications, models, and data flows where AI-related risk
-							appears.
-						</p>
-					</article>
-
-					<article class="bg-[#09090b] p-7 sm:p-8 lg:p-10">
-						<p class="section-kicker">Accountability</p>
-						<h3
-							class="mt-5 font-serif text-2xl font-medium tracking-tight text-cream"
-						>
-							Make governance operational.
-						</h3>
-						<p
-							class="mt-4 font-sans text-sm leading-relaxed text-mist sm:text-base"
-						>
-							Connect policies with owners, workflows, and evidence so
-							responsible AI adoption becomes part of normal operations rather
-							than a separate exercise.
-						</p>
-					</article>
-				</div>
-			</div>
-		</section>
-
 		<!-- Final CTA -->
-		<section class="relative overflow-hidden py-24 sm:py-28 lg:py-32">
+		<section class="relative overflow-hidden py-28 sm:py-32 lg:py-36">
 			<div
 				class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_100%,rgba(197,157,86,0.12),transparent_38%)]"
 				aria-hidden="true"
@@ -505,37 +291,28 @@ const architectureLayers = [
 
 			<div class="container-page relative text-center">
 				<div class="mx-auto max-w-4xl">
-					<p class="section-kicker">The Next Layer</p>
+					<p class="section-kicker">Behind the Build</p>
 					<h2
 						class="mt-6 font-serif text-4xl font-medium leading-tight tracking-tight text-cream sm:text-5xl lg:text-6xl"
 					>
-						Build AI on a stronger foundation.
+						Interested in the process?
 					</h2>
 					<p
 						class="mx-auto mt-6 max-w-2xl font-sans text-base leading-relaxed text-mist sm:text-lg"
 					>
-						See how the ApotheonAI platform concept supports enterprise AI,
-						generative AI applications, governance teams, and security
-						operations.
+						I wrote about the design and development process, the tools I used,
+						and what I learned while building the project.
 					</p>
 
 					<div class="mt-9 flex flex-wrap justify-center gap-4">
-						<a href="/blog" class="btn-gold btn-gold-lg">Read the Blog</a>
-						<a
-							href="/contact"
-							class="inline-flex min-h-12 items-center justify-center border border-white/15 px-6 py-3 font-sans text-sm font-semibold text-cream transition hover:border-[#c59d56]/60 hover:bg-white/[0.04] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c59d56]"
+						<a href="/blog" class="btn-gold btn-gold-lg">Read the Build Story</a
 						>
-							Talk to Us
-						</a>
 					</div>
 
 					<p
 						class="mx-auto mt-10 max-w-2xl border-t border-white/10 pt-6 font-sans text-xs leading-relaxed text-mist/75"
 					>
-						ApotheonAI is a fictional portfolio project. The platform concepts
-						shown on this page demonstrate product storytelling, frontend
-						development, and content architecture rather than a live
-						cybersecurity service.
+						ApotheonAI is a fictional portfolio project.
 					</p>
 				</div>
 			</div>
@@ -569,11 +346,6 @@ const architectureLayers = [
 
 	.platform-hero-title {
 		text-wrap: balance;
-	}
-
-	.capability-label-row {
-		flex-wrap: wrap;
-		min-width: 0;
 	}
 
 	.platform-orbit {
@@ -745,14 +517,6 @@ const architectureLayers = [
 		letter-spacing: 0.22em;
 	}
 
-	.capability-row {
-		display: grid;
-		gap: 2.5rem;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-		padding: 4.5rem 0;
-	}
-
-	.capability-copy,
 	.capability-visual {
 		min-width: 0;
 	}
@@ -984,23 +748,6 @@ const architectureLayers = [
 		);
 	}
 
-	@media (min-width: 1024px) {
-		.capability-row {
-			grid-template-columns: minmax(0, 1.05fr) minmax(23rem, 0.95fr);
-			align-items: center;
-			gap: 5rem;
-			padding: 6rem 0;
-		}
-
-		.capability-row-reverse .capability-copy {
-			order: 2;
-		}
-
-		.capability-row-reverse .capability-visual {
-			order: 1;
-		}
-	}
-
 	@media (max-width: 767px) {
 		.platform-hero-title {
 			font-size: clamp(2.7rem, 12vw, 3.75rem);
@@ -1098,15 +845,6 @@ const architectureLayers = [
 			text-align: center;
 			font-size: clamp(0.44rem, 2vw, 0.54rem);
 			letter-spacing: 0.12em;
-		}
-
-		.capability-row {
-			gap: 2rem;
-			padding: 3.5rem 0;
-		}
-
-		.capability-label-row {
-			gap: 0.65rem;
 		}
 
 		.visual-body {
