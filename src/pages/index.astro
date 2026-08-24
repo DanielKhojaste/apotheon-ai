@@ -343,6 +343,7 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 								headerImageUrl={post.headerImageUrl}
 								headerImageAlt={post.headerImageAlt}
 								priority={index === 0}
+								articleOrigin="home"
 							/>
 						))}
 					</div>

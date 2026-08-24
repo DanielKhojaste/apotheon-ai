@@ -9,6 +9,7 @@ export interface Props {
 	headerImageUrl?: string;
 	headerImageAlt?: string;
 	priority?: boolean;
+	articleOrigin?: "home" | "blog";
 }
 
 const {
@@ -21,7 +22,11 @@ const {
 	headerImageUrl,
 	headerImageAlt,
 	priority = false,
+	articleOrigin = "blog",
 } = Astro.props;
+
+const articleHref =
+	articleOrigin === "home" ? `/blog/${slug}?from=home` : `/blog/${slug}`;
 
 const publishedDate = publishedAt
 	? new Date(publishedAt).toLocaleDateString("en-CA", {
@@ -34,7 +39,7 @@ const publishedDate = publishedAt
 
 <article class="group">
 	<a
-		href={`/blog/${slug}`}
+		href={articleHref}
 		class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-4 focus-visible:ring-offset-black"
 		aria-label={`Read ${title}`}
 	>

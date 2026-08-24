@@ -185,6 +185,7 @@ const publishedDate = post.publishedAt
 				<div class="mt-12 flex items-end justify-between gap-6">
 					<a
 						href="/blog"
+						data-article-back-link
 						class="group inline-flex w-fit items-center gap-2 font-sans text-[0.64rem] font-semibold uppercase tracking-[0.18em] text-mist/70 transition-colors hover:text-cream focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
 					>
 						<span
@@ -193,7 +194,7 @@ const publishedDate = post.publishedAt
 						>
 							←
 						</span>
-						Back to blog
+						<span data-article-back-label>Back to blog</span>
 					</a>
 
 					{
@@ -360,3 +361,25 @@ const publishedDate = post.publishedAt
 		font-size: 0.9em;
 	}
 </style>
+
+<script>
+	function updateArticleBackLink() {
+		const link = document.querySelector<HTMLAnchorElement>(
+			"[data-article-back-link]",
+		);
+		const label = link?.querySelector<HTMLElement>("[data-article-back-label]");
+
+		if (!link || !label) {
+			return;
+		}
+
+		const cameFromHome =
+			new URLSearchParams(window.location.search).get("from") === "home";
+
+		link.href = cameFromHome ? "/" : "/blog";
+		label.textContent = cameFromHome ? "Back to Home" : "Back to blog";
+	}
+
+	updateArticleBackLink();
+	document.addEventListener("astro:page-load", updateArticleBackLink);
+</script>
