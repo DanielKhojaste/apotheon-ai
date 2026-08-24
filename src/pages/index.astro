@@ -238,7 +238,7 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 		kicker="From Adoption to Control"
 		heading="Forge a clearer path to trusted AI."
 	>
-		<div class="ascension-path mt-14 max-w-6xl" data-ascension-path>
+		<div class="ascension-path mt-14 w-full max-w-none" data-ascension-path>
 			<div class="ascension-line" data-ascension-line aria-hidden="true"></div>
 			<div
 				class="ascension-progress-node"
@@ -412,13 +412,14 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 		z-index: 4;
 		width: 0.82rem;
 		height: 0.82rem;
-		border: 1px solid #c59d56;
+		border: 0;
 		background: #c59d56;
+		clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
 		box-shadow:
 			0 0 14px rgba(197, 157, 86, 0.42),
 			0 0 28px rgba(197, 157, 86, 0.16);
 		pointer-events: none;
-		will-change: left, top, transform;
+		will-change: left, top, width, height, transform;
 	}
 
 	#path .ascension-step-highlight {
@@ -565,6 +566,7 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 	type NodePosition = {
 		x: number;
 		y: number;
+		size: number;
 	};
 
 	function initAscensionProgress() {
@@ -597,6 +599,9 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 				return {
 					x: rect.left - pathRect.left + rect.width / 2,
 					y: rect.top - pathRect.top + rect.height / 2,
+					// Match the moving fill to the visible hollow diamond itself.
+					// A tiny inset keeps the outline visible while eliminating uneven gaps.
+					size: Math.max(8, Math.min(rect.width, rect.height) - 1.5),
 				};
 			});
 
@@ -632,9 +637,11 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 				gsap.set(marker, {
 					left: target.x,
 					top: target.y,
+					width: target.size,
+					height: target.size,
 					xPercent: -50,
 					yPercent: -50,
-					rotation: 45,
+					rotation: 0,
 				});
 				return;
 			}
@@ -642,9 +649,11 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 			gsap.to(marker, {
 				left: target.x,
 				top: target.y,
+				width: target.size,
+				height: target.size,
 				xPercent: -50,
 				yPercent: -50,
-				rotation: 45,
+				rotation: 0,
 				duration: 0.42,
 				ease: "power3.out",
 				overwrite: true,
