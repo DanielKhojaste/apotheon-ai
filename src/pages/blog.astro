@@ -9,6 +9,7 @@ type BlogPost = {
 	slug: {
 		current: string;
 	};
+	excerpt?: string;
 	publishedAt?: string;
 	authorName?: string;
 	headerImageUrl?: string;
@@ -64,39 +65,41 @@ const posts = await sanityClient.fetch<BlogPost[]>(`
 		<!-- Posts -->
 		<section class="pb-20 pt-14 sm:pb-24 sm:pt-16 lg:pb-28 lg:pt-18">
 			<div class="container-page">
-				<div class="mb-8 flex items-center justify-between gap-6 sm:mb-10">
-					<p class="section-kicker">Latest Posts</p>
+				<div class="mx-auto max-w-[84rem]">
+					<div class="mb-8 flex items-center justify-between gap-6 sm:mb-10">
+						<p class="section-kicker">Latest Posts</p>
 
-					<p class="section-kicker">
-						{posts.length}{posts.length === 1 ? " Article" : " Articles"}
-					</p>
+						<p class="section-kicker">
+							{posts.length}{posts.length === 1 ? " Article" : " Articles"}
+						</p>
+					</div>
+
+					{
+						posts.length > 0 ? (
+							<div class="grid gap-x-8 gap-y-10 md:grid-cols-2 xl:grid-cols-3 xl:gap-x-10">
+								{posts.map((post, index) => (
+									<BlogCard
+										title={post.title}
+										slug={post.slug.current}
+										excerpt={post.excerpt}
+										publishedAt={post.publishedAt}
+										authorName={post.authorName}
+										headerImageUrl={post.headerImageUrl}
+										headerImageAlt={post.headerImageAlt}
+										priority={index === 0}
+									/>
+								))}
+							</div>
+						) : (
+							<div class="border-y border-white/10 py-16 sm:py-20">
+								<p class="section-kicker">No Posts Yet</p>
+								<p class="mt-5 max-w-xl font-serif text-3xl text-cream sm:text-4xl">
+									The journal is still being written.
+								</p>
+							</div>
+						)
+					}
 				</div>
-
-				{
-					posts.length > 0 ? (
-						<div class="grid gap-x-6 gap-y-8 md:grid-cols-2 xl:grid-cols-3">
-							{posts.map((post, index) => (
-								<BlogCard
-									title={post.title}
-									slug={post.slug.current}
-									excerpt={post.excerpt}
-									publishedAt={post.publishedAt}
-									authorName={post.authorName}
-									headerImageUrl={post.headerImageUrl}
-									headerImageAlt={post.headerImageAlt}
-									priority={index === 0}
-								/>
-							))}
-						</div>
-					) : (
-						<div class="border-y border-white/10 py-16 sm:py-20">
-							<p class="section-kicker">No Posts Yet</p>
-							<p class="mt-5 max-w-xl font-serif text-3xl text-cream sm:text-4xl">
-								The journal is still being written.
-							</p>
-						</div>
-					)
-				}
 			</div>
 		</section>
 	</main>
