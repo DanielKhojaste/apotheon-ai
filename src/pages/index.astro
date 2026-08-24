@@ -63,6 +63,12 @@ const path = [
 		title: "Govern",
 		body: "Establish consistent controls as AI adoption scales.",
 	},
+	{
+		number: "04",
+		title: "Ascend",
+		body: "Move forward with confidence, clarity, and control.",
+		highlight: true,
+	},
 ];
 
 type BlogPost = {
@@ -242,17 +248,42 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 			</div>
 			{
 				path.map((step) => (
-					<article class="ascension-step">
+					<article
+						class:list={[
+							"ascension-step",
+							step.highlight && "ascension-step-highlight",
+						]}
+					>
 						<div
-							class="ascension-node"
+							class:list={[
+								"ascension-node",
+								step.highlight && "ascension-node-highlight",
+							]}
 							data-ascension-node
 							aria-hidden="true"
 						/>
-						<p class="ascension-number">{step.number}</p>
-						<h3 class="mt-3 font-serif text-2xl font-medium tracking-tight text-cream sm:text-3xl">
+						<p
+							class:list={[
+								"ascension-number",
+								step.highlight && "ascension-number-highlight",
+							]}
+						>
+							{step.number}
+						</p>
+						<h3
+							class:list={[
+								"mt-3 font-serif text-2xl font-medium tracking-tight text-cream sm:text-3xl",
+								step.highlight && "ascension-title-highlight",
+							]}
+						>
 							{step.title}
 						</h3>
-						<p class="mt-3 max-w-xs font-sans text-base leading-relaxed text-mist">
+						<p
+							class:list={[
+								"mt-3 max-w-xs font-sans text-base leading-relaxed text-mist",
+								step.highlight && "ascension-body-highlight",
+							]}
+						>
 							{step.body}
 						</p>
 					</article>
@@ -383,9 +414,106 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 		height: 0.82rem;
 		border: 1px solid #c59d56;
 		background: #c59d56;
-		box-shadow: 0 0 16px rgba(197, 157, 86, 0.28);
+		box-shadow:
+			0 0 14px rgba(197, 157, 86, 0.42),
+			0 0 28px rgba(197, 157, 86, 0.16);
 		pointer-events: none;
-		will-change: transform;
+		will-change: left, top, transform;
+	}
+
+	#path .ascension-step-highlight {
+		position: relative;
+	}
+
+	#path .ascension-step-highlight::before {
+		content: "";
+		position: absolute;
+		left: -1.5rem;
+		top: 50%;
+		z-index: -1;
+		width: min(30rem, calc(100% + 4rem));
+		height: 11rem;
+		border-radius: 50%;
+		background: radial-gradient(
+			ellipse at center,
+			rgba(197, 157, 86, 0.16) 0%,
+			rgba(197, 157, 86, 0.07) 36%,
+			rgba(197, 157, 86, 0.025) 58%,
+			transparent 76%
+		);
+		filter: blur(14px);
+		transform: translateY(-50%);
+		pointer-events: none;
+	}
+
+	#path .ascension-node-highlight {
+		border-color: rgba(197, 157, 86, 0.9);
+		box-shadow:
+			0 0 12px rgba(197, 157, 86, 0.28),
+			0 0 28px rgba(197, 157, 86, 0.14);
+	}
+
+	#path .ascension-number-highlight,
+	#path .ascension-title-highlight {
+		color: #c59d56;
+		text-shadow: 0 0 18px rgba(197, 157, 86, 0.16);
+	}
+
+	#path .ascension-body-highlight {
+		color: rgba(242, 234, 220, 0.82);
+	}
+
+	/* Keep the path as one continuous rail instead of allowing steps to wrap. */
+	@media (max-width: 1023px) {
+		#path .ascension-path {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr);
+			gap: 4.5rem;
+		}
+
+		#path .ascension-step {
+			width: 100%;
+			min-width: 0;
+		}
+
+		#path .ascension-step-highlight::before {
+			left: -1rem;
+			width: min(26rem, calc(100% + 2rem));
+			height: 10rem;
+		}
+	}
+
+	/* Tablet needs its own rail gutter so the tracker never crosses the copy. */
+	@media (min-width: 640px) and (max-width: 1023px) {
+		#path .ascension-path {
+			--ascension-rail-gutter: clamp(4.75rem, 8vw, 6rem);
+			padding-left: var(--ascension-rail-gutter);
+		}
+
+		#path .ascension-step {
+			position: relative;
+		}
+
+		#path .ascension-node {
+			position: absolute;
+			left: calc(var(--ascension-rail-gutter) * -0.72);
+			top: 0.1rem;
+			margin: 0;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		#path .ascension-path {
+			display: grid;
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			align-items: start;
+			column-gap: clamp(2rem, 3vw, 4rem);
+		}
+
+		#path .ascension-step {
+			width: 100%;
+			min-width: 0;
+		}
 	}
 
 	/* Keep the first section closer to the hero so the transition feels tighter. */
@@ -432,12 +560,11 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 	gsap.registerPlugin(ScrollTrigger);
 
 	let ascensionTween: gsap.core.Tween | null = null;
+	let activeAscensionIndex = 0;
 
-	type PathGeometry = {
-		firstX: number;
-		firstY: number;
-		deltaX: number;
-		deltaY: number;
+	type NodePosition = {
+		x: number;
+		y: number;
 	};
 
 	function initAscensionProgress() {
@@ -458,26 +585,31 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 			return;
 		}
 
-		let geometry: PathGeometry;
-		const state = { progress: 0 };
+		let positions: NodePosition[] = [];
+		activeAscensionIndex = 0;
 
-		const measure = (): PathGeometry => {
+		const measure = () => {
 			const pathRect = path.getBoundingClientRect();
-			const firstRect = nodes[0].getBoundingClientRect();
-			const lastRect = nodes[nodes.length - 1].getBoundingClientRect();
 
-			const firstX = firstRect.left - pathRect.left + firstRect.width / 2;
-			const firstY = firstRect.top - pathRect.top + firstRect.height / 2;
-			const lastX = lastRect.left - pathRect.left + lastRect.width / 2;
-			const lastY = lastRect.top - pathRect.top + lastRect.height / 2;
-			const deltaX = lastX - firstX;
-			const deltaY = lastY - firstY;
+			positions = nodes.map((node) => {
+				const rect = node.getBoundingClientRect();
+
+				return {
+					x: rect.left - pathRect.left + rect.width / 2,
+					y: rect.top - pathRect.top + rect.height / 2,
+				};
+			});
+
+			const first = positions[0];
+			const last = positions[positions.length - 1];
+			const deltaX = last.x - first.x;
+			const deltaY = last.y - first.y;
 			const distance = Math.hypot(deltaX, deltaY);
 			const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
 
 			Object.assign(line.style, {
-				left: `${firstX}px`,
-				top: `${firstY}px`,
+				left: `${first.x}px`,
+				top: `${first.y}px`,
 				right: "auto",
 				bottom: "auto",
 				width: `${distance}px`,
@@ -485,25 +617,43 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 				transform: `rotate(${angle}deg)`,
 				transformOrigin: "0 50%",
 			});
-
-			return { firstX, firstY, deltaX, deltaY };
 		};
 
-		const render = () => {
-			gsap.set(marker, {
-				left: geometry.firstX,
-				top: geometry.firstY,
-				x: geometry.deltaX * state.progress,
-				y: geometry.deltaY * state.progress,
+		const placeMarker = (index: number, animate: boolean) => {
+			const target = positions[index];
+
+			if (!target) {
+				return;
+			}
+
+			gsap.killTweensOf(marker);
+
+			if (!animate) {
+				gsap.set(marker, {
+					left: target.x,
+					top: target.y,
+					xPercent: -50,
+					yPercent: -50,
+					rotation: 45,
+				});
+				return;
+			}
+
+			gsap.to(marker, {
+				left: target.x,
+				top: target.y,
 				xPercent: -50,
 				yPercent: -50,
 				rotation: 45,
+				duration: 0.42,
+				ease: "power3.out",
+				overwrite: true,
 			});
 		};
 
 		const refreshGeometry = () => {
-			geometry = measure();
-			render();
+			measure();
+			placeMarker(activeAscensionIndex, false);
 		};
 
 		refreshGeometry();
@@ -512,18 +662,53 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 			return;
 		}
 
+		const state = { progress: 0 };
+
 		ascensionTween = gsap.to(state, {
 			progress: 1,
 			ease: "none",
-			onUpdate: render,
 			scrollTrigger: {
 				trigger: path,
 				start: "top 68%",
 				end: "bottom 58%",
-				scrub: 0.35,
+				scrub: true,
 				invalidateOnRefresh: true,
 				onRefreshInit: refreshGeometry,
 				onRefresh: refreshGeometry,
+				onUpdate: (self) => {
+					const progress = self.progress;
+					const hysteresis = 0.055;
+					let nextIndex = activeAscensionIndex;
+
+					while (nextIndex < nodes.length - 1) {
+						const forwardBoundary =
+							(nextIndex + 0.5) / (nodes.length - 1) + hysteresis;
+
+						if (progress < forwardBoundary) {
+							break;
+						}
+
+						nextIndex += 1;
+					}
+
+					while (nextIndex > 0) {
+						const backwardBoundary =
+							(nextIndex - 0.5) / (nodes.length - 1) - hysteresis;
+
+						if (progress > backwardBoundary) {
+							break;
+						}
+
+						nextIndex -= 1;
+					}
+
+					if (nextIndex === activeAscensionIndex) {
+						return;
+					}
+
+					activeAscensionIndex = nextIndex;
+					placeMarker(activeAscensionIndex, true);
+				},
 			},
 		});
 	}
