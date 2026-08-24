@@ -240,12 +240,6 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 	>
 		<div class="ascension-path mt-14 w-full max-w-none" data-ascension-path>
 			<div class="ascension-line" data-ascension-line aria-hidden="true"></div>
-			<div
-				class="ascension-progress-node"
-				data-ascension-progress
-				aria-hidden="true"
-			>
-			</div>
 			{
 				path.map((step) => (
 					<article
@@ -405,23 +399,6 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 		z-index: 1;
 	}
 
-	#path .ascension-progress-node {
-		position: absolute;
-		left: 0;
-		top: 0;
-		z-index: 4;
-		width: 0.82rem;
-		height: 0.82rem;
-		border: 0;
-		background: #c59d56;
-		clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
-		box-shadow:
-			0 0 14px rgba(197, 157, 86, 0.42),
-			0 0 28px rgba(197, 157, 86, 0.16);
-		pointer-events: none;
-		will-change: left, top, width, height, transform;
-	}
-
 	#path .ascension-step-highlight {
 		position: relative;
 	}
@@ -560,35 +537,29 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 
 	gsap.registerPlugin(ScrollTrigger);
 
-	let ascensionTween: gsap.core.Tween | null = null;
-	let activeAscensionIndex = 0;
+	let ascensionTrigger: ScrollTrigger | null = null;
 
 	type NodePosition = {
 		x: number;
 		y: number;
-		size: number;
 	};
 
 	function initAscensionProgress() {
-		ascensionTween?.scrollTrigger?.kill();
-		ascensionTween?.kill();
-		ascensionTween = null;
+		ascensionTrigger?.kill();
+		ascensionTrigger = null;
 
 		const path = document.querySelector<HTMLElement>("[data-ascension-path]");
 		const line = path?.querySelector<HTMLElement>("[data-ascension-line]");
-		const marker = path?.querySelector<HTMLElement>(
-			"[data-ascension-progress]",
-		);
 		const nodes = path
 			? Array.from(path.querySelectorAll<HTMLElement>("[data-ascension-node]"))
 			: [];
 
-		if (!path || !line || !marker || nodes.length < 2) {
+		if (!path || !line || nodes.length < 2) {
 			return;
 		}
 
 		let positions: NodePosition[] = [];
-		activeAscensionIndex = 0;
+		let filledCount = 0;
 
 		const measure = () => {
 			const pathRect = path.getBoundingClientRect();
@@ -599,9 +570,6 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 				return {
 					x: rect.left - pathRect.left + rect.width / 2,
 					y: rect.top - pathRect.top + rect.height / 2,
-					// Match the moving fill to the visible hollow diamond itself.
-					// A tiny inset keeps the outline visible while eliminating uneven gaps.
-					size: Math.max(8, Math.min(rect.width, rect.height) - 1.5),
 				};
 			});
 
@@ -624,100 +592,77 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 			});
 		};
 
-		const placeMarker = (index: number, animate: boolean) => {
-			const target = positions[index];
+		const setNodeFilled = (
+			node: HTMLElement,
+			filled: boolean,
+			animate: boolean,
+		) => {
+			gsap.killTweensOf(node);
 
-			if (!target) {
-				return;
-			}
-
-			gsap.killTweensOf(marker);
+			const vars = filled
+				? {
+						backgroundColor: "#c59d56",
+						borderColor: "#c59d56",
+						boxShadow:
+							"0 0 14px rgba(197, 157, 86, 0.42), 0 0 28px rgba(197, 157, 86, 0.16)",
+					}
+				: {
+						backgroundColor: "rgba(9, 9, 11, 0)",
+						borderColor: "rgba(197, 157, 86, 0.72)",
+						boxShadow: "0 0 0 rgba(197, 157, 86, 0)",
+					};
 
 			if (!animate) {
-				gsap.set(marker, {
-					left: target.x,
-					top: target.y,
-					width: target.size,
-					height: target.size,
-					xPercent: -50,
-					yPercent: -50,
-					rotation: 0,
-				});
+				gsap.set(node, vars);
 				return;
 			}
 
-			gsap.to(marker, {
-				left: target.x,
-				top: target.y,
-				width: target.size,
-				height: target.size,
-				xPercent: -50,
-				yPercent: -50,
-				rotation: 0,
-				duration: 0.42,
-				ease: "power3.out",
+			gsap.to(node, {
+				...vars,
+				duration: 0.64,
+				ease: "power2.out",
 				overwrite: true,
 			});
 		};
 
-		const refreshGeometry = () => {
-			measure();
-			placeMarker(activeAscensionIndex, false);
+		const updateFilledNodes = (progress: number, animate: boolean) => {
+			const clamped = Math.min(1, Math.max(0, progress));
+			const nextFilledCount = Math.min(
+				nodes.length,
+				Math.max(0, Math.floor(clamped * nodes.length) + (clamped > 0 ? 1 : 0)),
+			);
+
+			if (nextFilledCount === filledCount && animate) {
+				return;
+			}
+
+			nodes.forEach((node, index) => {
+				setNodeFilled(node, index < nextFilledCount, animate);
+			});
+
+			filledCount = nextFilledCount;
 		};
 
-		refreshGeometry();
+		measure();
+		updateFilledNodes(0, false);
 
 		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+			nodes.forEach((node) => setNodeFilled(node, true, false));
 			return;
 		}
 
-		const state = { progress: 0 };
-
-		ascensionTween = gsap.to(state, {
-			progress: 1,
-			ease: "none",
-			scrollTrigger: {
-				trigger: path,
-				start: "top 68%",
-				end: "bottom 58%",
-				scrub: true,
-				invalidateOnRefresh: true,
-				onRefreshInit: refreshGeometry,
-				onRefresh: refreshGeometry,
-				onUpdate: (self) => {
-					const progress = self.progress;
-					const hysteresis = 0.055;
-					let nextIndex = activeAscensionIndex;
-
-					while (nextIndex < nodes.length - 1) {
-						const forwardBoundary =
-							(nextIndex + 0.5) / (nodes.length - 1) + hysteresis;
-
-						if (progress < forwardBoundary) {
-							break;
-						}
-
-						nextIndex += 1;
-					}
-
-					while (nextIndex > 0) {
-						const backwardBoundary =
-							(nextIndex - 0.5) / (nodes.length - 1) - hysteresis;
-
-						if (progress > backwardBoundary) {
-							break;
-						}
-
-						nextIndex -= 1;
-					}
-
-					if (nextIndex === activeAscensionIndex) {
-						return;
-					}
-
-					activeAscensionIndex = nextIndex;
-					placeMarker(activeAscensionIndex, true);
-				},
+		ascensionTrigger = ScrollTrigger.create({
+			trigger: path,
+			start: "top 68%",
+			end: "bottom 58%",
+			invalidateOnRefresh: true,
+			onRefreshInit: measure,
+			onRefresh: (self) => {
+				measure();
+				updateFilledNodes(self.progress, false);
+			},
+			onUpdate: (self) => {
+				updateFilledNodes(self.progress, true);
 			},
 		});
 	}
