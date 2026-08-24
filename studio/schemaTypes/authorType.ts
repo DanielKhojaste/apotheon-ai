@@ -15,6 +15,16 @@ export const authorType = defineType({
 			name: 'profilePicture',
 			title: 'Profile Picture',
 			type: 'image',
+			options: {
+				hotspot: true,
+			},
+			fields: [
+				defineField({
+					name: 'alt',
+					title: 'Alternative Text',
+					type: 'string',
+				}),
+			],
 		}),
 	],
 })
