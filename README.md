@@ -1,6 +1,6 @@
-# ApotheonAI
+# [ApotheonAI]([https://apotheon-ai.vercel.app/)
 
-> 
+**Live site:** [https://apotheon-ai.vercel.app/](https://apotheon-ai.vercel.app/)
 
 ApotheonAI is a fictional enterprise AI security brand focused on helping organizations adopt AI with better **visibility, security, and governance**.
 
@@ -20,7 +20,7 @@ For this fictional brand, that idea represents elevating AI toward a higher stan
 
 The project is a multi-page Astro site with reusable components, responsive layouts, animated navigation, and a Sanity-powered blog.
 
-The current project includes:
+The completed project includes:
 
 - reusable Astro components and layouts
 - TypeScript for browser-side behavior
@@ -144,7 +144,7 @@ The blog is powered by Sanity.
 
 Posts can be created and published through Sanity Studio without editing frontend source files.
 
-The current Post model supports:
+The Post model supports:
 
 - title
 - slug
