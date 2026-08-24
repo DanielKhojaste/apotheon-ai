@@ -6,17 +6,21 @@ test.describe("Shared site layout", () => {
 	}) => {
 		await page.goto("/");
 
-		const toggle = page.getByRole("button", {
+		const openToggle = page.getByRole("button", {
 			name: "Open navigation",
 		});
 
-		await expect(toggle).toBeVisible();
-		await expect(toggle).toHaveAttribute("aria-expanded", "false");
+		await expect(openToggle).toBeVisible();
+		await expect(openToggle).toHaveAttribute("aria-expanded", "false");
 
-		await toggle.click();
+		await openToggle.click();
 
-		await expect(toggle).toHaveAttribute("aria-expanded", "true");
-		await expect(toggle).toHaveAttribute("aria-label", "Close navigation");
+		const closeToggle = page.getByRole("button", {
+			name: "Close navigation",
+		});
+
+		await expect(closeToggle).toBeVisible();
+		await expect(closeToggle).toHaveAttribute("aria-expanded", "true");
 
 		const navigation = page.getByRole("dialog", {
 			name: "Site navigation",
