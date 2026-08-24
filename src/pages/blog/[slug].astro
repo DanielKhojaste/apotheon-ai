@@ -1,0 +1,294 @@
+---
+import { PortableText } from "astro-portabletext";
+import { sanityClient } from "sanity:client";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+type BlogPost = {
+	title: string;
+	publishedAt?: string;
+	content: unknown[];
+	authorName?: string;
+	headerImageUrl?: string;
+	headerImageAlt?: string;
+	headerImageCredit?: string;
+	headerImageSourceUrl?: string;
+};
+
+export async function getStaticPaths() {
+	const posts = await sanityClient.fetch<{ slug: string }[]>(`
+		*[_type == "post" && defined(slug.current)] {
+			"slug": slug.current
+		}
+	`);
+
+	return posts.map((post) => ({
+		params: { slug: post.slug },
+	}));
+}
+
+const { slug } = Astro.params;
+
+const post = await sanityClient.fetch<BlogPost | null>(
+	`
+		*[_type == "post" && slug.current == $slug][0] {
+			title,
+			publishedAt,
+			content,
+			"authorName": author->name,
+			"headerImageUrl": headerImage.asset->url,
+			"headerImageAlt": headerImage.alt,
+			"headerImageCredit": headerImage.credit,
+			"headerImageSourceUrl": headerImage.sourceUrl
+		}
+	`,
+	{ slug },
+);
+
+if (!post) {
+	return Astro.redirect("/blog");
+}
+
+const publishedDate = post.publishedAt
+	? new Date(post.publishedAt).toLocaleDateString("en-CA", {
+			year: "numeric",
+			month: "long",
+			day: "numeric",
+		})
+	: null;
+---
+
+<BaseLayout title={`${post.title} | ApotheonAI`}>
+	<main>
+		<!-- Article hero -->
+		<section class="relative isolate overflow-hidden border-b border-white/10">
+			{
+				post.headerImageUrl ? (
+					<>
+						<img
+							src={post.headerImageUrl}
+							alt={post.headerImageAlt ?? ""}
+							class="absolute inset-0 -z-30 h-full w-full object-cover"
+						/>
+						<div
+							class="absolute inset-0 -z-20 bg-black/55"
+							aria-hidden="true"
+						/>
+						<div
+							class="absolute inset-0 -z-10 bg-[linear-gradient(to_bottom,rgba(7,6,8,0.34),rgba(7,6,8,0.58)_45%,rgba(7,6,8,0.98)_100%)]"
+							aria-hidden="true"
+						/>
+						<div
+							class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_78%_28%,rgba(197,157,86,0.16),transparent_34%)]"
+							aria-hidden="true"
+						/>
+					</>
+				) : (
+					<div
+						class="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_76%_28%,rgba(197,157,86,0.14),transparent_34%),linear-gradient(to_bottom,rgba(255,255,255,0.02),transparent)]"
+						aria-hidden="true"
+					/>
+				)
+			}
+
+			<div
+				class="container-page flex min-h-[34rem] flex-col justify-between py-8 sm:min-h-[38rem] sm:py-10 lg:min-h-[42rem] lg:py-12"
+			>
+				<a
+					href="/blog"
+					class="group inline-flex w-fit items-center gap-3 font-sans text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-mist transition-colors hover:text-cream focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+				>
+					<span
+						class="text-gold transition-transform duration-300 group-hover:-translate-x-1"
+						aria-hidden="true">←</span
+					>
+					Back to blog
+				</a>
+
+				<header class="max-w-5xl pb-4 sm:pb-6">
+					<p class="section-kicker">Article</p>
+
+					<h1
+						class="mt-6 max-w-5xl font-serif text-5xl font-medium leading-[0.96] tracking-[-0.035em] text-cream sm:text-6xl lg:text-7xl"
+					>
+						{post.title}
+					</h1>
+
+					<div
+						class="mt-7 flex flex-wrap items-center gap-x-3 gap-y-2 font-sans text-[0.7rem] font-semibold uppercase tracking-[0.14em]"
+					>
+						{
+							post.authorName && (
+								<span class="text-gold">{post.authorName}</span>
+							)
+						}
+
+						{
+							post.authorName && publishedDate && (
+								<span class="text-white/25" aria-hidden="true">
+									/
+								</span>
+							)
+						}
+
+						{
+							publishedDate && (
+								<time datetime={post.publishedAt} class="text-mist">
+									{publishedDate}
+								</time>
+							)
+						}
+					</div>
+				</header>
+			</div>
+		</section>
+
+		<!-- Image attribution -->
+		{
+			post.headerImageUrl &&
+				(post.headerImageCredit || post.headerImageSourceUrl) && (
+					<div class="container-page">
+						<p class="border-b border-white/10 py-3 text-right font-sans text-[0.65rem] leading-relaxed text-mist/60">
+							{post.headerImageCredit && (
+								<span>Image: {post.headerImageCredit}</span>
+							)}
+							{post.headerImageCredit && post.headerImageSourceUrl && (
+								<span aria-hidden="true"> · </span>
+							)}
+							{post.headerImageSourceUrl && (
+								<a
+									href={post.headerImageSourceUrl}
+									target="_blank"
+									rel="noreferrer"
+									class="underline decoration-white/20 underline-offset-4 transition-colors hover:text-cream"
+								>
+									Source
+								</a>
+							)}
+						</p>
+					</div>
+				)
+		}
+
+		<!-- Article body -->
+		<section class="py-14 sm:py-18 lg:py-22">
+			<div class="container-page">
+				<article class="article-content mx-auto max-w-3xl">
+					<PortableText value={post.content} />
+				</article>
+
+				<div
+					class="mx-auto mt-16 flex max-w-3xl border-t border-white/10 pt-8 sm:mt-20"
+				>
+					<a
+						href="/blog"
+						class="group inline-flex items-center gap-3 font-sans text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-mist transition-colors hover:text-cream focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+					>
+						<span
+							class="text-gold transition-transform duration-300 group-hover:-translate-x-1"
+							aria-hidden="true">←</span
+						>
+						All articles
+					</a>
+				</div>
+			</div>
+		</section>
+	</main>
+</BaseLayout>
+
+<style>
+	.article-content {
+		color: var(--color-mist);
+		font-family: var(--font-sans);
+		font-size: 1rem;
+		line-height: 1.85;
+	}
+
+	.article-content :global(p) {
+		margin-top: 1.5rem;
+	}
+
+	.article-content :global(p:first-child) {
+		margin-top: 0;
+		color: var(--color-cream);
+		font-size: 1.12rem;
+		line-height: 1.8;
+	}
+
+	.article-content :global(h2) {
+		margin-top: 3.75rem;
+		color: var(--color-cream);
+		font-family: var(--font-serif);
+		font-size: clamp(2rem, 4vw, 2.65rem);
+		font-weight: 500;
+		line-height: 1.08;
+		letter-spacing: -0.025em;
+	}
+
+	.article-content :global(h3) {
+		margin-top: 2.75rem;
+		color: var(--color-cream);
+		font-family: var(--font-serif);
+		font-size: 1.7rem;
+		font-weight: 500;
+		line-height: 1.2;
+	}
+
+	.article-content :global(ul),
+	.article-content :global(ol) {
+		margin-top: 1.5rem;
+		padding-left: 1.35rem;
+	}
+
+	.article-content :global(ul) {
+		list-style: disc;
+	}
+
+	.article-content :global(ol) {
+		list-style: decimal;
+	}
+
+	.article-content :global(li) {
+		margin-top: 0.6rem;
+		padding-left: 0.25rem;
+	}
+
+	.article-content :global(strong) {
+		color: var(--color-cream);
+		font-weight: 600;
+	}
+
+	.article-content :global(em) {
+		color: var(--color-cream);
+	}
+
+	.article-content :global(a) {
+		color: var(--color-gold);
+		text-decoration: underline;
+		text-decoration-color: rgba(197, 157, 86, 0.45);
+		text-underline-offset: 0.22em;
+		transition: color 180ms ease;
+	}
+
+	.article-content :global(a:hover) {
+		color: var(--color-cream);
+	}
+
+	.article-content :global(blockquote) {
+		margin-top: 2.25rem;
+		border-left: 1px solid rgba(197, 157, 86, 0.55);
+		padding-left: 1.5rem;
+		color: var(--color-cream);
+		font-family: var(--font-serif);
+		font-size: 1.35rem;
+		font-style: italic;
+		line-height: 1.55;
+	}
+
+	.article-content :global(code) {
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		background: rgba(255, 255, 255, 0.04);
+		padding: 0.1rem 0.3rem;
+		color: var(--color-cream);
+		font-size: 0.9em;
+	}
+</style>

@@ -68,7 +68,7 @@ const posts = await sanityClient.fetch<BlogPost[]>(`
 				<div class="mb-8 flex items-center justify-between gap-6 sm:mb-10">
 					<p class="section-kicker">Latest Posts</p>
 
-					<p class="section-kicker text-mist">
+					<p class="section-kicker">
 						{posts.length}{posts.length === 1 ? " Article" : " Articles"}
 					</p>
 				</div>
