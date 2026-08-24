@@ -13,8 +13,8 @@
   Color:   bg-void  text-cream  text-mist  text-gold  bg-ink
   Type:    font-serif (Playfair Display)  font-cane (CaneNero)  font-sans (Inter)
   Buttons: .btn-gold  .btn-gold-sm  .btn-gold-lg
-  Logo:    .logo-gold  (tints the black /Logo.svg)
-           .logo-mark  (tints the black /ApotheonAI.svg)
+  Logo:    .logo-gold  (tints the black /brand/apotheonai-logo.svg)
+           .logo-mark  (tints the black /brand/apotheonai-logo.svg)
   Layout:  .container-page  .section-kicker  .text-card  .nav-link
   Nav:     .nav-toggle  .nav-burger  (--nav-burger-width, --nav-burger-thickness)
 */
