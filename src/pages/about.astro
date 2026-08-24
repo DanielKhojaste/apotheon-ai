@@ -3,46 +3,58 @@ import { Image } from "astro:assets";
 import danielStatue from "../assets/images/daniel-statue.png";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
+const skillGroups = [
+	{
+		title: "Frontend",
+		skills: [
+			"Astro",
+			"React",
+			"Next.js",
+			"TypeScript",
+			"Tailwind CSS",
+			"Preline",
+			"GSAP",
+			"D3.js",
+		],
+	},
+	{
+		title: "Backend & Data",
+		skills: [
+			"Node.js",
+			"Express.js",
+			"NestJS",
+			"REST APIs",
+			"MySQL",
+			"MariaDB",
+			"Sanity",
+			"GROQ",
+		],
+	},
+	{
+		title: "Testing & Delivery",
+		skills: ["Playwright", "Postman", "Lighthouse", "Git", "Vercel", "Docker"],
+	},
+	{
+		title: "Languages",
+		skills: ["JavaScript", "TypeScript", "Python", "Java", "C#", "Rust", "PHP"],
+	},
+];
+
 const objectives = [
 	{
 		number: "01",
 		title: "Build for the real web",
-		body: "Create a polished, public-facing website that prioritizes responsive design, accessibility, performance, and clear content rather than behaving like a dashboard or web app.",
+		body: "Build a public-facing website with responsive design, accessibility, performance, and clear content treated as core requirements from the start.",
 	},
 	{
 		number: "02",
 		title: "Learn by shipping",
-		body: "Use Astro in a real project alongside TypeScript, Tailwind CSS, reusable components, and selective client-side interactivity instead of learning each technology in isolation.",
+		body: "Use Astro in a real project and make practical decisions about when TypeScript, React, Preline, and client-side JavaScript are actually needed.",
 	},
 	{
 		number: "03",
 		title: "Make content maintainable",
-		body: "Design the site so content can move beyond hard-coded pages. The Insights section is being built around Sanity so a non-technical editor can publish and update articles without touching the source code.",
-	},
-];
-
-const stack = [
-	"Astro",
-	"TypeScript",
-	"Tailwind CSS",
-	"Sanity",
-	"React",
-	"Playwright",
-	"GitHub",
-];
-
-const principles = [
-	{
-		title: "Understand the code",
-		body: "AI can accelerate research, debugging, and iteration, but I want to understand the architecture and the code that ultimately ships.",
-	},
-	{
-		title: "Keep the frontend purposeful",
-		body: "I prefer static, semantic HTML where it is enough and add JavaScript or framework components only when they provide a clear benefit.",
-	},
-	{
-		title: "Treat quality as part of development",
-		body: "Responsive behavior, accessibility, testing, performance, maintainability, and documentation are part of the build—not cleanup tasks for the end.",
+		body: "Use Sanity to move the blog beyond hard-coded pages so new posts can be published and updated without editing the Astro source.",
 	},
 ];
 ---
@@ -58,7 +70,7 @@ const principles = [
 			</div>
 
 			<div
-				class="container-page relative grid min-h-[78vh] items-center gap-12 py-20 sm:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6 lg:py-28"
+				class="container-page relative grid min-h-[78vh] items-center gap-14 py-24 sm:py-28 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10 lg:py-32"
 			>
 				<div class="relative z-10 max-w-3xl">
 					<p class="section-kicker">About the Project</p>
@@ -73,24 +85,10 @@ const principles = [
 					<p
 						class="mt-8 max-w-2xl font-sans text-base leading-relaxed text-mist sm:text-lg"
 					>
-						ApotheonAI is not a real cybersecurity company or security product.
-						It is a portfolio and learning project built to explore how a
-						modern, content-driven corporate website can be designed, developed,
-						tested, documented, and maintained.
+						ApotheonAI is a fictional AI-security brand I created as a portfolio
+						project to design and build a polished, content-driven website with
+						a modern frontend stack.
 					</p>
-
-					<div
-						class="mt-9 flex flex-wrap gap-3"
-						aria-label="Project technologies"
-					>
-						{
-							stack.map((item) => (
-								<span class="rounded-full border border-white/10 bg-white/[0.035] px-4 py-2 font-sans text-xs font-medium tracking-wide text-mist">
-									{item}
-								</span>
-							))
-						}
-					</div>
 				</div>
 
 				<div class="relative mx-auto w-full max-w-[27rem] self-end lg:ml-auto">
@@ -127,12 +125,12 @@ const principles = [
 			</div>
 		</section>
 
-		<!-- Why -->
-		<section class="border-b border-white/10 py-20 sm:py-24 lg:py-28">
+		<!-- About -->
+		<section class="border-b border-white/10 py-28 sm:py-32 lg:py-36">
 			<div class="container-page">
-				<div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+				<div class="grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-24">
 					<div>
-						<p class="section-kicker">Why I Built It</p>
+						<p class="section-kicker">About Me & the Project</p>
 						<h2
 							class="mt-5 max-w-xl font-serif text-4xl font-medium leading-tight tracking-tight text-cream sm:text-5xl"
 						>
@@ -140,94 +138,28 @@ const principles = [
 						</h2>
 					</div>
 
-					<div
-						class="max-w-3xl space-y-5 font-sans text-base leading-relaxed text-mist sm:text-lg"
-					>
-						<p>
-							I built ApotheonAI to practice the kind of work involved in modern
-							public-facing websites: strong visual presentation, reusable
-							frontend architecture, responsive layouts, accessible content,
-							performance-conscious development, and content that can be
-							maintained outside the codebase.
-						</p>
-
-						<p>
-							The fictional AI-security theme gives the project a coherent
-							product story without pretending that the security capabilities
-							shown on the site are real. The product language, assessments, and
-							platform concepts are demonstrations of web design and content
-							architecture, not claims about a functioning security service.
-						</p>
-
-						<p>
-							ApotheonAI is also a way for me to work through the full lifecycle
-							of a modern website, from structure and styling to content
-							management, testing, accessibility, performance, and deployment,
-							within one cohesive project.
-						</p>
-					</div>
-				</div>
-
-				<div class="mt-16 grid border-y border-white/10 md:grid-cols-3">
-					{
-						objectives.map((objective) => (
-							<article class="border-white/10 py-8 md:border-r md:px-8 md:first:pl-0 md:last:border-r-0 lg:py-10">
-								<p class="font-sans text-xs font-semibold tracking-[0.2em] text-[#c59d56]">
-									{objective.number}
-								</p>
-								<h3 class="mt-5 font-serif text-2xl font-medium tracking-tight text-cream sm:text-3xl">
-									{objective.title}
-								</h3>
-								<p class="mt-4 font-sans text-sm leading-relaxed text-mist sm:text-base">
-									{objective.body}
-								</p>
-							</article>
-						))
-					}
-				</div>
-			</div>
-		</section>
-
-		<!-- About me -->
-		<section class="border-b border-white/10 py-20 sm:py-24 lg:py-28">
-			<div class="container-page">
-				<div class="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
-					<div>
-						<p class="section-kicker">About Me</p>
-						<h2
-							class="mt-5 max-w-xl font-serif text-4xl font-medium leading-tight tracking-tight text-cream sm:text-5xl"
-						>
-							A developer who learns best by building.
-						</h2>
-					</div>
-
 					<div>
 						<div
-							class="max-w-3xl space-y-5 font-sans text-base leading-relaxed text-mist sm:text-lg"
+							class="max-w-3xl space-y-6 font-sans text-base leading-relaxed text-mist sm:text-lg"
 						>
 							<p>
-								I am a graduate of Algonquin College's Web Development &
-								Internet Applications program, focused on building responsive,
-								public-facing websites with modern frontend tools.
+								I graduated from Algonquin College's Web Development & Internet
+								Applications program, and I built ApotheonAI as a portfolio
+								project to bring together the kind of work I enjoy: design,
+								frontend development, content, testing, and deployment.
 							</p>
 
 							<p>
-								I am especially interested in the point where design, frontend
-								engineering, content, and tooling meet. I like understanding how
-								a page is structured, why a technology is being used, how the
-								content will be maintained, and what happens when the project
-								reaches production.
-							</p>
-
-							<p>
-								ApotheonAI is part of that process: learn something new, apply
-								it to a realistic problem, test it, document it, and leave the
-								project in a state another person could understand.
+								The fictional brand gave me room to build something polished and
+								cohesive while learning through a real project. My goal was to
+								create a responsive, maintainable public website that I could
+								take from the original design all the way through development,
+								CMS integration, testing, and production.
 							</p>
 						</div>
 
 						<div
-							class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-white/10 pt-6"
+							class="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-white/10 pt-7"
 							aria-label="Daniel Khojaste's social profiles"
 						>
 							<p
@@ -254,88 +186,115 @@ const principles = [
 								GitHub ↗
 							</a>
 						</div>
+					</div>
+				</div>
 
-						<div class="mt-10 grid gap-4 sm:grid-cols-2">
-							<a
-								href="/platform"
-								class="group border border-white/10 bg-white/[0.025] p-6 transition hover:border-[#c59d56]/50 hover:bg-white/[0.045]"
+				<div class="mt-20 border-t border-white/10 pt-14 sm:pt-16">
+					<div class="grid gap-12 lg:grid-cols-[0.72fr_1.28fr] lg:gap-20">
+						<div>
+							<p class="section-kicker">Skills</p>
+							<h3
+								class="mt-5 max-w-lg font-serif text-3xl font-medium leading-tight tracking-tight text-cream sm:text-4xl"
 							>
-								<p class="section-kicker">Next</p>
-								<p class="mt-3 font-serif text-2xl text-cream">
-									Explore the platform
-								</p>
-								<p class="mt-3 font-sans text-sm leading-relaxed text-mist">
-									See how the fictional product story is translated into a
-									content-heavy corporate page.
-								</p>
-								<span
-									class="mt-5 inline-block font-sans text-sm font-semibold text-[#c59d56] transition-transform group-hover:translate-x-1"
-									aria-hidden="true"
-								>
-									→
-								</span>
-							</a>
+								Comfortable across the stack.
+							</h3>
+							<p
+								class="mt-5 max-w-lg font-sans text-sm leading-relaxed text-mist sm:text-base"
+							>
+								My strongest focus is frontend development, but I also work with
+								backend APIs, databases, testing, deployment, and several
+								programming languages. That broader experience helps me
+								understand how the pieces around the interface fit together.
+							</p>
+						</div>
 
-							<a
-								href="/blog"
-								class="group border border-white/10 bg-white/[0.025] p-6 transition hover:border-[#c59d56]/50 hover:bg-white/[0.045]"
-							>
-								<p class="section-kicker">Insights</p>
-								<p class="mt-3 font-serif text-2xl text-cream">Read the blog</p>
-								<p class="mt-3 font-sans text-sm leading-relaxed text-mist">
-									Explore the content-driven side of the project and the
-									headless CMS integration.
-								</p>
-								<span
-									class="mt-5 inline-block font-sans text-sm font-semibold text-[#c59d56] transition-transform group-hover:translate-x-1"
-									aria-hidden="true"
-								>
-									→
-								</span>
-							</a>
+						<div class="hs-accordion-group border-t border-white/10">
+							{
+								skillGroups.map((group, index) => {
+									const headingId = `skill-heading-${index}`;
+									const collapseId = `skill-collapse-${index}`;
+
+									return (
+										<div
+											class="hs-accordion border-b border-white/10"
+											id={headingId}
+										>
+											<button
+												type="button"
+												class="hs-accordion-toggle flex w-full items-center justify-between gap-6 py-6 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c59d56]"
+												aria-expanded="false"
+												aria-controls={collapseId}
+											>
+												<span class="font-serif text-xl font-medium text-cream sm:text-2xl">
+													{group.title}
+												</span>
+
+												<span
+													class="relative h-4 w-4 shrink-0 text-[#c59d56]"
+													aria-hidden="true"
+												>
+													<span class="hs-accordion-active:hidden absolute left-0 top-1/2 h-px w-4 -translate-y-1/2 bg-current" />
+													<span class="hs-accordion-active:hidden absolute left-1/2 top-0 h-4 w-px -translate-x-1/2 bg-current" />
+													<span class="hs-accordion-active:block absolute left-0 top-1/2 hidden h-px w-4 -translate-y-1/2 bg-current" />
+												</span>
+											</button>
+
+											<div
+												id={collapseId}
+												class="hs-accordion-content hidden w-full overflow-hidden transition-[height] duration-300"
+												role="region"
+												aria-labelledby={headingId}
+											>
+												<div class="flex flex-wrap gap-2 pb-7">
+													{group.skills.map((skill) => (
+														<span class="rounded-full border border-white/10 bg-white/[0.025] px-3 py-2 font-sans text-xs font-medium text-mist">
+															{skill}
+														</span>
+													))}
+												</div>
+											</div>
+										</div>
+									);
+								})
+							}
 						</div>
 					</div>
 				</div>
-			</div>
-		</section>
 
-		<!-- Working principles -->
-		<section class="py-20 sm:py-24 lg:py-28">
-			<div class="container-page">
-				<p class="section-kicker">How I Work</p>
-				<h2
-					class="mt-5 max-w-3xl font-serif text-4xl font-medium leading-tight tracking-tight text-cream sm:text-5xl"
-				>
-					Use the tools. Understand the decisions.
-				</h2>
+				<div class="mt-24 border-t border-white/10 pt-14 sm:pt-16">
+					<div class="max-w-3xl">
+						<p class="section-kicker">Project Goals</p>
+						<h3
+							class="mt-5 font-serif text-3xl font-medium leading-tight tracking-tight text-cream sm:text-4xl"
+						>
+							What I wanted this project to prove.
+						</h3>
+						<p
+							class="mt-5 max-w-2xl font-sans text-sm leading-relaxed text-mist sm:text-base"
+						>
+							ApotheonAI gave me one project where I could turn those skills
+							into clear development goals and carry them through to a finished,
+							deployed website.
+						</p>
+					</div>
 
-				<div
-					class="mt-14 grid gap-px overflow-hidden border border-white/10 bg-white/10 lg:grid-cols-3"
-				>
-					{
-						principles.map((principle) => (
-							<article class="bg-[#09090b] p-7 sm:p-8 lg:p-10">
-								<h3 class="font-serif text-2xl font-medium tracking-tight text-cream">
-									{principle.title}
-								</h3>
-								<p class="mt-4 font-sans text-sm leading-relaxed text-mist sm:text-base">
-									{principle.body}
-								</p>
-							</article>
-						))
-					}
-				</div>
-
-				<div class="mt-16 border-t border-white/10 pt-10 text-center">
-					<p class="section-kicker">Continue Exploring</p>
-					<h2
-						class="mx-auto mt-5 max-w-3xl font-serif text-4xl font-medium tracking-tight text-cream sm:text-5xl"
-					>
-						See how the idea becomes a platform.
-					</h2>
-					<a href="/platform" class="btn-gold btn-gold-lg mt-8">
-						Explore the Platform
-					</a>
+					<div class="mt-12 grid border-y border-white/10 md:grid-cols-3">
+						{
+							objectives.map((objective) => (
+								<article class="border-white/10 py-10 md:border-r md:px-8 md:first:pl-0 md:last:border-r-0 lg:py-12">
+									<p class="font-sans text-xs font-semibold tracking-[0.2em] text-[#c59d56]">
+										{objective.number}
+									</p>
+									<h3 class="mt-5 font-serif text-2xl font-medium tracking-tight text-cream sm:text-3xl">
+										{objective.title}
+									</h3>
+									<p class="mt-4 font-sans text-sm leading-relaxed text-mist sm:text-base">
+										{objective.body}
+									</p>
+								</article>
+							))
+						}
+					</div>
 				</div>
 			</div>
 		</section>

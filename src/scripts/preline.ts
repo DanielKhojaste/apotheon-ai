@@ -1,7 +1,8 @@
-import HSOverlay from "preline/plugins/overlay-non-auto";
+import { HSAccordion, HSOverlay } from "preline/non-auto";
 
 function initPreline() {
 	HSOverlay.autoInit();
+	HSAccordion.autoInit();
 }
 
 function closeNavOnOutsideClick(event: MouseEvent) {
