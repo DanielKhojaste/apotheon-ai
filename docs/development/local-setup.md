@@ -61,7 +61,7 @@ public/       Static public assets
 screenshots/  Screenshots used by the repository or project
 src/          Astro application source
 studio/       Sanity Studio and CMS schemas
-to-do/        Project notes and task tracking
+tests/        Playwright end-to-end tests
 dist/         Generated Astro build output
 ```
 
@@ -76,4 +76,5 @@ Before committing:
 - remove duplicated posts or other layout-preview data
 - check the affected page at relevant screen sizes
 - run `npm run build`
+- run the relevant Playwright tests for changes that affect user-facing behavior
 - confirm CMS fields still flow through the query, type, and component correctly when applicable

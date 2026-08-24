@@ -5,12 +5,11 @@
 ```text
 dist/
 docs/
-node_modules/
 public/
 screenshots/
 src/
 studio/
-to-do/
+tests/
 ```
 
 The two main source areas are:
@@ -32,6 +31,7 @@ Examples include:
 
 - Header
 - BlogCard
+- About page skill accordions
 - shared page sections
 - navigation
 - layout elements
@@ -82,23 +82,28 @@ Shared utilities are useful when the same behavior appears across multiple compo
 
 For example, the project uses a `noselect` utility for images that should not be selectable.
 
-## Header Animation
+## GSAP
 
-The menu icon uses SVG geometry animated with GSAP.
+GSAP is used for the custom hamburger-to-X animation in the site header.
 
-The same menu button stays above the navigation overlay while it transitions between the hamburger and X states.
+The menu icon is built from SVG geometry and animated with GSAP so the transition can be controlled more precisely than a simple icon swap. The same menu button stays above the navigation overlay while it transitions between the hamburger and X states.
 
-This avoids swapping between two different controls and prevents the icon from blinking when the overlay opens.
+This keeps the interaction visually continuous and prevents the icon from blinking or being replaced when the overlay opens. The animation remains custom even though Preline manages the overlay behavior around it.
 
 ## Preline UI
 
-Preline is used for the header navigation overlay.
+Preline UI is used selectively for interactive behavior in two parts of the site:
 
-I evaluated Preline and used its overlay component for the navigation instead of building the overlay lifecycle from scratch. Preline handles the core open and close behavior and the overlay state, while the header scroll behavior and hamburger-to-X animation remain custom.
+- the header navigation overlay
+- the skills accordions on the About page
+
+For the header, Preline manages the core overlay open and close behavior and overlay state. Custom TypeScript coordinates the surrounding header behavior, while GSAP handles the hamburger-to-X animation.
+
+On the About page, Preline accordion behavior is used to organize the skills content into expandable sections without requiring a custom accordion implementation.
 
 Most of the site does not need component-library behavior, so components such as BlogCard remain custom Astro and Tailwind components instead of being rewritten around Preline without a clear benefit.
 
-This keeps Preline focused on the part of the project where it saves useful implementation work rather than introducing it purely for visibility in the project.
+This keeps Preline focused on interactions where it saves useful implementation work while the project's layout, styling, and reusable components remain custom.
 
 ## Sanity
 
@@ -138,6 +143,14 @@ Typical fields include:
 - header image alternative text
 
 The full article content can be fetched separately by the dynamic article page.
+
+## Testing
+
+End-to-end testing is handled with Playwright.
+
+The test suite covers high-value user flows across the main pages, shared navigation, content, links, image loading, and important client-side behavior. The Playwright configuration builds the production Astro site and runs tests against Astro Preview so the tested output is close to the deployed application.
+
+See [Playwright Tests](../testing/playwright-tests.md) for the testing workflow and CI details.
 
 ## Accessibility
 
