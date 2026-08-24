@@ -11,21 +11,13 @@
   ApotheonAI tokens — reuse these utilities as you build pages.
 
   Color:   bg-void  text-cream  text-mist  text-gold  bg-ink
-  Type:    font-serif (Playfair Display)  font-empiric (Empiric Roman)  font-cane (CaneNero)  font-sans (Inter)
+  Type:    font-serif (Playfair Display)  font-cane (CaneNero)  font-sans (Inter)
   Buttons: .btn-gold  .btn-gold-sm  .btn-gold-lg
   Logo:    .logo-gold  (tints the black /Logo.svg)
            .logo-mark  (tints the black /ApotheonAI.svg)
   Layout:  .container-page  .section-kicker  .text-card  .nav-link
   Nav:     .nav-toggle  .nav-burger  (--nav-burger-width, --nav-burger-thickness)
 */
-
-@font-face {
-	font-family: "Empiric Roman";
-	src: url("/fonts/Empiric-Roman.TTF") format("truetype");
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
-}
 
 @font-face {
 	font-family: "CaneNero";
@@ -39,7 +31,6 @@
 
 @theme {
 	--font-serif: "Playfair Display", ui-serif, Georgia, "Times New Roman", serif;
-	--font-empiric: "Empiric Roman", "Playfair Display", ui-serif, Georgia, serif;
 	--font-cane: "CaneNero", "Playfair Display", ui-serif, Georgia, serif;
 	--font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 
@@ -112,15 +103,15 @@
 		display: inline-block;
 		flex-shrink: 0;
 		background-color: var(--color-gold);
-		mask: url("/Logo.svg") center / contain no-repeat;
-		-webkit-mask: url("/Logo.svg") center / contain no-repeat;
+		mask: url("/brand/apotheonai-logo.svg") center / contain no-repeat;
+		-webkit-mask: url("/brand/apotheonai-logo.svg") center / contain no-repeat;
 	}
 
 	.logo-mark {
 		display: inline-block;
 		flex-shrink: 0;
-		mask: url("/ApotheonAI.svg") center / contain no-repeat;
-		-webkit-mask: url("/ApotheonAI.svg") center / contain no-repeat;
+		mask: url("/brand/apotheonai-logo.svg") center / contain no-repeat;
+		-webkit-mask: url("/brand/apotheonai-logo.svg") center / contain no-repeat;
 	}
 
 	.nav-link {
@@ -1177,9 +1168,9 @@
 			font-size: clamp(2.35rem, 10.5vw, 3.2rem);
 		}
 
-	.assessment-score-ring strong {
-		font-size: 3.8rem;
-	}
+		.assessment-score-ring strong {
+			font-size: 3.8rem;
+		}
 	}
 }
 
