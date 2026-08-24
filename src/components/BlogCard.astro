@@ -5,6 +5,7 @@ export interface Props {
 	excerpt?: string;
 	publishedAt?: string;
 	authorName?: string;
+	authorProfilePictureUrl?: string;
 	headerImageUrl?: string;
 	headerImageAlt?: string;
 	priority?: boolean;
@@ -16,6 +17,7 @@ const {
 	excerpt,
 	publishedAt,
 	authorName,
+	authorProfilePictureUrl,
 	headerImageUrl,
 	headerImageAlt,
 	priority = false,
@@ -28,8 +30,6 @@ const publishedDate = publishedAt
 			day: "numeric",
 		})
 	: null;
-
-console.log(excerpt);
 ---
 
 <article class="group">
@@ -43,13 +43,13 @@ console.log(excerpt);
 		>
 			{
 				headerImageUrl ? (
-				<img
-					src={headerImageUrl}
-					alt={headerImageAlt ?? ""}
-					loading={priority ? "eager" : "lazy"}
-					draggable="false"
-					class="noselect h-full w-full object-cover transition duration-500 ease-out group-hover:scale-[1.025]"
-				/>
+					<img
+						src={headerImageUrl}
+						alt={headerImageAlt ?? ""}
+						loading={priority ? "eager" : "lazy"}
+						draggable="false"
+						class="noselect h-full w-full object-cover transition duration-500 ease-out group-hover:scale-[1.025]"
+					/>
 				) : (
 					<div
 						class="flex h-full items-end bg-[radial-gradient(circle_at_72%_24%,rgba(197,157,86,0.16),transparent_36%),linear-gradient(145deg,rgba(255,255,255,0.025),transparent_55%)] p-6"
@@ -75,7 +75,21 @@ console.log(excerpt);
 			<div
 				class="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 font-sans text-[0.68rem] font-semibold uppercase tracking-[0.14em]"
 			>
-				{authorName && <span class="text-gold">{authorName}</span>}
+				{
+					authorName && (
+						<span class="flex items-center gap-2 text-gold">
+							{authorProfilePictureUrl && (
+								<img
+									src={authorProfilePictureUrl}
+									alt=""
+									class="noselect h-7 w-7 shrink-0 rounded-full object-cover ring-1 ring-white/15"
+									draggable="false"
+								/>
+							)}
+							<span>{authorName}</span>
+						</span>
+					)
+				}
 
 				{
 					authorName && publishedDate && (

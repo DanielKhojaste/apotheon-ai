@@ -12,6 +12,7 @@ type BlogPost = {
 	excerpt?: string;
 	publishedAt?: string;
 	authorName?: string;
+	authorProfilePictureUrl?: string;
 	headerImageUrl?: string;
 	headerImageAlt?: string;
 };
@@ -25,6 +26,7 @@ const posts = await sanityClient.fetch<BlogPost[]>(`
 		excerpt,
 		publishedAt,
 		"authorName": author->name,
+		"authorProfilePictureUrl": author->profilePicture.asset->url,
 		"headerImageUrl": headerImage.asset->url,
 		"headerImageAlt": headerImage.alt
 	}
@@ -84,6 +86,7 @@ const posts = await sanityClient.fetch<BlogPost[]>(`
 										excerpt={post.excerpt}
 										publishedAt={post.publishedAt}
 										authorName={post.authorName}
+										authorProfilePictureUrl={post.authorProfilePictureUrl}
 										headerImageUrl={post.headerImageUrl}
 										headerImageAlt={post.headerImageAlt}
 										priority={index === 0}

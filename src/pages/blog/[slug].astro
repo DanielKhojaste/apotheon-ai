@@ -10,6 +10,7 @@ type BlogPost = {
 	publishedAt?: string;
 	content: PortableTextBlock[];
 	authorName?: string;
+	authorProfilePictureUrl?: string;
 	headerImageUrl?: string;
 	headerImageAlt?: string;
 	headerImageCredit?: string;
@@ -37,6 +38,7 @@ const post = await sanityClient.fetch<BlogPost | null>(
 			publishedAt,
 			content,
 			"authorName": author->name,
+			"authorProfilePictureUrl": author->profilePicture.asset->url,
 			"headerImageUrl": headerImage.asset->url,
 			"headerImageAlt": headerImage.alt,
 			"headerImageCredit": headerImage.credit,
@@ -138,11 +140,23 @@ const publishedDate = post.publishedAt
 					<div class="mt-8 flex flex-wrap items-center gap-x-4 gap-y-3">
 						{
 							post.authorName && (
-								<span
-									class="font-sans text-[0.7rem] font-semibold uppercase tracking-[0.15em] text-gold"
-								>
-									{post.authorName}
-								</span>
+								<div class="flex items-center gap-2.5">
+									{
+										post.authorProfilePictureUrl && (
+											<img
+												src={post.authorProfilePictureUrl}
+												alt=""
+												class="noselect h-8 w-8 shrink-0 rounded-full object-cover ring-1 ring-white/15"
+												draggable="false"
+											/>
+										)
+									}
+									<span
+										class="font-sans text-[0.7rem] font-semibold uppercase tracking-[0.15em] text-gold"
+									>
+										{post.authorName}
+									</span>
+								</div>
 							)
 						}
 
