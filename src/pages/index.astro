@@ -1,4 +1,6 @@
 ---
+import { sanityClient } from "sanity:client";
+import BlogCard from "../components/BlogCard.astro";
 import Hero from "../components/Hero.astro";
 import HomeSection from "../components/HomeSection.astro";
 import TextCard from "../components/TextCard.astro";
@@ -62,6 +64,35 @@ const path = [
 		body: "Establish consistent controls as AI adoption scales.",
 	},
 ];
+
+type BlogPost = {
+	_id: string;
+	title: string;
+	slug: {
+		current: string;
+	};
+	excerpt?: string;
+	publishedAt?: string;
+	authorName?: string;
+	authorProfilePictureUrl?: string;
+	headerImageUrl?: string;
+	headerImageAlt?: string;
+};
+
+const recentPosts = await sanityClient.fetch<BlogPost[]>(`
+	*[_type == "post" && defined(slug.current)]
+	| order(publishedAt desc, _createdAt desc)[0...3] {
+		_id,
+		title,
+		slug,
+		excerpt,
+		publishedAt,
+		"authorName": author->name,
+		"authorProfilePictureUrl": author->profilePicture.asset->url,
+		"headerImageUrl": headerImage.asset->url,
+		"headerImageAlt": headerImage.alt
+	}
+`);
 ---
 
 <BaseLayout title="ApotheonAI | Ascend to the divine">
@@ -219,6 +250,62 @@ const path = [
 			}
 		</div>
 	</HomeSection>
+
+	<section id="recent-articles" class="border-y border-white/10">
+		<div class="container-page py-28 sm:py-32 lg:py-36">
+			<div
+				class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between"
+			>
+				<div>
+					<p class="section-kicker">Recent Articles</p>
+					<h2
+						class="mt-5 max-w-3xl font-serif text-4xl font-medium leading-tight tracking-tight text-cream sm:text-5xl"
+					>
+						Notes from the build.
+					</h2>
+					<p
+						class="mt-6 max-w-2xl font-sans text-base leading-relaxed text-mist sm:text-lg"
+					>
+						Recent posts about the development process, tools, and ideas behind
+						ApotheonAI.
+					</p>
+				</div>
+
+				<a
+					href="/blog"
+					class="font-sans text-sm font-semibold text-[#c59d56] underline-offset-4 transition hover:text-cream hover:underline"
+				>
+					View all articles →
+				</a>
+			</div>
+
+			{
+				recentPosts.length > 0 ? (
+					<div class="mt-14 grid gap-x-8 gap-y-10 md:grid-cols-2 xl:grid-cols-3 xl:gap-x-10">
+						{recentPosts.map((post, index) => (
+							<BlogCard
+								title={post.title}
+								slug={post.slug.current}
+								excerpt={post.excerpt}
+								publishedAt={post.publishedAt}
+								authorName={post.authorName}
+								authorProfilePictureUrl={post.authorProfilePictureUrl}
+								headerImageUrl={post.headerImageUrl}
+								headerImageAlt={post.headerImageAlt}
+								priority={index === 0}
+							/>
+						))}
+					</div>
+				) : (
+					<div class="mt-14 border-y border-white/10 py-12">
+						<p class="font-sans text-base text-mist">
+							No articles have been published yet.
+						</p>
+					</div>
+				)
+			}
+		</div>
+	</section>
 
 	<section id="contact" class="home-final-cta">
 		<div class="container-page">
