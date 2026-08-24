@@ -1,4 +1,5 @@
 ---
+import { Icon } from "astro-icon/components";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const links = [
@@ -25,6 +26,30 @@ const links = [
 		external: true,
 	},
 ];
+
+const visualLinks = [
+	{
+		label: "LinkedIn",
+		href: "https://www.linkedin.com/in/aref-khojaste/",
+		icon: "mdi:linkedin",
+		position: "contact-node-link-1",
+		external: true,
+	},
+	{
+		label: "GitHub",
+		href: "https://github.com/DanielKhojaste",
+		icon: "mdi:github",
+		position: "contact-node-link-2",
+		external: true,
+	},
+	{
+		label: "Email",
+		href: "mailto:danielkhojaste101@gmail.com",
+		icon: "mdi:email-outline",
+		position: "contact-node-link-3",
+		external: false,
+	},
+] as const;
 ---
 
 <BaseLayout title="Contact | ApotheonAI">
@@ -70,15 +95,14 @@ const links = [
 					</p>
 				</div>
 
-				<div
-					class="contact-visual relative mx-auto w-full max-w-[31rem]"
-					aria-hidden="true"
-				>
-					<div class="contact-visual-grid"></div>
-					<div class="contact-orbit contact-orbit-outer"></div>
-					<div class="contact-orbit contact-orbit-inner"></div>
+				<div class="contact-visual relative mx-auto w-full max-w-[31rem]">
+					<div class="contact-visual-grid" aria-hidden="true"></div>
+					<div class="contact-orbit contact-orbit-outer" aria-hidden="true">
+					</div>
+					<div class="contact-orbit contact-orbit-inner" aria-hidden="true">
+					</div>
 
-					<div class="contact-core">
+					<div class="contact-core" aria-hidden="true">
 						<span class="contact-core-index">A</span>
 						<div>
 							<p>AVAILABLE TO CONNECT</p>
@@ -86,9 +110,29 @@ const links = [
 						</div>
 					</div>
 
-					<span class="contact-node contact-node-1"></span>
-					<span class="contact-node contact-node-2"></span>
-					<span class="contact-node contact-node-3"></span>
+					{
+						visualLinks.map((link) => (
+							<a
+								href={link.href}
+								target={link.external ? "_blank" : undefined}
+								rel={link.external ? "noopener noreferrer" : undefined}
+								class={`contact-node-link ${link.position}`}
+								aria-label={
+									link.external
+										? `Open Daniel Khojaste's ${link.label}`
+										: "Email Daniel Khojaste"
+								}
+							>
+								<span class="contact-node" aria-hidden="true" />
+								<Icon
+									name={link.icon}
+									size="1.35rem"
+									class="contact-node-icon"
+									aria-hidden="true"
+								/>
+							</a>
+						))
+					}
 				</div>
 			</div>
 		</section>
@@ -224,29 +268,73 @@ const links = [
 		letter-spacing: 0.12em;
 	}
 
-	.contact-node {
+	.contact-node-link {
 		position: absolute;
+		z-index: 10;
+		display: flex;
+		align-items: center;
+		gap: 0.55rem;
+		color: rgba(210, 207, 199, 0.64);
+		transition:
+			color 200ms ease,
+			transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.contact-node {
 		width: 0.52rem;
 		height: 0.52rem;
+		flex: 0 0 auto;
 		border: 1px solid rgba(197, 157, 86, 0.8);
 		border-radius: 999px;
 		background: #09090b;
 		box-shadow: 0 0 14px rgba(197, 157, 86, 0.25);
+		transition:
+			border-color 200ms ease,
+			background-color 200ms ease,
+			box-shadow 200ms ease;
 	}
 
-	.contact-node-1 {
+	.contact-node-icon {
+		display: block;
+		transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.contact-node-link-1 {
 		left: 17%;
 		top: 38%;
 	}
 
-	.contact-node-2 {
+	.contact-node-link-2 {
 		right: 18%;
 		top: 26%;
+		flex-direction: row-reverse;
 	}
 
-	.contact-node-3 {
+	.contact-node-link-3 {
 		right: 22%;
 		bottom: 21%;
+		flex-direction: row-reverse;
+	}
+
+	.contact-node-link:hover {
+		color: var(--color-gold-bright);
+		transform: translateY(-1px);
+	}
+
+	.contact-node-link:hover .contact-node {
+		border-color: var(--color-gold-bright);
+		background: rgba(197, 157, 86, 0.22);
+		box-shadow: 0 0 18px rgba(197, 157, 86, 0.38);
+	}
+
+	.contact-node-link:hover .contact-node-icon {
+		transform: scale(1.08);
+	}
+
+	.contact-node-link:focus-visible {
+		border-radius: 0.2rem;
+		outline: 2px solid var(--color-gold);
+		outline-offset: 5px;
 	}
 
 	.contact-links {
@@ -337,6 +425,9 @@ const links = [
 	}
 
 	@media (prefers-reduced-motion: reduce) {
+		.contact-node-link,
+		.contact-node,
+		.contact-node-icon,
 		.contact-link,
 		.contact-link-title,
 		.contact-link-arrow {
