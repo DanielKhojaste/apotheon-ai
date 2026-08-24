@@ -1177,8 +1177,16 @@
 			font-size: clamp(2.35rem, 10.5vw, 3.2rem);
 		}
 
-		.assessment-score-ring strong {
-			font-size: 3.8rem;
-		}
+	.assessment-score-ring strong {
+		font-size: 3.8rem;
 	}
+	}
+}
+
+/* ── Utility: prevent image selection / dragging ── */
+.noselect {
+	-webkit-user-select: none;
+	user-select: none;
+	-webkit-user-drag: none;
+	-webkit-touch-callout: none;
 }

@@ -73,13 +73,14 @@ const publishedDate = post.publishedAt
 			{
 				post.headerImageUrl ? (
 					<>
-						<img
-							src={post.headerImageUrl}
-							alt={post.headerImageAlt ?? ""}
-							class="absolute inset-0 -z-40 h-full w-full object-cover object-center"
-							loading="eager"
-							fetchpriority="high"
-						/>
+					<img
+						src={post.headerImageUrl}
+						alt={post.headerImageAlt ?? ""}
+						class="noselect absolute inset-0 -z-40 h-full w-full object-cover object-center"
+						loading="eager"
+						fetchpriority="high"
+						draggable="false"
+					/>
 
 						<!-- Keep the navbar readable without visually boxing it in. -->
 						<div
