@@ -1,6 +1,6 @@
 # ApotheonAI
 
-> **Work in progress** — a portfolio project for learning and showcasing modern web development with Astro.
+> 
 
 ApotheonAI is a fictional enterprise AI security brand focused on helping organizations adopt AI with better **visibility, security, and governance**.
 
@@ -12,93 +12,167 @@ ApotheonAI is a fictional enterprise AI security brand focused on helping organi
 
 The name was inspired by **Apotheon**, one of my favorite video games, which is set in Ancient Greek mythology and centers on ascending Mount Olympus and confronting the gods.
 
-It also draws from **apotheosis**: the elevation of someone to divine status, or figuratively, the highest point or culmination of something.
+It also draws from **apotheosis**, the elevation of someone to divine status, or figuratively, the highest point or culmination of something.
 
-For this fictional brand, that idea represents **elevating AI toward a higher standard of security, trust, and maturity**.
+For this fictional brand, that idea represents elevating AI toward a higher standard of security, trust, and maturity.
 
-## Project Goals
+## What I Built
 
-- [ ] Learn Astro through a real project
-- [ ] Build a responsive, public-facing corporate website
-- [ ] Use TypeScript throughout the project
-- [ ] Build reusable Astro components and layouts
-- [ ] Style the site with Tailwind CSS
-- [ ] Integrate selected Preline UI components
-- [ ] Add React only where client-side interactivity is useful
-- [ ] Build an interactive AI Security Readiness assessment
-- [ ] Build an insights/blog section powered by a headless CMS
-- [ ] Create CMS-managed articles with dynamic Astro routes
-- [ ] Make article content editable without changing frontend code
-- [ ] Follow accessibility and responsive-design best practices
-- [ ] Optimize performance and SEO with Lighthouse
-- [ ] Add automated testing with Playwright
-- [ ] Deploy a live version
-- [ ] Document the architecture and development process
+The project is a multi-page Astro site with reusable components, responsive layouts, animated navigation, and a Sanity-powered blog.
 
-## Planned Stack
+The current project includes:
+
+- reusable Astro components and layouts
+- TypeScript for browser-side behavior
+- Tailwind CSS for responsive styling
+- Preline UI for selected interactive behavior
+- GSAP for the header menu animation
+- a Sanity headless CMS
+- CMS-managed blog posts
+- dynamic blog routes based on Sanity slugs
+- reusable BlogCard components
+- image metadata such as alternative text, credit, and source URLs
+- responsive desktop, tablet, and mobile layouts
+
+## Stack
 
 - **Astro**
 - **TypeScript**
 - **Tailwind CSS**
 - **Preline UI**
-- **React**
-- **Playwright**
-- **Headless CMS**
-- **Vercel / Netlify**
-- **AWS** — later in the project
+- **GSAP**
+- **Sanity**
+
+## What I Learned
+
+This project gave me practical experience with Astro beyond building static pages.
+
+### Astro and component structure
+
+I learned how to separate page structure, reusable components, layouts, and browser-side scripts instead of putting everything into one component.
+
+For example, the header keeps its markup in Astro while its scroll and menu behavior lives in TypeScript. That kept the component easier to read and avoided introducing React for behavior that did not need it.
+
+### Astro versus React
+
+One of the most useful decisions in this project was learning when not to use React.
+
+Astro handles most of the site well on its own. Small interactions can use TypeScript and browser APIs, while React can be reserved for components that actually need client-side state or more application-like behavior.
+
+### TypeScript in a frontend project
+
+I used TypeScript for component props, CMS data, and browser-side scripts.
+
+Working with Sanity made the value of keeping schemas, GROQ projections, TypeScript types, and component props in sync especially clear.
+
+### Headless CMS integration
+
+I added Sanity so blog content can be created and updated without editing Astro source files.
+
+That involved:
+
+- defining Author and Post schemas
+- creating references between documents
+- fetching content with GROQ
+- passing CMS data into Astro components
+- rendering blog listings and article routes
+- handling optional content such as excerpts and images
+- learning how a schema change also needs corresponding frontend query and type changes
+
+### Responsive UI development
+
+I spent a large part of the project refining layouts across desktop, tablet, and mobile sizes.
+
+That included working on:
+
+- hero layouts
+- responsive typography
+- card grids
+- navigation behavior
+- image sizing and cropping
+- spacing at different breakpoints
+
+I also learned that responsive work is often less about adding more breakpoints and more about choosing better layout constraints.
+
+### Animation and interaction
+
+The header menu was a useful exercise in interaction design.
+
+I moved from simple CSS transitions to a GSAP-driven SVG animation so the hamburger-to-X transition could be controlled more precisely.
+
+That also reinforced the importance of understanding stacking contexts, overlay timing, accessibility state, and how multiple libraries interact.
+
+### Accessibility
+
+I incorporated accessibility into component behavior instead of treating it as a final pass.
+
+Examples include:
+
+- semantic elements
+- accessible navigation labels
+- `aria-expanded` state
+- keyboard focus styles
+- alternative text for CMS-managed images
+- reduced-motion considerations
+- keeping interactive controls usable while overlays are open
+
+### Keeping content separate from presentation
+
+The blog helped reinforce the value of separating content from frontend code.
+
+Authors can publish or update articles in Sanity while Astro remains responsible for presentation, routing, and layout.
+
+### Typography
+
+- **CaneNero**
+- **Playfair Display**
+- **Inter**
 
 ## Design
 
-I am designing the site myself in **Figma**, including the visual identity, layout, typography, component direction, and responsive UI.
+I designed the site in **Figma**, including the layout, typography, visual identity, component direction, and responsive UI.
 
-The design direction is intended to feel modern, premium, minimal, enterprise-focused, secure, and slightly futuristic, with visual inspiration drawn from classical mythology and the ApotheonAI brand identity.
+The visual direction combines a modern enterprise interface with references to classical mythology.
 
-## AI-Assisted Development
+## Blog and Headless CMS
 
-I am using **Cursor** and **Codex** while building the project.
+The blog is powered by Sanity.
 
-The goal is not to have AI build the entire site. I am using these tools to accelerate development where it makes sense, including:
+Posts can be created and published through Sanity Studio without editing frontend source files.
 
-- frontend implementation support
-- debugging and code review
-- repetitive UI work
-- repetitive backend/CMS work as that part of the project is added
-- refactoring
-- accessibility checks
-- testing ideas
+The current Post model supports:
 
-I am still making and reviewing the main decisions around architecture, component structure, Astro vs. React usage, data flow, and overall implementation so I can understand and explain the code I ship.
+- title
+- slug
+- excerpt
+- publication date
+- author
+- header image
+- alternative text
+- image credit
+- image source URL
+- rich article content
 
-## Insights & Headless CMS
+The frontend fetches this content with GROQ and renders it through Astro pages and components.
 
-A planned part of the project is an **Insights section powered by a headless CMS**.
+See [Blog Authoring](./docs/cms/blog-authoring.md) for the publishing workflow.
 
-The goal is to separate content management from the frontend so articles can be created and updated through the CMS without editing Astro source files.
+## Project Structure
 
-Planned features include:
+The main application lives in `src/`.
 
-- CMS-managed article content
-- article categories and metadata
-- dynamic routes such as `/insights/[slug]`
-- reusable Astro article layouts
-- SEO metadata for individual articles
-- a workflow that demonstrates how a non-technical content editor could publish updates
+Sanity Studio and CMS schemas live in `studio/`.
 
-## Planned Pages
+Project documentation lives in `docs/`.
 
-- **Home** — introduction to the ApotheonAI platform and brand
-- **Platform** — AI visibility, threat detection, prompt protection, and governance
-- **AI Security Readiness** — interactive security maturity assessment
-- **Insights** — articles on AI security, governance, and responsible adoption
-- **About** — the idea, design philosophy, and story behind ApotheonAI
-- **Contact** — contact and product inquiry page
+## Documentation
 
-Additional trust, privacy, and security documentation may be added as the project develops.
+- [Documentation Index](./docs/documentation.md)
+- [Blog Authoring](./docs/cms/blog-authoring.md)
+- [CMS Content Model](./docs/cms/content-model.md)
+- [Local Setup](./docs/development/local-setup.md)
+- [Architecture](./docs/development/architecture.md)
 
 ## Disclaimer
 
 **ApotheonAI is a fictional company created solely as a portfolio and learning project.** It is not a real cybersecurity product or business.
-
-The font used in this project is **Empiric Roman by SDFont**, which is free to use.
-
-The **helmet was created using Cursor**, and the **ApotheonAI logo was generated using Codex**.
