@@ -1,12 +1,14 @@
 ---
+import type { PortableTextBlock } from "@portabletext/types";
 import { PortableText } from "astro-portabletext";
 import { sanityClient } from "sanity:client";
+
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 type BlogPost = {
 	title: string;
 	publishedAt?: string;
-	content: unknown[];
+	content: PortableTextBlock[];
 	authorName?: string;
 	headerImageUrl?: string;
 	headerImageAlt?: string;
@@ -58,135 +60,189 @@ const publishedDate = post.publishedAt
 ---
 
 <BaseLayout title={`${post.title} | ApotheonAI`}>
-	<main>
-		<!-- Article hero -->
-		<section class="relative isolate overflow-hidden border-b border-white/10">
+	<main class="bg-black">
+		<!-- Full-width editorial hero -->
+		<section
+			class:list={[
+				"relative isolate flex overflow-hidden border-b border-white/10",
+				post.headerImageUrl
+					? "min-h-[72svh] lg:min-h-[78svh]"
+					: "min-h-[34rem]",
+			]}
+		>
 			{
 				post.headerImageUrl ? (
 					<>
 						<img
 							src={post.headerImageUrl}
 							alt={post.headerImageAlt ?? ""}
-							class="absolute inset-0 -z-30 h-full w-full object-cover"
+							class="absolute inset-0 -z-40 h-full w-full object-cover object-center"
+							loading="eager"
+							fetchpriority="high"
 						/>
+
+						<!-- Keep the navbar readable without visually boxing it in. -->
 						<div
-							class="absolute inset-0 -z-20 bg-black/55"
+							class="absolute inset-x-0 top-0 -z-30 h-32 bg-gradient-to-b from-black via-black/75 to-transparent"
 							aria-hidden="true"
-						/>
+						></div>
+
+						<!-- Editorial image treatment. -->
 						<div
-							class="absolute inset-0 -z-10 bg-[linear-gradient(to_bottom,rgba(7,6,8,0.34),rgba(7,6,8,0.58)_45%,rgba(7,6,8,0.98)_100%)]"
+							class="absolute inset-0 -z-30 bg-black/22"
 							aria-hidden="true"
-						/>
+						></div>
 						<div
-							class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_78%_28%,rgba(197,157,86,0.16),transparent_34%)]"
+							class="absolute inset-0 -z-20 bg-[linear-gradient(90deg,rgba(0,0,0,0.90)_0%,rgba(0,0,0,0.72)_32%,rgba(0,0,0,0.28)_66%,rgba(0,0,0,0.12)_100%)]"
 							aria-hidden="true"
-						/>
+						></div>
+						<div
+							class="absolute inset-0 -z-20 bg-[linear-gradient(0deg,rgba(0,0,0,0.94)_0%,rgba(0,0,0,0.18)_50%,rgba(0,0,0,0.32)_100%)]"
+							aria-hidden="true"
+						></div>
+						<div
+							class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_18%_68%,rgba(197,157,86,0.12),transparent_34%)]"
+							aria-hidden="true"
+						></div>
 					</>
 				) : (
-					<div
-						class="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_76%_28%,rgba(197,157,86,0.14),transparent_34%),linear-gradient(to_bottom,rgba(255,255,255,0.02),transparent)]"
-						aria-hidden="true"
-					/>
+					<>
+						<div
+							class="absolute inset-0 -z-30 bg-[radial-gradient(circle_at_22%_58%,rgba(197,157,86,0.14),transparent_32%)]"
+							aria-hidden="true"
+						></div>
+						<div
+							class="absolute inset-0 -z-20 bg-gradient-to-b from-black via-black/90 to-black"
+							aria-hidden="true"
+						></div>
+					</>
 				)
 			}
 
 			<div
-				class="container-page flex min-h-[34rem] flex-col justify-between py-8 sm:min-h-[38rem] sm:py-10 lg:min-h-[42rem] lg:py-12"
+				class="container-page flex w-full flex-col justify-between pb-10 pt-28 sm:pb-12 sm:pt-32 lg:pb-14 lg:pt-36"
 			>
-				<a
-					href="/blog"
-					class="group inline-flex w-fit items-center gap-3 font-sans text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-mist transition-colors hover:text-cream focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
-				>
-					<span
-						class="text-gold transition-transform duration-300 group-hover:-translate-x-1"
-						aria-hidden="true">←</span
+				<div class="flex justify-end">
+					<a
+						href="/blog"
+						class="group inline-flex w-fit items-center gap-2 font-sans text-[0.64rem] font-semibold uppercase tracking-[0.18em] text-mist/70 transition-colors hover:text-cream focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
 					>
-					Back to blog
-				</a>
+						<span
+							class="text-gold transition-transform duration-300 group-hover:-translate-x-1"
+							aria-hidden="true"
+						>
+							←
+						</span>
+						Blog
+					</a>
+				</div>
 
-				<header class="max-w-5xl pb-4 sm:pb-6">
-					<p class="section-kicker">Article</p>
+				<header class="max-w-4xl pt-16 sm:pt-20 lg:pt-24">
+					<div class="flex items-center gap-4">
+						<span class="section-kicker">Article</span>
+						<span class="h-px w-12 bg-gold/45" aria-hidden="true"></span>
+						<span
+							class="font-sans text-[0.64rem] font-medium uppercase tracking-[0.24em] text-mist"
+						>
+							ApotheonAI Journal
+						</span>
+					</div>
 
 					<h1
-						class="mt-6 max-w-5xl font-serif text-5xl font-medium leading-[0.96] tracking-[-0.035em] text-cream sm:text-6xl lg:text-7xl"
+						class="mt-6 max-w-4xl font-serif text-[clamp(2.6rem,5.2vw,5.1rem)] font-medium leading-[0.96] tracking-[-0.035em] text-cream"
 					>
 						{post.title}
 					</h1>
 
-					<div
-						class="mt-7 flex flex-wrap items-center gap-x-3 gap-y-2 font-sans text-[0.7rem] font-semibold uppercase tracking-[0.14em]"
-					>
+					<div class="mt-8 flex flex-wrap items-center gap-x-4 gap-y-3">
 						{
 							post.authorName && (
-								<span class="text-gold">{post.authorName}</span>
-							)
-						}
-
-						{
-							post.authorName && publishedDate && (
-								<span class="text-white/25" aria-hidden="true">
-									/
+								<span
+									class="font-sans text-[0.7rem] font-semibold uppercase tracking-[0.15em] text-gold"
+								>
+									{post.authorName}
 								</span>
 							)
 						}
 
 						{
+							post.authorName && publishedDate && (
+								<span
+									class="h-1 w-1 rounded-full bg-cream/30"
+									aria-hidden="true"
+								></span>
+							)
+						}
+
+						{
 							publishedDate && (
-								<time datetime={post.publishedAt} class="text-mist">
+								<time
+									datetime={post.publishedAt}
+									class="font-sans text-[0.7rem] font-medium uppercase tracking-[0.15em] text-mist"
+								>
 									{publishedDate}
 								</time>
 							)
 						}
 					</div>
 				</header>
+
+				<div class="mt-12 flex items-end justify-between gap-6">
+					<div
+						class="hidden items-center gap-3 font-sans text-[0.62rem] font-medium uppercase tracking-[0.18em] text-mist/60 sm:flex"
+						aria-hidden="true"
+					>
+						<span class="h-px w-8 bg-white/20"></span>
+						Scroll to read
+					</div>
+
+					{
+						post.headerImageUrl &&
+							(post.headerImageCredit || post.headerImageSourceUrl) && (
+								<p class="ml-auto max-w-sm text-right font-sans text-[0.6rem] leading-relaxed text-mist/60">
+									{post.headerImageCredit && (
+										<span>Image: {post.headerImageCredit}</span>
+									)}
+									{post.headerImageCredit && post.headerImageSourceUrl && (
+										<span aria-hidden="true"> · </span>
+									)}
+									{post.headerImageSourceUrl && (
+										<a
+											href={post.headerImageSourceUrl}
+											target="_blank"
+											rel="noreferrer"
+											class="underline decoration-white/20 underline-offset-4 transition-colors hover:text-cream"
+										>
+											Source
+										</a>
+									)}
+								</p>
+							)
+					}
+				</div>
 			</div>
 		</section>
 
-		<!-- Image attribution -->
-		{
-			post.headerImageUrl &&
-				(post.headerImageCredit || post.headerImageSourceUrl) && (
-					<div class="container-page">
-						<p class="border-b border-white/10 py-3 text-right font-sans text-[0.65rem] leading-relaxed text-mist/60">
-							{post.headerImageCredit && (
-								<span>Image: {post.headerImageCredit}</span>
-							)}
-							{post.headerImageCredit && post.headerImageSourceUrl && (
-								<span aria-hidden="true"> · </span>
-							)}
-							{post.headerImageSourceUrl && (
-								<a
-									href={post.headerImageSourceUrl}
-									target="_blank"
-									rel="noreferrer"
-									class="underline decoration-white/20 underline-offset-4 transition-colors hover:text-cream"
-								>
-									Source
-								</a>
-							)}
-						</p>
-					</div>
-				)
-		}
-
 		<!-- Article body -->
-		<section class="py-14 sm:py-18 lg:py-22">
-			<div class="container-page">
+		<section class="border-b border-white/5">
+			<div class="container-page py-16 sm:py-20 lg:py-24">
 				<article class="article-content mx-auto max-w-3xl">
 					<PortableText value={post.content} />
 				</article>
 
 				<div
-					class="mx-auto mt-16 flex max-w-3xl border-t border-white/10 pt-8 sm:mt-20"
+					class="mx-auto mt-16 max-w-3xl border-t border-white/10 pt-8 sm:mt-20"
 				>
 					<a
 						href="/blog"
-						class="group inline-flex items-center gap-3 font-sans text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-mist transition-colors hover:text-cream focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+						class="group inline-flex w-fit items-center gap-3 border border-white/12 bg-white/[0.02] px-5 py-3 font-sans text-[0.66rem] font-semibold uppercase tracking-[0.16em] text-mist transition-colors hover:border-gold/45 hover:text-cream focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
 					>
 						<span
 							class="text-gold transition-transform duration-300 group-hover:-translate-x-1"
-							aria-hidden="true">←</span
+							aria-hidden="true"
 						>
+							←
+						</span>
 						All articles
 					</a>
 				</div>
@@ -200,42 +256,51 @@ const publishedDate = post.publishedAt
 		color: var(--color-mist);
 		font-family: var(--font-sans);
 		font-size: 1rem;
-		line-height: 1.85;
+		line-height: 1.9;
 	}
 
 	.article-content :global(p) {
-		margin-top: 1.5rem;
+		margin-top: 1.55rem;
 	}
 
 	.article-content :global(p:first-child) {
 		margin-top: 0;
 		color: var(--color-cream);
-		font-size: 1.12rem;
-		line-height: 1.8;
+		font-size: 1.1rem;
+		line-height: 1.85;
 	}
 
 	.article-content :global(h2) {
-		margin-top: 3.75rem;
+		margin-top: 4rem;
 		color: var(--color-cream);
 		font-family: var(--font-serif);
-		font-size: clamp(2rem, 4vw, 2.65rem);
+		font-size: clamp(2.2rem, 4vw, 3rem);
 		font-weight: 500;
-		line-height: 1.08;
-		letter-spacing: -0.025em;
+		line-height: 1.04;
+		letter-spacing: -0.03em;
+	}
+
+	.article-content :global(h2::before) {
+		content: "";
+		display: block;
+		width: 2.25rem;
+		height: 1px;
+		margin-bottom: 1rem;
+		background: rgba(197, 157, 86, 0.6);
 	}
 
 	.article-content :global(h3) {
-		margin-top: 2.75rem;
+		margin-top: 2.8rem;
 		color: var(--color-cream);
 		font-family: var(--font-serif);
 		font-size: 1.7rem;
 		font-weight: 500;
-		line-height: 1.2;
+		line-height: 1.18;
 	}
 
 	.article-content :global(ul),
 	.article-content :global(ol) {
-		margin-top: 1.5rem;
+		margin-top: 1.55rem;
 		padding-left: 1.35rem;
 	}
 
@@ -248,38 +313,41 @@ const publishedDate = post.publishedAt
 	}
 
 	.article-content :global(li) {
-		margin-top: 0.6rem;
+		margin-top: 0.65rem;
 		padding-left: 0.25rem;
 	}
 
-	.article-content :global(strong) {
-		color: var(--color-cream);
-		font-weight: 600;
-	}
-
+	.article-content :global(strong),
 	.article-content :global(em) {
 		color: var(--color-cream);
+	}
+
+	.article-content :global(strong) {
+		font-weight: 600;
 	}
 
 	.article-content :global(a) {
 		color: var(--color-gold);
 		text-decoration: underline;
-		text-decoration-color: rgba(197, 157, 86, 0.45);
-		text-underline-offset: 0.22em;
-		transition: color 180ms ease;
+		text-decoration-color: rgba(197, 157, 86, 0.42);
+		text-underline-offset: 0.23em;
+		transition:
+			color 180ms ease,
+			text-decoration-color 180ms ease;
 	}
 
 	.article-content :global(a:hover) {
 		color: var(--color-cream);
+		text-decoration-color: rgba(243, 235, 221, 0.5);
 	}
 
 	.article-content :global(blockquote) {
-		margin-top: 2.25rem;
-		border-left: 1px solid rgba(197, 157, 86, 0.55);
-		padding-left: 1.5rem;
+		margin-top: 2.4rem;
+		border-left: 1px solid rgba(197, 157, 86, 0.58);
+		padding-left: 1.55rem;
 		color: var(--color-cream);
 		font-family: var(--font-serif);
-		font-size: 1.35rem;
+		font-size: 1.4rem;
 		font-style: italic;
 		line-height: 1.55;
 	}
