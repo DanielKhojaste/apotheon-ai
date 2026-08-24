@@ -747,9 +747,8 @@
 	}
 
 	.manifesto-subtitle span {
-		font-family: var(--font-cane);
 		font-size: clamp(1.25rem, 1.7vw, 1.45rem);
-		font-weight: 900;
+		font-weight: 100;
 		letter-spacing: 0.18em;
 		text-transform: none;
 		text-transform: uppercase;
