@@ -96,6 +96,8 @@ const visualLinks = [
 				</div>
 
 				<div class="contact-visual relative mx-auto w-full max-w-[31rem]">
+					<p class="contact-visual-prompt">Select a connection on the orbit</p>
+
 					<div class="contact-visual-grid" aria-hidden="true"></div>
 					<div class="contact-orbit contact-orbit-outer" aria-hidden="true">
 					</div>
@@ -122,14 +124,37 @@ const visualLinks = [
 										? `Open Daniel Khojaste's ${link.label}`
 										: "Email Daniel Khojaste"
 								}
+								data-contact-node-link
 							>
-								<span class="contact-node" aria-hidden="true" />
-								<Icon
-									name={link.icon}
-									size="1.35rem"
-									class="contact-node-icon"
+								<span
+									class="contact-node"
+									data-contact-node
 									aria-hidden="true"
 								/>
+
+								<span class="contact-node-pill-position" aria-hidden="true">
+									<span class="contact-node-pill" data-contact-pill>
+										<Icon
+											name={link.icon}
+											size="1.85rem"
+											class="contact-node-icon"
+											data-contact-icon
+										/>
+
+										<span
+											class="contact-node-pill-details"
+											data-contact-pill-details
+										>
+											<span>{link.label}</span>
+											<span
+												class="contact-node-pill-arrow"
+												data-contact-pill-arrow
+											>
+												↗
+											</span>
+										</span>
+									</span>
+								</span>
 							</a>
 						))
 					}
@@ -268,73 +293,146 @@ const visualLinks = [
 		letter-spacing: 0.12em;
 	}
 
+	.contact-visual-prompt {
+		position: absolute;
+		left: 50%;
+		top: 1.5%;
+		z-index: 20;
+		margin: 0;
+		transform: translateX(-50%);
+		white-space: nowrap;
+		color: rgba(210, 207, 199, 0.52);
+		font-family: var(--font-sans);
+		font-size: 0.62rem;
+		font-weight: 600;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+	}
+
+	.contact-visual-prompt::before {
+		content: "";
+		display: inline-block;
+		width: 0.32rem;
+		height: 0.32rem;
+		margin-right: 0.5rem;
+		border-radius: 999px;
+		background: var(--color-gold);
+		box-shadow: 0 0 10px rgba(197, 157, 86, 0.3);
+		vertical-align: 0.08rem;
+	}
+
 	.contact-node-link {
+		--icon-x: 0rem;
+		--icon-y: 0rem;
 		position: absolute;
 		z-index: 10;
-		display: flex;
-		align-items: center;
-		gap: 0.55rem;
-		color: rgba(210, 207, 199, 0.64);
-		transition:
-			color 200ms ease,
-			transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+		width: 4.5rem;
+		height: 4.5rem;
+		color: rgba(210, 207, 199, 0.68);
+		transform: translate(-50%, -50%);
 	}
 
 	.contact-node {
+		position: absolute;
+		left: calc(50% - 0.26rem);
+		top: calc(50% - 0.26rem);
 		width: 0.52rem;
 		height: 0.52rem;
-		flex: 0 0 auto;
-		border: 1px solid rgba(197, 157, 86, 0.8);
+		border: 1px solid rgba(197, 157, 86, 0.82);
 		border-radius: 999px;
 		background: #09090b;
 		box-shadow: 0 0 14px rgba(197, 157, 86, 0.25);
-		transition:
-			border-color 200ms ease,
-			background-color 200ms ease,
-			box-shadow 200ms ease;
+		transform-origin: center;
+	}
+
+	.contact-node-pill-position {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		z-index: 20;
+		width: max-content;
+		height: 2.75rem;
+		pointer-events: none;
+		transform: translate(
+			calc(var(--icon-x) - 1.375rem),
+			calc(var(--icon-y) - 1.375rem)
+		);
+	}
+
+	.contact-node-pill {
+		display: flex;
+		width: 2.75rem;
+		height: 100%;
+		align-items: center;
+		overflow: hidden;
+		white-space: nowrap;
+		border: 1px solid rgba(197, 157, 86, 0);
+		border-radius: 999px;
+		background: rgba(9, 9, 11, 0);
+		box-shadow: none;
+		color: rgba(210, 207, 199, 0.68);
+		pointer-events: auto;
+		will-change: width;
 	}
 
 	.contact-node-icon {
 		display: block;
-		transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+		width: 2.75rem;
+		flex: 0 0 2.75rem;
+		transform-origin: center;
 	}
 
+	.contact-node-pill-details {
+		display: flex;
+		visibility: hidden;
+		flex: 0 0 auto;
+		align-items: baseline;
+		gap: 0.55rem;
+		padding-right: 0.65rem;
+		opacity: 0;
+		color: var(--color-cream);
+		font-family: var(--font-sans);
+		font-size: 0.68rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		transform: translateX(-0.35rem);
+	}
+
+	.contact-node-pill-arrow {
+		position: relative;
+		top: 0.1rem;
+		flex: 0 0 auto;
+		color: var(--color-gold);
+		font-size: 0.78rem;
+		line-height: 1;
+	}
+
+	/* Exact points on the 78% outer orbit. Icons sit radially outside it. */
 	.contact-node-link-1 {
-		left: 17%;
-		top: 38%;
+		left: 12.33%;
+		top: 39.91%;
+		--icon-x: -2rem;
+		--icon-y: -0.55rem;
 	}
 
 	.contact-node-link-2 {
-		right: 18%;
-		top: 26%;
-		flex-direction: row-reverse;
+		left: 79.88%;
+		top: 24.93%;
+		--icon-x: 1.65rem;
+		--icon-y: -1.35rem;
 	}
 
 	.contact-node-link-3 {
-		right: 22%;
-		bottom: 21%;
-		flex-direction: row-reverse;
-	}
-
-	.contact-node-link:hover {
-		color: var(--color-gold-bright);
-		transform: translateY(-1px);
-	}
-
-	.contact-node-link:hover .contact-node {
-		border-color: var(--color-gold-bright);
-		background: rgba(197, 157, 86, 0.22);
-		box-shadow: 0 0 18px rgba(197, 157, 86, 0.38);
-	}
-
-	.contact-node-link:hover .contact-node-icon {
-		transform: scale(1.08);
+		left: 78.98%;
+		top: 76.1%;
+		--icon-x: 1.6rem;
+		--icon-y: 1.4rem;
 	}
 
 	.contact-node-link:focus-visible {
-		border-radius: 0.2rem;
-		outline: 2px solid var(--color-gold);
-		outline-offset: 5px;
+		border-radius: 999px;
+		outline: 1px solid rgba(197, 157, 86, 0.45);
+		outline-offset: -0.25rem;
 	}
 
 	.contact-links {
@@ -418,6 +516,39 @@ const visualLinks = [
 			padding: 0.85rem;
 		}
 
+		.contact-node-link {
+			width: 4rem;
+			height: 4rem;
+		}
+
+		.contact-node-link-1 {
+			--icon-x: -1.7rem;
+			--icon-y: -0.45rem;
+		}
+
+		.contact-node-link-2 {
+			--icon-x: 1.4rem;
+			--icon-y: -1.15rem;
+		}
+
+		.contact-node-link-3 {
+			--icon-x: 1.4rem;
+			--icon-y: 1.2rem;
+		}
+
+		.contact-node-pill {
+			width: 2.55rem;
+		}
+
+		.contact-node-icon {
+			width: 2.55rem;
+			flex-basis: 2.55rem;
+		}
+
+		.contact-node-pill-details {
+			font-size: 0.62rem;
+		}
+
 		.contact-link {
 			grid-template-columns: 2rem 1fr auto;
 			min-height: 8rem;
@@ -425,9 +556,7 @@ const visualLinks = [
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.contact-node-link,
 		.contact-node,
-		.contact-node-icon,
 		.contact-link,
 		.contact-link-title,
 		.contact-link-arrow {
@@ -435,3 +564,180 @@ const visualLinks = [
 		}
 	}
 </style>
+
+<script>
+	import { gsap } from "gsap";
+
+	const CONTACT_ORBIT_ANIMATION_DURATION = 0.36;
+
+	const initContactNodes = () => {
+		const prefersReducedMotion = window.matchMedia(
+			"(prefers-reduced-motion: reduce)",
+		).matches;
+
+		document
+			.querySelectorAll<HTMLElement>("[data-contact-node-link]")
+			.forEach((link) => {
+				if (link.dataset.contactNodeReady === "true") return;
+
+				const node = link.querySelector<HTMLElement>("[data-contact-node]");
+				const icon = link.querySelector<SVGElement>("[data-contact-icon]");
+				const pill = link.querySelector<HTMLElement>("[data-contact-pill]");
+				const details = link.querySelector<HTMLElement>(
+					"[data-contact-pill-details]",
+				);
+				const pillArrow = link.querySelector<HTMLElement>(
+					"[data-contact-pill-arrow]",
+				);
+
+				if (!node || !icon || !pill || !details || !pillArrow) return;
+
+				link.dataset.contactNodeReady = "true";
+
+				const closedWidth = pill.getBoundingClientRect().width;
+				const openWidth = Math.ceil(pill.scrollWidth);
+
+				if (prefersReducedMotion) {
+					const show = () => {
+						gsap.set(node, {
+							scale: 0.86,
+							borderColor: "var(--color-gold)",
+							backgroundColor: "var(--color-gold)",
+							boxShadow: "0 0 18px rgba(201, 165, 106, 0.38)",
+						});
+						gsap.set(icon, {
+							scale: 0.86,
+							color: "var(--color-gold)",
+						});
+						gsap.set(pill, {
+							width: openWidth,
+							borderColor: "rgba(197, 157, 86, 0.34)",
+							backgroundColor: "rgba(9, 9, 11, 0.96)",
+							boxShadow:
+								"0 10px 30px rgba(0, 0, 0, 0.28), 0 0 24px rgba(197, 157, 86, 0.06)",
+						});
+						gsap.set(details, {
+							autoAlpha: 1,
+							x: 0,
+						});
+						gsap.set(pillArrow, { x: 2, y: 0 });
+					};
+
+					const hide = () => {
+						gsap.set(node, {
+							scale: 1,
+							clearProps: "borderColor,backgroundColor,boxShadow",
+						});
+						gsap.set(icon, {
+							scale: 1,
+							clearProps: "color",
+						});
+						gsap.set(details, {
+							autoAlpha: 0,
+							x: -5,
+						});
+						gsap.set(pillArrow, { x: 0, y: 0 });
+						gsap.set(pill, {
+							width: closedWidth,
+							borderColor: "rgba(197, 157, 86, 0)",
+							backgroundColor: "rgba(9, 9, 11, 0)",
+							boxShadow: "none",
+						});
+					};
+
+					hide();
+					link.addEventListener("mouseenter", show);
+					link.addEventListener("mouseleave", hide);
+					link.addEventListener("focus", show);
+					link.addEventListener("blur", hide);
+					return;
+				}
+
+				gsap.set(details, {
+					autoAlpha: 0,
+					x: -5,
+				});
+
+				const timeline = gsap.timeline({
+					paused: true,
+					onReverseComplete: () => {
+						gsap.set(details, { visibility: "hidden" });
+					},
+				});
+
+				timeline
+					.set(details, { visibility: "visible" }, 0)
+					.to(
+						node,
+						{
+							scale: 0.86,
+							borderColor: "var(--color-gold)",
+							backgroundColor: "var(--color-gold)",
+							boxShadow: "0 0 18px rgba(201, 165, 106, 0.38)",
+							duration: CONTACT_ORBIT_ANIMATION_DURATION,
+							ease: "power2.out",
+						},
+						0,
+					)
+					.to(
+						icon,
+						{
+							scale: 0.86,
+							color: "var(--color-gold)",
+							duration: CONTACT_ORBIT_ANIMATION_DURATION,
+							ease: "power2.out",
+						},
+						0,
+					)
+					.to(
+						pill,
+						{
+							width: openWidth,
+							borderColor: "rgba(197, 157, 86, 0.34)",
+							backgroundColor: "rgba(9, 9, 11, 0.96)",
+							boxShadow:
+								"0 10px 30px rgba(0, 0, 0, 0.28), 0 0 24px rgba(197, 157, 86, 0.06)",
+							duration: CONTACT_ORBIT_ANIMATION_DURATION,
+							ease: "power3.out",
+						},
+						0,
+					)
+					.to(
+						details,
+						{
+							autoAlpha: 1,
+							x: 0,
+							duration: CONTACT_ORBIT_ANIMATION_DURATION * 0.65,
+							ease: "power2.out",
+						},
+						CONTACT_ORBIT_ANIMATION_DURATION * 0.45,
+					)
+					.to(
+						pillArrow,
+						{
+							x: 2,
+							y: 0,
+							duration: CONTACT_ORBIT_ANIMATION_DURATION * 0.6,
+							ease: "power2.out",
+						},
+						CONTACT_ORBIT_ANIMATION_DURATION * 0.55,
+					);
+
+				const open = () => {
+					timeline.timeScale(1).play();
+				};
+
+				const close = () => {
+					timeline.timeScale(1.15).reverse();
+				};
+
+				link.addEventListener("mouseenter", open);
+				link.addEventListener("mouseleave", close);
+				link.addEventListener("focus", open);
+				link.addEventListener("blur", close);
+			});
+	};
+
+	initContactNodes();
+	document.addEventListener("astro:page-load", initContactNodes);
+</script>
