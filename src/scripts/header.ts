@@ -1,8 +1,10 @@
 const HEADER_SELECTOR = "[data-site-header]";
 const HERO_SELECTOR = ".hero-section";
 const OVERLAY_ID = "hs-header-overlay-nav";
+const TOGGLE_ID = "hs-header-overlay";
 const VISIBLE_CLASS = "is-visible";
 const SOLID_CLASS = "is-solid";
+const MENU_OPEN_CLASS = "is-menu-open";
 const DIRECTION_THRESHOLD = 8;
 
 let lastScrollY = 0;
@@ -10,13 +12,64 @@ let heroInView = false;
 let ticking = false;
 let scrollBound = false;
 let heroObserver: IntersectionObserver | null = null;
+let overlayObserver: MutationObserver | null = null;
 
 function getHeader(): HTMLElement | null {
 	return document.querySelector<HTMLElement>(HEADER_SELECTOR);
 }
 
+function getOverlay(): HTMLElement | null {
+	return document.getElementById(OVERLAY_ID);
+}
+
+function getToggle(): HTMLButtonElement | null {
+	return document.getElementById(TOGGLE_ID) as HTMLButtonElement | null;
+}
+
 function isOverlayOpen(): boolean {
-	return document.getElementById(OVERLAY_ID)?.classList.contains("open") === true;
+	return getOverlay()?.classList.contains("open") === true;
+}
+
+function syncMenuToggle() {
+	const toggle = getToggle();
+
+	if (!toggle) {
+		return;
+	}
+
+	const open = isOverlayOpen();
+	toggle.setAttribute("aria-expanded", String(open));
+	toggle.setAttribute(
+		"aria-label",
+		open ? "Close navigation" : "Open navigation",
+	);
+	getHeader()?.classList.toggle(MENU_OPEN_CLASS, open);
+}
+
+function observeOverlay() {
+	overlayObserver?.disconnect();
+	overlayObserver = null;
+
+	const overlay = getOverlay();
+
+	if (!overlay) {
+		return;
+	}
+
+	syncMenuToggle();
+
+	overlayObserver = new MutationObserver(() => {
+		syncMenuToggle();
+
+		if (isOverlayOpen()) {
+			setHeaderState(true, !heroInView);
+		}
+	});
+
+	overlayObserver.observe(overlay, {
+		attributes: true,
+		attributeFilter: ["class"],
+	});
 }
 
 function setHeaderState(visible: boolean, solid: boolean) {
@@ -98,6 +151,7 @@ function observeHero() {
 function initHeader() {
 	lastScrollY = window.scrollY;
 	observeHero();
+	observeOverlay();
 	setHeaderState(true, !heroInView);
 
 	if (!scrollBound) {

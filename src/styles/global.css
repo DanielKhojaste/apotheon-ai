@@ -201,6 +201,11 @@
 		background-color: rgb(0 0 0 / 0.5);
 	}
 
+	/* The transformed header bar is its own stacking context; raise it only while the menu is open. */
+	.site-header.is-menu-open .site-header-bar {
+		z-index: 50;
+	}
+
 	@media (prefers-reduced-motion: reduce) {
 		.site-header-bar {
 			transition: none;
@@ -259,16 +264,43 @@
 		height: var(--nav-burger-thickness);
 		background-color: currentColor;
 		border-radius: calc(var(--nav-burger-thickness) / 2);
+		transform-origin: center;
+		transition:
+			transform 220ms ease,
+			opacity 160ms ease;
 	}
 
 	.nav-burger span:nth-child(2) {
 		width: 75%;
 		margin-inline-start: auto;
-		transition: width 200ms ease;
+		transition:
+			width 200ms ease,
+			transform 220ms ease,
+			opacity 160ms ease;
 	}
 
 	.nav-toggle:hover .nav-burger span:nth-child(2) {
 		width: 100%;
+	}
+
+	/* Keep the original burger geometry; transform those same bars into the close icon. */
+	.nav-toggle[aria-expanded="true"] .nav-burger span:nth-child(1) {
+		transform: translateY(
+				calc(var(--nav-burger-thickness) + var(--nav-burger-gap))
+			)
+			rotate(45deg);
+	}
+
+	.nav-toggle[aria-expanded="true"] .nav-burger span:nth-child(2) {
+		opacity: 0;
+		transform: scaleX(0);
+	}
+
+	.nav-toggle[aria-expanded="true"] .nav-burger span:nth-child(3) {
+		transform: translateY(
+				calc(0px - var(--nav-burger-thickness) - var(--nav-burger-gap))
+			)
+			rotate(-45deg);
 	}
 
 	.hero-section {
