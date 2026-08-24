@@ -6,6 +6,9 @@ import HomeSection from "../components/HomeSection.astro";
 import TextCard from "../components/TextCard.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
+const ASCENSION_FILL_DURATION = 0.64;
+const ASCENSION_FILL_STAGGER = 0.18;
+
 const capabilities = [
 	{
 		title: "AI Visibility",
@@ -238,7 +241,12 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 		kicker="From Adoption to Control"
 		heading="Forge a clearer path to trusted AI."
 	>
-		<div class="ascension-path mt-14 w-full max-w-none" data-ascension-path>
+		<div
+			class="ascension-path mt-14 w-full max-w-none"
+			data-ascension-path
+			data-fill-duration={ASCENSION_FILL_DURATION}
+			data-fill-stagger={ASCENSION_FILL_STAGGER}
+		>
 			<div class="ascension-line" data-ascension-line aria-hidden="true"></div>
 			{
 				path.map((step) => (
@@ -406,20 +414,20 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 	#path .ascension-step-highlight::before {
 		content: "";
 		position: absolute;
-		left: -1.5rem;
+		left: -1.75rem;
 		top: 50%;
 		z-index: -1;
-		width: min(30rem, calc(100% + 4rem));
-		height: 11rem;
+		width: min(32rem, calc(100% + 5rem));
+		height: 12.5rem;
 		border-radius: 50%;
 		background: radial-gradient(
 			ellipse at center,
-			rgba(197, 157, 86, 0.16) 0%,
-			rgba(197, 157, 86, 0.07) 36%,
-			rgba(197, 157, 86, 0.025) 58%,
-			transparent 76%
+			rgba(197, 157, 86, 0.28) 0%,
+			rgba(197, 157, 86, 0.15) 34%,
+			rgba(197, 157, 86, 0.065) 58%,
+			transparent 78%
 		);
-		filter: blur(14px);
+		filter: blur(11px);
 		transform: translateY(-50%);
 		pointer-events: none;
 	}
@@ -558,6 +566,9 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 			return;
 		}
 
+		const fillDuration = Number(path.dataset.fillDuration) || 0.64;
+		const fillStagger = Number(path.dataset.fillStagger) || 0.08;
+
 		let positions: NodePosition[] = [];
 		let filledCount = 0;
 
@@ -596,6 +607,7 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 			node: HTMLElement,
 			filled: boolean,
 			animate: boolean,
+			delay = 0,
 		) => {
 			gsap.killTweensOf(node);
 
@@ -619,7 +631,8 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 
 			gsap.to(node, {
 				...vars,
-				duration: 0.64,
+				duration: fillDuration,
+				delay,
 				ease: "power2.out",
 				overwrite: true,
 			});
@@ -632,13 +645,41 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 				Math.max(0, Math.floor(clamped * nodes.length) + (clamped > 0 ? 1 : 0)),
 			);
 
-			if (nextFilledCount === filledCount && animate) {
+			if (nextFilledCount === filledCount) {
 				return;
 			}
 
-			nodes.forEach((node, index) => {
-				setNodeFilled(node, index < nextFilledCount, animate);
-			});
+			if (!animate) {
+				nodes.forEach((node, index) => {
+					setNodeFilled(node, index < nextFilledCount, false);
+				});
+				filledCount = nextFilledCount;
+				return;
+			}
+
+			if (nextFilledCount > filledCount) {
+				for (let index = filledCount; index < nextFilledCount; index += 1) {
+					setNodeFilled(
+						nodes[index],
+						true,
+						true,
+						(index - filledCount) * fillStagger,
+					);
+				}
+			} else {
+				for (
+					let index = filledCount - 1;
+					index >= nextFilledCount;
+					index -= 1
+				) {
+					setNodeFilled(
+						nodes[index],
+						false,
+						true,
+						(filledCount - 1 - index) * fillStagger,
+					);
+				}
+			}
 
 			filledCount = nextFilledCount;
 		};
