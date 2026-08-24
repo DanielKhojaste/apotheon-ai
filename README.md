@@ -134,6 +134,10 @@ I designed the site in **Figma**, including the layout, typography, visual ident
 
 The visual direction combines a modern enterprise interface with references to classical mythology.
 
+The statue portrait used on the About page was created with [Face Your Fate](https://www.faceyourfate.app/en-us), which I found through Christopher Nolan's *The Odyssey* website.
+
+P.S. Please watch The Odyssey as soon as you get the chance. It's by far the best experience I've ever had in a movie theatre!
+
 ## Blog and Headless CMS
 
 The blog is powered by Sanity.
