@@ -2,19 +2,40 @@
 import { sanityClient } from "sanity:client";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const posts = await sanityClient.fetch(`
-  *[_type == "post" && defined(slug.current)]
-  | order(_createdAt desc) {
-    _id,
-    title,
-    slug,
-    publishedAt,
-    "authorName": author->name
-  }
+type BlogCard = {
+	_id: string;
+	title: string;
+	slug: {
+		current: string;
+	};
+	publishedAt?: string;
+	authorName?: string;
+	headerImageUrl?: string;
+	headerImageAlt?: string;
+};
+
+const posts = await sanityClient.fetch<BlogCard[]>(`
+	*[_type == "post" && defined(slug.current)]
+	| order(publishedAt desc, _createdAt desc) {
+		_id,
+		title,
+		slug,
+		publishedAt,
+		"authorName": author->name,
+		"headerImageUrl": headerImage.asset->url,
+		"headerImageAlt": headerImage.alt
+	}
 `);
 
-console.log("posts:");
-console.log(posts);
+const formatDate = (date?: string) => {
+	if (!date) return null;
+
+	return new Date(date).toLocaleDateString("en-CA", {
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+	});
+};
 ---
 
 <BaseLayout title="Blog | ApotheonAI">
@@ -41,69 +62,124 @@ console.log(posts);
 					<p
 						class="mt-8 max-w-2xl font-sans text-base leading-relaxed text-mist sm:text-lg"
 					>
-						This is where I’ll share posts about frontend development, AI,
-						product thinking, and the process behind projects like ApotheonAI.
+						This is where I share posts about frontend development, AI, product
+						thinking, and the process behind projects like ApotheonAI.
 					</p>
 				</div>
 			</div>
 		</section>
 
-		<!-- Empty state -->
+		<!-- Posts -->
 		<section class="py-20 sm:py-24 lg:py-28">
 			<div class="container-page">
-				<div class="border-y border-white/10 py-16 sm:py-20 lg:py-24">
-					<div
-						class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-20"
-					>
-						<div>
-							<p class="section-kicker">Latest Posts</p>
-
-							<h2
-								class="mt-5 max-w-xl font-serif text-4xl font-medium leading-tight tracking-tight text-cream sm:text-5xl"
-							>
-								Nothing published yet.
-							</h2>
-						</div>
-
-						<div class="max-w-2xl">
-							<p
-								class="font-sans text-base leading-relaxed text-mist sm:text-lg"
-							>
-								I’m still setting up the publishing workflow. Once the CMS is
-								connected, this page will become a grid of articles with topics,
-								publish dates, summaries, and individual post pages.
-							</p>
-
-							<div
-								class="mt-8 flex flex-wrap gap-2"
-								aria-label="Future blog topics"
-							>
-								<span class="topic-chip">Frontend</span>
-								<span class="topic-chip">AI</span>
-								<span class="topic-chip">Product</span>
-								<span class="topic-chip">Learning</span>
-							</div>
-						</div>
+				<div
+					class="mb-10 flex items-end justify-between gap-6 border-b border-white/10 pb-6 sm:mb-12"
+				>
+					<div>
+						<p class="section-kicker">Latest Posts</p>
+						<h2
+							class="mt-4 font-serif text-3xl font-medium tracking-tight text-cream sm:text-4xl"
+						>
+							From the journal.
+						</h2>
 					</div>
+
+					<p
+						class="hidden font-sans text-xs font-medium uppercase tracking-[0.16em] text-mist sm:block"
+					>
+						{posts.length}
+						{posts.length === 1 ? "Article" : "Articles"}
+					</p>
 				</div>
+
+				{
+					posts.length > 0 ? (
+						<div class="grid gap-x-6 gap-y-10 md:grid-cols-2 xl:grid-cols-3">
+							{posts.map((post, index) => {
+								const publishedDate = formatDate(post.publishedAt);
+
+								return (
+									<article class="group">
+										<a
+											href={`/blog/${post.slug.current}`}
+											class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-4 focus-visible:ring-offset-black"
+											aria-label={`Read ${post.title}`}
+										>
+											<div class="relative aspect-[16/10] overflow-hidden border border-white/10 bg-white/[0.025]">
+												{post.headerImageUrl ? (
+													<img
+														src={post.headerImageUrl}
+														alt={post.headerImageAlt ?? ""}
+														loading={index === 0 ? "eager" : "lazy"}
+														class="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-[1.025]"
+													/>
+												) : (
+													<div
+														class="flex h-full items-end bg-[radial-gradient(circle_at_72%_24%,rgba(197,157,86,0.16),transparent_36%),linear-gradient(145deg,rgba(255,255,255,0.025),transparent_55%)] p-6"
+														aria-hidden="true"
+													>
+														<span class="font-sans text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-gold/80">
+															ApotheonAI Journal
+														</span>
+													</div>
+												)}
+
+												<div
+													class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+													aria-hidden="true"
+												></div>
+											</div>
+
+											<div class="border-b border-white/10 py-6 transition-colors duration-300 group-hover:border-gold/40">
+												<div class="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 font-sans text-[0.68rem] font-semibold uppercase tracking-[0.14em]">
+													{post.authorName && (
+														<span class="text-gold">{post.authorName}</span>
+													)}
+
+													{post.authorName && publishedDate && (
+														<span class="text-white/25" aria-hidden="true">
+															/
+														</span>
+													)}
+
+													{publishedDate && (
+														<time datetime={post.publishedAt} class="text-mist">
+															{publishedDate}
+														</time>
+													)}
+												</div>
+
+												<h3 class="font-serif text-3xl font-medium leading-[1.06] tracking-[-0.025em] text-cream transition-colors duration-300 group-hover:text-gold">
+													{post.title}
+												</h3>
+
+												<div class="mt-6 flex items-center gap-3">
+													<span class="font-sans text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-mist transition-colors duration-300 group-hover:text-cream">
+														Read article
+													</span>
+													<span
+														class="font-sans text-lg leading-none text-gold transition-transform duration-300 group-hover:translate-x-1"
+														aria-hidden="true"
+													>
+														→
+													</span>
+												</div>
+											</div>
+										</a>
+									</article>
+								);
+							})}
+						</div>
+					) : (
+						<div class="border-y border-white/10 py-16 sm:py-20">
+							<p class="section-kicker">No Posts Yet</p>
+							<p class="mt-5 max-w-xl font-serif text-3xl text-cream sm:text-4xl">
+								The journal is still being written.
+							</p>
+						</div>
+					)
+				}
 			</div>
 		</section>
 	</main>
 </BaseLayout>
-
-<style>
-	.topic-chip {
-		display: inline-flex;
-		align-items: center;
-		min-height: 2.25rem;
-		border: 1px solid rgba(197, 157, 86, 0.24);
-		background: rgba(197, 157, 86, 0.045);
-		padding: 0.45rem 0.8rem;
-		color: rgba(210, 170, 99, 0.9);
-		font-family: var(--font-sans);
-		font-size: 0.68rem;
-		font-weight: 600;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-	}
-</style>
