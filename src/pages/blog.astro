@@ -1,5 +1,20 @@
 ---
+import { sanityClient } from "sanity:client";
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const posts = await sanityClient.fetch(`
+  *[_type == "post" && defined(slug.current)]
+  | order(_createdAt desc) {
+    _id,
+    title,
+    slug,
+    publishedAt,
+    "authorName": author->name
+  }
+`);
+
+console.log("posts:");
+console.log(posts);
 ---
 
 <BaseLayout title="Blog | ApotheonAI">
