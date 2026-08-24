@@ -21,6 +21,7 @@ const posts = await sanityClient.fetch<BlogPost[]>(`
 		_id,
 		title,
 		slug,
+		excerpt,
 		publishedAt,
 		"authorName": author->name,
 		"headerImageUrl": headerImage.asset->url,
@@ -78,6 +79,7 @@ const posts = await sanityClient.fetch<BlogPost[]>(`
 								<BlogCard
 									title={post.title}
 									slug={post.slug.current}
+									excerpt={post.excerpt}
 									publishedAt={post.publishedAt}
 									authorName={post.authorName}
 									headerImageUrl={post.headerImageUrl}
