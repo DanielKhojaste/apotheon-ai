@@ -104,7 +104,7 @@ const architectureLayers = [
 ---
 
 <BaseLayout title="Platform | ApotheonAI">
-	<main>
+	<main class="platform-page">
 		<!-- Hero -->
 		<section class="relative overflow-hidden border-b border-white/10">
 			<div
@@ -120,7 +120,7 @@ const architectureLayers = [
 					<p class="section-kicker">The ApotheonAI Platform</p>
 
 					<h1
-						class="mt-6 max-w-3xl font-serif text-5xl font-medium leading-[0.95] tracking-[-0.035em] text-cream sm:text-6xl lg:text-7xl xl:text-8xl"
+						class="platform-hero-title mt-6 max-w-3xl font-serif text-5xl font-medium leading-[0.95] tracking-[-0.035em] text-cream sm:text-6xl lg:text-7xl xl:text-8xl"
 					>
 						Security for the
 						<span class="block text-mist">full AI lifecycle.</span>
@@ -281,7 +281,7 @@ const architectureLayers = [
 								]}
 							>
 								<div class="capability-copy">
-									<div class="flex items-center gap-4">
+									<div class="capability-label-row flex items-center gap-4">
 										<span class="font-sans text-xs font-semibold tracking-[0.2em] text-[#c59d56]">
 											{capability.number}
 										</span>
@@ -544,6 +544,38 @@ const architectureLayers = [
 </BaseLayout>
 
 <style>
+	.platform-page {
+		width: 100%;
+		max-width: 100%;
+		overflow-x: clip;
+	}
+
+	.platform-page .container-page,
+	.platform-page .container-page > *,
+	.platform-page [class*="grid"] > *,
+	.capability-copy,
+	.capability-visual,
+	.architecture-stack,
+	.architecture-layer,
+	.visual-header > *,
+	.visual-footer > * {
+		min-width: 0;
+		max-width: 100%;
+	}
+
+	.platform-page :is(h1, h2, h3, p, li, strong, a, span) {
+		overflow-wrap: break-word;
+	}
+
+	.platform-hero-title {
+		text-wrap: balance;
+	}
+
+	.capability-label-row {
+		flex-wrap: wrap;
+		min-width: 0;
+	}
+
 	.platform-orbit {
 		aspect-ratio: 1 / 1;
 		min-height: 30rem;
@@ -737,6 +769,7 @@ const architectureLayers = [
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		flex-wrap: wrap;
 		gap: 1rem;
 		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 		padding: 0.9rem 1rem;
@@ -876,12 +909,16 @@ const architectureLayers = [
 
 	.architecture-stack {
 		display: flex;
+		width: 100%;
+		min-width: 0;
 		flex-direction: column;
 		justify-content: center;
 	}
 
 	.architecture-layer {
 		display: grid;
+		width: 100%;
+		min-width: 0;
 		gap: 0.65rem;
 		border: 1px solid rgba(255, 255, 255, 0.1);
 		background: rgba(9, 9, 11, 0.82);
@@ -890,7 +927,9 @@ const architectureLayers = [
 
 	.architecture-layer > div {
 		display: flex;
+		min-width: 0;
 		align-items: center;
+		flex-wrap: wrap;
 		gap: 0.85rem;
 	}
 
@@ -903,6 +942,8 @@ const architectureLayers = [
 	}
 
 	.architecture-layer strong {
+		min-width: 0;
+		overflow-wrap: anywhere;
 		color: #f2eadc;
 		font-family: var(--font-serif);
 		font-size: 1.25rem;
@@ -910,7 +951,9 @@ const architectureLayers = [
 	}
 
 	.architecture-layer p {
+		min-width: 0;
 		margin: 0;
+		overflow-wrap: anywhere;
 		color: rgba(210, 207, 199, 0.66);
 		font-family: var(--font-sans);
 		font-size: 0.75rem;
@@ -959,38 +1002,115 @@ const architectureLayers = [
 	}
 
 	@media (max-width: 767px) {
+		.platform-hero-title {
+			font-size: clamp(2.7rem, 12vw, 3.75rem);
+			line-height: 0.98;
+		}
+
 		.platform-orbit {
-			min-height: 23rem;
+			width: min(100%, 22rem);
+			min-height: 0;
+			aspect-ratio: 1 / 1;
+		}
+
+		.orbit-ring-1 {
+			width: 76%;
+			height: 76%;
+		}
+
+		.orbit-ring-2 {
+			width: 48%;
+			height: 48%;
+		}
+
+		.orbit-axis-x {
+			width: 82%;
+		}
+
+		.orbit-axis-y {
+			height: 82%;
 		}
 
 		.orbit-core {
-			width: 10.5rem;
-			padding: 0.8rem;
-		}
-
-		.orbit-node {
-			min-width: 5.9rem;
+			width: clamp(8.7rem, 48vw, 10.25rem);
+			max-width: 54%;
+			gap: 0.55rem;
 			padding: 0.65rem 0.7rem;
 		}
 
+		.orbit-mark {
+			width: 2rem;
+			height: 2rem;
+			font-size: 1rem;
+		}
+
+		.orbit-core p {
+			font-size: clamp(0.53rem, 2.4vw, 0.66rem);
+			letter-spacing: 0.11em;
+		}
+
+		.orbit-core div span {
+			font-size: clamp(0.42rem, 1.9vw, 0.5rem);
+			letter-spacing: 0.1em;
+		}
+
+		.orbit-node {
+			width: clamp(4.7rem, 27vw, 5.6rem);
+			min-width: 0;
+			max-width: 30%;
+			padding: 0.52rem 0.55rem;
+		}
+
+		.orbit-node span {
+			font-size: clamp(0.48rem, 2vw, 0.55rem);
+			letter-spacing: 0.11em;
+		}
+
 		.orbit-node strong {
-			font-size: 0.9rem;
+			font-size: clamp(0.58rem, 2.7vw, 0.7rem);
+			letter-spacing: 0.08em;
 		}
 
 		.orbit-node-1 {
 			left: 0;
+			top: 15%;
 		}
 
 		.orbit-node-2 {
 			right: 0;
+			top: 15%;
 		}
 
 		.orbit-node-3 {
-			left: 1%;
+			left: 0;
+			bottom: 15%;
 		}
 
 		.orbit-node-4 {
 			right: 0;
+			bottom: 15%;
+		}
+
+		.orbit-caption {
+			bottom: 1.5%;
+			width: 92%;
+			white-space: normal;
+			text-align: center;
+			font-size: clamp(0.44rem, 2vw, 0.54rem);
+			letter-spacing: 0.12em;
+		}
+
+		.capability-row {
+			gap: 2rem;
+			padding: 3.5rem 0;
+		}
+
+		.capability-label-row {
+			gap: 0.65rem;
+		}
+
+		.visual-body {
+			padding: 1rem;
 		}
 
 		.visual-grid {
@@ -998,7 +1118,109 @@ const architectureLayers = [
 		}
 
 		.visual-tile {
-			min-height: 6.5rem;
+			min-height: 6.25rem;
+		}
+
+		.visual-footer {
+			grid-template-columns: auto minmax(2.5rem, 1fr) auto;
+			gap: 0.45rem;
+			letter-spacing: 0.06em;
+		}
+
+		.architecture-layer {
+			padding: 1rem;
+		}
+
+		.architecture-layer strong {
+			font-size: 1.1rem;
+		}
+
+		.btn-gold-lg {
+			max-width: 100%;
+			white-space: normal;
+			text-align: center;
+		}
+	}
+
+	@media (max-width: 479px) {
+		.platform-page :is(h1, h2, h3, p, li) {
+			overflow-wrap: anywhere;
+		}
+
+		.visual-header {
+			align-items: flex-start;
+			gap: 0.45rem 0.75rem;
+		}
+
+		.visual-header p,
+		.visual-header span {
+			font-size: 0.54rem;
+			letter-spacing: 0.12em;
+		}
+
+		.visual-title {
+			font-size: 1.3rem;
+		}
+
+		.architecture-layer > div {
+			align-items: flex-start;
+			gap: 0.5rem;
+		}
+
+		.architecture-layer p {
+			font-size: 0.72rem;
+		}
+	}
+
+	@media (max-width: 359px) {
+		.platform-hero-title {
+			font-size: clamp(2.35rem, 13vw, 2.75rem);
+		}
+
+		.orbit-core {
+			width: 50%;
+			max-width: 50%;
+			padding: 0.55rem;
+		}
+
+		.orbit-mark {
+			width: 1.75rem;
+			height: 1.75rem;
+			font-size: 0.9rem;
+		}
+
+		.orbit-node {
+			width: 28%;
+			max-width: 28%;
+			padding: 0.45rem;
+		}
+
+		.orbit-node strong {
+			font-size: 0.56rem;
+			letter-spacing: 0.04em;
+		}
+
+		.orbit-caption {
+			font-size: 0.42rem;
+			letter-spacing: 0.08em;
+		}
+
+		.visual-header {
+			flex-direction: column;
+		}
+
+		.visual-footer {
+			grid-template-columns: 1fr;
+			justify-items: start;
+		}
+
+		.visual-footer div {
+			justify-content: flex-start;
+		}
+
+		.architecture-layer > div {
+			flex-direction: column;
+			gap: 0.35rem;
 		}
 	}
 
