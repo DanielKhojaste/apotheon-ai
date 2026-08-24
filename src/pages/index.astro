@@ -232,12 +232,22 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 		kicker="From Adoption to Control"
 		heading="Forge a clearer path to trusted AI."
 	>
-		<div class="ascension-path mt-14 max-w-6xl">
-			<div class="ascension-line" aria-hidden="true"></div>
+		<div class="ascension-path mt-14 max-w-6xl" data-ascension-path>
+			<div class="ascension-line" data-ascension-line aria-hidden="true"></div>
+			<div
+				class="ascension-progress-node"
+				data-ascension-progress
+				aria-hidden="true"
+			>
+			</div>
 			{
 				path.map((step) => (
 					<article class="ascension-step">
-						<div class="ascension-node" aria-hidden="true" />
+						<div
+							class="ascension-node"
+							data-ascension-node
+							aria-hidden="true"
+						/>
 						<p class="ascension-number">{step.number}</p>
 						<h3 class="mt-3 font-serif text-2xl font-medium tracking-tight text-cream sm:text-3xl">
 							{step.title}
@@ -339,6 +349,45 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 		padding-bottom: 7rem;
 	}
 
+	/* Keep the path rail centered through every hollow diamond. */
+	#path .ascension-path {
+		position: relative;
+	}
+
+	#path .ascension-line {
+		position: absolute;
+		z-index: 0;
+		display: block;
+		height: 1px;
+		margin: 0;
+		pointer-events: none;
+		background: linear-gradient(
+			90deg,
+			rgba(197, 157, 86, 0.22),
+			rgba(197, 157, 86, 0.62),
+			rgba(197, 157, 86, 0.22)
+		);
+	}
+
+	#path .ascension-step {
+		position: relative;
+		z-index: 1;
+	}
+
+	#path .ascension-progress-node {
+		position: absolute;
+		left: 0;
+		top: 0;
+		z-index: 4;
+		width: 0.82rem;
+		height: 0.82rem;
+		border: 1px solid #c59d56;
+		background: #c59d56;
+		box-shadow: 0 0 16px rgba(197, 157, 86, 0.28);
+		pointer-events: none;
+		will-change: transform;
+	}
+
 	/* Keep the first section closer to the hero so the transition feels tighter. */
 	#platform {
 		padding-top: 5rem;
@@ -376,3 +425,109 @@ const recentPosts = await sanityClient.fetch<BlogPost[]>(`
 		}
 	}
 </style>
+<script>
+	import { gsap } from "gsap";
+	import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+	gsap.registerPlugin(ScrollTrigger);
+
+	let ascensionTween: gsap.core.Tween | null = null;
+
+	type PathGeometry = {
+		firstX: number;
+		firstY: number;
+		deltaX: number;
+		deltaY: number;
+	};
+
+	function initAscensionProgress() {
+		ascensionTween?.scrollTrigger?.kill();
+		ascensionTween?.kill();
+		ascensionTween = null;
+
+		const path = document.querySelector<HTMLElement>("[data-ascension-path]");
+		const line = path?.querySelector<HTMLElement>("[data-ascension-line]");
+		const marker = path?.querySelector<HTMLElement>(
+			"[data-ascension-progress]",
+		);
+		const nodes = path
+			? Array.from(path.querySelectorAll<HTMLElement>("[data-ascension-node]"))
+			: [];
+
+		if (!path || !line || !marker || nodes.length < 2) {
+			return;
+		}
+
+		let geometry: PathGeometry;
+		const state = { progress: 0 };
+
+		const measure = (): PathGeometry => {
+			const pathRect = path.getBoundingClientRect();
+			const firstRect = nodes[0].getBoundingClientRect();
+			const lastRect = nodes[nodes.length - 1].getBoundingClientRect();
+
+			const firstX = firstRect.left - pathRect.left + firstRect.width / 2;
+			const firstY = firstRect.top - pathRect.top + firstRect.height / 2;
+			const lastX = lastRect.left - pathRect.left + lastRect.width / 2;
+			const lastY = lastRect.top - pathRect.top + lastRect.height / 2;
+			const deltaX = lastX - firstX;
+			const deltaY = lastY - firstY;
+			const distance = Math.hypot(deltaX, deltaY);
+			const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+
+			Object.assign(line.style, {
+				left: `${firstX}px`,
+				top: `${firstY}px`,
+				right: "auto",
+				bottom: "auto",
+				width: `${distance}px`,
+				height: "1px",
+				transform: `rotate(${angle}deg)`,
+				transformOrigin: "0 50%",
+			});
+
+			return { firstX, firstY, deltaX, deltaY };
+		};
+
+		const render = () => {
+			gsap.set(marker, {
+				left: geometry.firstX,
+				top: geometry.firstY,
+				x: geometry.deltaX * state.progress,
+				y: geometry.deltaY * state.progress,
+				xPercent: -50,
+				yPercent: -50,
+				rotation: 45,
+			});
+		};
+
+		const refreshGeometry = () => {
+			geometry = measure();
+			render();
+		};
+
+		refreshGeometry();
+
+		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+			return;
+		}
+
+		ascensionTween = gsap.to(state, {
+			progress: 1,
+			ease: "none",
+			onUpdate: render,
+			scrollTrigger: {
+				trigger: path,
+				start: "top 68%",
+				end: "bottom 58%",
+				scrub: 0.35,
+				invalidateOnRefresh: true,
+				onRefreshInit: refreshGeometry,
+				onRefresh: refreshGeometry,
+			},
+		});
+	}
+
+	initAscensionProgress();
+	document.addEventListener("astro:page-load", initAscensionProgress);
+</script>
