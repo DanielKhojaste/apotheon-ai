@@ -6,12 +6,6 @@ export const authorType = defineType({
 	type: 'document',
 	fields: [
 		defineField({
-			name: 'id',
-			title: 'ID',
-			type: 'string',
-		}),
-
-		defineField({
 			name: 'name',
 			title: 'Name',
 			type: 'string',
